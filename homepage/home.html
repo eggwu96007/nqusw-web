@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+
+/*動畫*/
+
+.slider_container {
+margin: 30px;
+width: auto;
+height: 700px;
+}
+
+.slider_container img{
+width: 200;
+height: 500px;
+}
+
+.slider_container div {
+position:absolute;
+top: 200px;
+margin-left: 300px;
+animation: round 25s linear infinite;
+}
+
+
+@keyframes round {
+4% {
+opacity: 1;
+filter: alpha(opacity=100);
+/* 0 - 1秒 淡入*/
+}
+20% {
+opacity: 1;
+filter: alpha(opacity=100);
+/* 1- 5秒靜止*/
+}
+24% {
+opacity: 0;
+filter: alpha(opacity=0);
+/* 5-6秒淡出*/
+}
+}
+
+.slider_container div:nth-child(5) {
+-webkit-animation-delay: 0s;
+animation-delay: 0s;
+}
+
+.slider_container div:nth-child(4) {
+-webkit-animation-delay: 5s;
+animation-delay: 5s;
+}
+
+.slider_container div:nth-child(3) {
+-webkit-animation-delay: 10s;
+animation-delay: 10s;
+}
+
+.slider_container div:nth-child(2) {
+-webkit-animation-delay: 15s;
+animation-delay: 15s;
+}
+
+.slider_container div:nth-child(1) {
+-webkit-animation-delay: 20s;
+animation-delay: 20s;
+}
+
+
+/*bar*/
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+
+}
+
+li {
+  float: left;
+ 
+}
+
+li a, .dropbtn {
+  display: inline-block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+li a:hover, .dropdown:hover .dropbtn {
+  background-color: #04AA6D;
+}
+
+li.dropdown {
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #04AA6D;
+  min-width: 200px;
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: white;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.dropdown-content a:hover {background-color: rgb(248, 145, 60);}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+</style>
+</head>
+<body>
+
+
+    <ul>
+        <li class="barleft"><a href="#news">最新消息</a></li>
+        <li class="dropdown">
+          <a href="javascript:void(0)" class="dropbtn">學術活動 &#8595</a>
+          <div class="dropdown-content">
+            <a href="#">Link 1</a>
+            <a href="#">Link 2</a>
+            <a href="#">Link 3</a>
+          </div>
+        </li>
+        <li class="dropdown">
+          <a href="javascript:void(0)" class="dropbtn">系所介紹 &#8595</a>
+          <div class="dropdown-content">
+            <a href="#">Link 1</a>
+            <a href="#">Link 2</a>
+            <a href="#">Link 3</a>
+          </div>
+        </li>
+        <li class="dropdown">
+          <a href="javascript:void(0)" class="dropbtn">課程資訊 &#8595</a>
+          <div class="dropdown-content">
+            <a href="#">Link 1</a>
+            <a href="#">Link 2</a>
+            <a href="#">Link 3</a>
+          </div>
+        </li>
+        <li class="dropdown">
+          <a href="javascript:void(0)" class="dropbtn">師資陣容 &#8595</a>
+          <div class="dropdown-content">
+            <a href="#">Link 1</a>
+            <a href="#">Link 2</a>
+            <a href="#">Link 3</a>
+          </div>
+        </li>
+        <li class="barleft"><a href="#news">榮譽榜</a></li>
+        <li class="dropdown">
+          <a href="javascript:void(0)" class="dropbtn">系學會 &#8595</a>
+          <div class="dropdown-content">
+            <a href="#">Link 1</a>
+            <a href="#">Link 2</a>
+            <a href="#">Link 3</a>
+          </div>
+        </li>
+       
+      
+        <li class="dropdown">
+          <a href="javascript:void(0)" class="dropbtn">招生資訊 &#8595</a>
+          <div class="dropdown-content">
+            <a href="#">Link 1</a>
+            <a href="#">Link 2</a>
+            <a href="#">Link 3</a>
+          </div>
+        </li>
+      
+        <li class="barleft"><a href="#about">相關連結</a></li>
+        
+      
+      
+        <li class="dropdown" style="float: right;">
+          <a href="javascript:void(0)" class="dropbtn" >畢業專區 &#8595</a>
+          <div class="dropdown-content">
+            <a href="#">Link 1</a>
+            <a href="#">Link 2</a>
+            <a href="#">Link 3</a>
+          </div>
+        </li>
+      
+        <li class="dropdown" style="float: right;">
+          <a href="javascript:void(0)" class="dropbtn">實習專區 &#8595</a>
+          <div class="dropdown-content">
+            <a href="#">Link 1</a>
+            <a href="#">Link 2</a>
+            <a href="#">Link 3</a>
+          </div>
+        </li>
+      
+      
+        <li class="dropdown" style="float: right;">
+          <a href="javascript:void(0)" class="dropbtn">新生專區 &#8595</a>
+          <div class="dropdown-content">
+            <a href="#">Link 1</a>
+            <a href="#">Link 2</a>
+            <a href="#">Link 3</a>
+          </div>
+        </li>
+        
+      </ul>
+
+<section>
+
+      <div class="slider_container">
+        <div>
+        <img src="images/1.jpg" alt="pure css3 slider" />
+        </div>
+        <div>
+        <img src="images/2.jpg" alt="pure css3 slider" />
+        </div>
+        <div>
+        <img src="images/3.jpg" alt="pure css3 slider" />
+        </div>
+        <div>
+        <img src="images/4.jpg" alt="pure css3 slider"/>
+        </div>
+        <div>
+        <img src="images/5.jpg" alt="pure css3 slider"/>
+        </div>
+        </div>
+      </section>
+     
+
+<h1>最新消息</h1>
+      <section style="background: black;">
+        <div>
+          <img src="images/5.jpg" alt="pure css3 slider" width="500px" height="500px"/>
+          </div>
+
+      </section>
+
+<h1>近期活動</h1>
+      <section style="background: green;">
+        <div>
+          <img src="images/5.jpg" alt="pure css3 slider" width="500px" height="500px"/>
+          </div>
+
+      </section>
+
+        
+        
+      
+
+</body>
+</html>
+
+
