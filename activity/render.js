@@ -20,8 +20,8 @@ export function layout(title, content) {
       
       background-color:  #D1E9E9;
         font-family: Arial, Helvetica, sans-serif;
-        padding: 100px;
-        font: 16px Helvetica, Arial;
+        padding: 50px;
+        font: 20px Helvetica, Arial;
       }
     
 
@@ -29,13 +29,15 @@ export function layout(title, content) {
     {
       position: absolute;
       background-color: #FFC1E0 ;
-      width:450px;
-      height:450px;
-      border-radius:999em;
+      width:400px;
+      height:400px;
+      padding:30px;
       text-align: center;
-      display: inline-block;
+      display:inline-block;
+      border-radius:999em;
       top: 25%;
       left: 55%;
+      
      
       
     }
@@ -44,8 +46,9 @@ export function layout(title, content) {
     {
       position: absolute;
       background-color: #FFC1E0 ;
-      width:450px;
-      height:450px;
+      padding:30px;
+      width:400px;
+      height:400px;
       border-radius:999em;
       text-align: center;
       display: inline-block;
@@ -142,7 +145,7 @@ export function loginUi(args={})  {
     alertScriptstu = `<p>帳號或密碼有誤<p>`
   } 
 
-  else if (args.status == '請先登入'||args.status == '不可輸入特殊符號') {
+  else if (args.status == '請先登入'||args.status == '不可輸入特殊符號'||args.status == '修改成功') {
     alertScript = ''
     alertScriptstu = ''
     alertScriptshow = `<script>
@@ -155,12 +158,12 @@ export function loginUi(args={})  {
     alertScriptstu = ''
     alertScriptshow = ''
   }
-  return layout('Login', `
+  return layout('學習歷程檔案登入', `
   <body id="bodylogin">
   ${alertScriptshow}
 
   <div class="formloginleft">
-  <h1>教師端登入</h1>
+  <h1>管理員登入</h1>
   
   <form action="/login" method="post" >
     <p><input type="text" placeholder="帳號"  name="username" style="width:auto;"></p>
@@ -168,11 +171,6 @@ export function loginUi(args={})  {
     <p><input type="submit" value="登入"></p>
   </form>
  <p>${alertScript}</p>
- 
- <p>1.教師帳號皆擁有最高權限</p>
- <p>2.所有文章皆可自由編輯</p>
- <p>3.可管理所有帳號及密碼</p>
- <p>4.務必保管好自身帳號密碼</p>
 
  </div>
 
@@ -185,34 +183,28 @@ export function loginUi(args={})  {
    <p><input type="submit" value="登入"></p>
  </form>
 <p>${alertScriptstu}</p>
-
-<p>1.教師帳號皆擁有最高權限</p>
-<p>2.所有文章皆可自由編輯</p>
-<p>3.可管理所有帳號及密碼</p>
-<p>4.務必保管好自身帳號密碼</p>
 </div>
   </body>
   `)
 }
 
-export function signupUi(args={}) {
+export function signup_teacherUi(args={}) {
   var alertScript
   if (args.status != null) {
-    console.log('signupUI:alertScript args=', args)
     alertScript = `<script>
     alert('${args.status}')
     </script>`
-  } else {
-    console.log('signupUI:no alert')
+  } 
+  else {
     alertScript = ''
   }
-  return layout('Signup',` 
-  <h1>Signup</h1>
-  <form action="/signup" method="post">
+  return layout('管理員註冊',` 
+  <h1>每個選項都要填(別新增太多!!)</h1>
+  <form action="/signup_teacher" method="post">
     <p><input type="text" placeholder="帳號" name="username"></p>
     <p><input type="password" placeholder="密碼" name="password"></p>
     <p><input type="text" placeholder="手機號碼" name="email"></p>
-    <p><input type="submit" value="Signup"></p>
+    <p><input type="submit" value="新增"></p>
   </form>
   ${alertScript}
   `
@@ -220,24 +212,22 @@ export function signupUi(args={}) {
   )
 }
 
-export function signup_stuUi(args={}) {
+export function signup_studentUi(args={}) {
   var alertScript
   if (args.status != null) {
-    console.log('signupUI:alertScript args=', args)
     alertScript = `<script>
     alert('${args.status}')
     </script>`
   } else {
-    console.log('signupUI:no alert')
     alertScript = ''
   }
-  return layout('Signup',` 
-  <h1>Signup</h1>
-  <form action="/addaccount" method="post">
+  return layout('使用者註冊',` 
+  <h1>每個選項都要填</h1>
+  <form action="/signup_student" method="post">
     <p><input type="text" placeholder="學號" name="username"></p>
     <p><input type="password" placeholder="密碼" name="password"></p>
-    <p><input type="text" placeholder="手機號碼" name="email"></p>
-    <p><input type="submit" value="Signup"></p>
+    <p><input type="text" placeholder="入學級別和姓名(例如:108級王曉明)/老師姓名與職位(例如:黃大銘教授)" name="email"></p>
+    <p><input type="submit" value="註冊"></p>
   </form>
   ${alertScript}
   `
@@ -255,7 +245,7 @@ export function changeaccount() {
 }
 
 
-export function editaccount(users) {
+export function editaccount(users,roots) {
   let list = []
   for (let user of users) {
     list.push(`
@@ -263,15 +253,24 @@ export function editaccount(users) {
     <p>帳號${user.username}</p>
       <p>密碼${user.password}</p>
       <p><a href="/delaccount/${user.id}">刪除</a></p>
-      <p><a href="/editpassword/${user.id}">編輯</a></p>
-      <p><a href="/editpassword/${user.id}">檢視</a></p>
+      <p><a href="/editpassword_user/${user.id}">編輯</a></p>
+      </li>
+    `)
+  }
+  for (let root of roots) {
+    list.push(`
+    <li style="border-color: crimson">
+    <p>管理員帳號密碼(除非帳號密碼被破解，否則別刪掉!!)</p>
+    <p>帳號${root.username}</p>
+      <p>密碼${root.password}</p>
+      <p><a href="/editpassword_root/${root.id}">變更</a></p>
       </li>
     `)
   }
   let content = `
   <body>
   <article>
-  <p><a href="/addaccount">新增學生帳號</a><a href="/signup">新增教師帳號</a></p>
+  <p><a href="/signup_student">新增使用者帳號</a><a href="/signup_teacher">新增管理員帳號</a></p>
   <ul id="posts">
     ${list.join('\n')}
   </ul>
@@ -282,17 +281,43 @@ export function editaccount(users) {
 }
 
 
-export function editpasswordui(user) {
+export function editpassword_userui(user,args={}) {
+  var alertScript
+  if (args.status =='舊密碼錯誤'||args.status =='新密碼與再次確認密碼有誤'||args.status =='不可輸入特殊符號或空白') {
+    alertScript = `<script>
+    alert('${args.status}')
+    </script>`
+  } 
+  else {
+    alertScript = ''
+  }
+
+  return layout(user.email+'正在修改密碼', `
+ 
+<body>
+${alertScript}
+  <h1>編輯中</h1>
+  <form action="/editpassword_user/${user.id}"  method="post">
+  <p><input type="text" placeholder="舊密碼" name="password_check" ></p>
+  <p><input type="text" placeholder="新密碼" name="password_new" ></p>
+  <p><input type="text" placeholder="再次確認新密碼" name="password_new_check" ></p>
+    
+    <p><input type="submit" value="修改"></p>
+  </form>
+  </body>
+  `)
+}
+
+export function editpassword_rootui(user) {
   return layout(user.id, `
  
 <body>
   <h1>編輯中${user.id}</h1>
-  <p>Create a new post.</p>
-  <form action="/change/${user.id}"  method="post">
+  <form action="/editpassword_root/${user.id}"  method="post">
   <p><input type="text" placeholder="Title" name="username" value="${user.username}"></p>
   <p><textarea placeholder="Contents" name="password" rows="6" cols="40">${user.password}</textarea></p>
     
-    <p><input type="submit" value="Create"></p>
+    <p><input type="submit" value="修改"></p>
   </form>
 
   </body>
@@ -315,7 +340,6 @@ export function fail() {
 }
 
 export function list(posts, user) {
-  console.log('listing: user=', user)
   let list = []
   
   for (let post of posts) {
@@ -323,34 +347,34 @@ export function list(posts, user) {
     list.push(`
    
     <li style="border-color: blue">
-    <h2>${ post.title} -- by ${post.username}<a href="/delpost/${post.id}">刪除貼文</a><a href="/editpost/${post.id}">編輯貼文</a></h2>
-    
-      <p>${post.body}</p>
-      <p>${post.file}</p>
-      <p>${post.content}</p>
-
-      <a href="images/${post.file}">下載點這裡</a>
-      
-      <p><a href="/post/${post.id}">Read post</a></p>
-      </li>
+    <h2>機構名稱：${ post.title}<a href="/delpost/${post.id}">刪除貼文</a><a href="/editpost/${post.id}">編輯貼文</a></h2>
+    <p>類別：${post.content}</p>
+    <p>作者：${post.username}</p>
+    <p><a href="/post/${post.id}">查看完整內容</a></p>
+    </li>
     `)
   }
   let content = `
   <body>
   <article>
-  <p style="border: crimson;font-size: 30px; border-top: 100px; ">${(user==null)?'':'歡迎 '+user.username}<a href="/post/new">上傳檔案</a><a href="/editaccount">帳號管理</a><a href="/logout">登出</a></p>
+ 
+  <p style="border: crimson;font-size: 30px; border-top: 100px; ">${(user==null)?'':'歡迎 '+user}<a href="/post/new">上傳檔案</a><a href="/editaccount">帳號管理</a><a href="/logout">登出</a> 
+  <form action="/list_custom" method="post" display="inline" >
+  
+  <input type="text" placeholder="關鍵字搜尋"  name="search" style="width:auto;">
+  <input type="submit" value="搜尋">
+</form></p>
   <ul id="posts">
     ${list.join('\n')}
   </ul>
   </article>
   </body>
   `
-  return layout('Posts', content)
+  return layout('金大社工系學習歷程專區', content)
 }
 
 
 export function liststu(posts, user) {
-  console.log('listing: user=', user)
   let list = []
   
   for (let post of posts) {
@@ -358,22 +382,17 @@ export function liststu(posts, user) {
     list.push(`
    
     <li style="border-color: blue">
-    <h2>${ post.title} -- by ${post.username}</h2>
-    
-      <p>${post.body}</p>
-      <p>${post.file}</p>
-      <p>${post.content}</p>
-
-      <a href="images/${post.file}">下載點這裡</a>
-      
-      <p><a href="/post/${post.id}">Read post</a></p>
+    <h2>機構名稱：${ post.title}</h2>
+    <p>類別：${post.content}</p>
+    <p>作者：${post.username}</p>
+    <p><a href="/post/${post.id}">查看完整內容</a></p>
       </li>
     `)
   }
   let content = `
   <body>
   <article>
-  <p style="border: crimson;font-size: 30px; border-top: 100px; ">${(user==null)?'':'歡迎 '+user.username}<a href="/post/newstu">上傳檔案</a><a href="/logout">登出</a></p>
+  <p style="border: crimson;font-size: 30px; border-top: 100px; ">${(user==null)?'':'歡迎 '+user.email}<a href="/editpassword_user/${user.id}">變更密碼</a><a href="/logout">登出</a></p>
   <ul id="posts">
     ${list.join('\n')}
   </ul>
@@ -384,17 +403,15 @@ export function liststu(posts, user) {
 }
 
 
-
-
-
 export function newPost(args={}) {
   var alertScript
-  if(args.status=='請上傳檔案')
+  if(args.status=='請上傳檔案'||args.status=='不可空白'||args.status=='檔案類型錯誤，可接受檔案類型為pdf'||args.status=='不可輸入特殊符號')
   {
  alertScript=`<script>
   alert('${args.status}')
   </script>`
   }
+ 
   else
   alertScript=''
   return layout('New Post',
@@ -402,9 +419,9 @@ export function newPost(args={}) {
   `    
   <body>
     <h1>新貼文</h1>
-    <p>Create a new post.</p>
     <form action="/post" enctype="multipart/form-data" method="post" >
-      <p><input type="text" placeholder="Title" name="title"></p>
+      <p><input type="text" placeholder="機構名稱(全名)" name="title"></p>
+      <p><input type="text" placeholder="入學級別和姓名(例如:108級王曉明)/老師姓名與職位(例如:黃大銘教授)" name="author"></p>
       
       <p><select name="content">
       <option value="">文章類別</option>
@@ -418,9 +435,9 @@ export function newPost(args={}) {
       <option value="other" >其他</option>
     </select></p>
 
-      <p><textarea placeholder="Contents" name="body"></textarea></p>
-      <p>檔案上傳: <input type="file" name="file"/></p>
-      <p><input type="submit" value="Create"></p>
+      <p><textarea placeholder="心得或給學弟妹的建議(不可使用特殊符號：如${"[@`#$%^&*_+<>{}\/[\]])"}" name="body"></textarea></p>
+      <p>檔案上傳(僅限pdf!!!): <input type="file" name="file" accept="pdf"/></p>
+      <p><input type="submit" value="建立"></p>
     </form>
   </body>
   ${alertScript}
@@ -449,9 +466,8 @@ export function newPoststu(args={}) {
   `    
   <body>
     <h1>新貼文</h1>
-    <p>Create a new post.</p>
     <form action="/poststu" enctype="multipart/form-data" method="post" >
-      <p><input type="text" placeholder="Title" name="title"></p>
+      <p><input type="text" placeholder="機構名稱(全名)" name="title"></p>
       
       <p><select name="content">
       <option value="">文章類別</option>
@@ -465,9 +481,9 @@ export function newPoststu(args={}) {
       <option value="other" >其他</option>
     </select></p>
 
-      <p><textarea placeholder="Contents" name="body"></textarea></p>
+      <p><textarea placeholder="心得或給學弟妹的建議" name="body"></textarea></p>
       <p>檔案上傳: <input type="file" name="file"/></p>
-      <p><input type="submit" value="Create"></p>
+      <p><input type="submit" value="新增"></p>
     </form>
   </body>
   ${alertScript}
@@ -484,14 +500,12 @@ export function newPoststu(args={}) {
 
 
 export function editpostui(post) {
-  console.log("近來這裡是嗎1214")
   return layout(post.title, `
  
 <body>
-  <h1>編輯中${post.id}</h1>
-  <p>Create a new post.</p>
+  <h1>編輯中</h1>
   <form action="/${post.id}" enctype="multipart/form-data" method="post">
-  <p><input type="text" placeholder="Title" name="title" value="${post.title}"></p>
+  <p><input type="text" placeholder="機構名稱(全名)" name="title" value="${post.title}"></p>
 
   
   <p><select name="content">
@@ -506,9 +520,9 @@ export function editpostui(post) {
   <option value="other" >其他</option>
 </select></p>
 
-  <p><textarea placeholder="Contents" name="body" rows="6" cols="40">${post.body}</textarea></p>
+  <p><textarea placeholder="心得或給學弟妹的建議" name="body" rows="6" cols="40">${post.body}</textarea></p>
   <p>檔案上傳: <input type="file" name="file"/></p>
-    <p><input type="submit" value="Create"></p>
+    <p><input type="submit" value="修改"></p>
   </form>
   
 
@@ -525,10 +539,11 @@ export function show(post) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
   <body>
 
-    <h1>${post.title} -- by ${post.username}</h1>
-    <p>${post.body}</p>
-    <p>蝦蝦蝦</p>
-    <p>${post.content}</p>
+    <h1>機構名稱：${post.title} </h1>
+    <p>類別：${post.content}</p>
+    <p>作者：${post.username}</p>
+    <p>給學弟妹的建議：${post.body}</p>
+    
   </body>
   </head>
   </html>
