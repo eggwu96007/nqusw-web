@@ -128,7 +128,7 @@ export function layout(title, content) {
   </html>
   `
 }
-
+/*1223check*/
 export function loginUi(args={})  {
   var alertScript
   var alertScriptshow
@@ -187,7 +187,6 @@ export function loginUi(args={})  {
   </body>
   `)
 }
-
 export function signup_teacherUi(args={}) {
   var alertScript
   if (args.status != null) {
@@ -246,13 +245,15 @@ export function changeaccount() {
 
 
 export function editaccount(users,roots) {
+  console.log("級別與姓名",users)
   let list = []
   for (let user of users) {
     list.push(`
     <li style="border-color: crimson">
-    <p>帳號${user.username}</p>
-      <p>密碼${user.password}</p>
-      <p><a href="/delaccount/${user.id}">刪除</a></p>
+    <p>帳號：${user.username}</p>
+      <p>密碼：${user.password}</p>
+      <p>級別姓名：${user.email}</p>
+      <p><a href="/delaccount_user/${user.id}">刪除</a></p>
       <p><a href="/editpassword_user/${user.id}">編輯</a></p>
       </li>
     `)
@@ -280,7 +281,7 @@ export function editaccount(users,roots) {
   return layout('帳號密碼管理', content)
 }
 
-
+/*1223check*/ 
 export function editpassword_userui(user,args={}) {
   var alertScript
   if (args.status =='舊密碼錯誤'||args.status =='新密碼與再次確認密碼有誤'||args.status =='不可輸入特殊符號或空白') {
@@ -308,18 +309,53 @@ ${alertScript}
   `)
 }
 
-export function editpassword_rootui(user) {
+/* check1223*/
+export function editpassword_user_for_rootui(user,args={}) {
+  var alertScript
+  if (args.status =='不可輸入特殊符號或空白') {
+    alertScript = `<script>
+    alert('${args.status}')
+    </script>`
+  } 
+  else {
+    alertScript = ''
+  }
+  return layout("正在編輯"+user.email, `
+ 
+<body>
+${alertScript}
+  <h1>編輯中</h1>
+  <form action="/editpassword_user_for_root/${user.id}"  method="post">
+  <p>變更帳號：<input type="text" placeholder="帳號" name="account" value="${user.username}"></p>
+  <p>變更密碼：<input type="text" placeholder="密碼" name="password" value="${user.password}"></p>
+  <p>變更姓名及級別<input type="text" placeholder="名稱" name="username" value="${user.email}"></p>
+    <p><input type="submit" value="修改"></p>
+  </form>
+  </body>
+  `)
+}
+
+
+export function editpassword_rootui(user,args={}) {
+  var alertScript
+  if (args.status =='不可輸入特殊符號或空白') {
+    alertScript = `<script>
+    alert('${args.status}')
+    </script>`
+  } 
+  else {
+    alertScript = ''
+  }
   return layout(user.id, `
  
 <body>
+${alertScript}
   <h1>編輯中${user.id}</h1>
   <form action="/editpassword_root/${user.id}"  method="post">
-  <p><input type="text" placeholder="Title" name="username" value="${user.username}"></p>
-  <p><textarea placeholder="Contents" name="password" rows="6" cols="40">${user.password}</textarea></p>
-    
+  <p><input type="text" placeholder="使用者帳號" name="account" value="${user.username}"></p>
+  <p><input type="text" placeholder="使用者密碼" name="password" value="${user.password}"></p>
     <p><input type="submit" value="修改"></p>
   </form>
-
   </body>
   `)
 }
@@ -341,7 +377,7 @@ export function fail() {
 
 export function list(posts, user) {
   let list = []
-  
+  //    <p><a href="/post/${post.id}">查看完整內容</a></p>
   for (let post of posts) {
     
     list.push(`
@@ -350,16 +386,15 @@ export function list(posts, user) {
     <h2>機構名稱：${ post.title}<a href="/delpost/${post.id}">刪除貼文</a><a href="/editpost/${post.id}">編輯貼文</a></h2>
     <p>類別：${post.content}</p>
     <p>作者：${post.username}</p>
-    <p><a href="/post/${post.id}">查看完整內容</a></p>
+    <p><a href="/images/${post.file}">查看資料</a></p>
     </li>
     `)
   }
   let content = `
   <body>
   <article>
- 
   <p style="border: crimson;font-size: 30px; border-top: 100px; ">${(user==null)?'':'歡迎 '+user}<a href="/post/new">上傳檔案</a><a href="/editaccount">帳號管理</a><a href="/logout">登出</a> 
-  <form action="/list_custom" method="post" display="inline" >
+  <form action="/list_custom" method="post">
   
   <input type="text" placeholder="關鍵字搜尋"  name="search" style="width:auto;">
   <input type="submit" value="搜尋">
@@ -385,21 +420,26 @@ export function liststu(posts, user) {
     <h2>機構名稱：${ post.title}</h2>
     <p>類別：${post.content}</p>
     <p>作者：${post.username}</p>
-    <p><a href="/post/${post.id}">查看完整內容</a></p>
+    <p><a href="/images/${post.file}">查看資料</a></p>
       </li>
     `)
   }
   let content = `
   <body>
   <article>
-  <p style="border: crimson;font-size: 30px; border-top: 100px; ">${(user==null)?'':'歡迎 '+user.email}<a href="/editpassword_user/${user.id}">變更密碼</a><a href="/logout">登出</a></p>
+  <p style="border: crimson;font-size: 30px; border-top: 100px; ">${(user==null)?'':'歡迎 '+user}<a href="/editpassword_user/${user.id}">變更密碼</a><a href="/logout">登出</a></p>
+  <form action="/list_custom_stu" method="post">
+  
+  <input type="text" placeholder="關鍵字搜尋"  name="search" style="width:auto;">
+  <input type="submit" value="搜尋">
+</form>
   <ul id="posts">
     ${list.join('\n')}
   </ul>
   </article>
   </body>
   `
-  return layout('Posts', content)
+  return layout('金大社工系學習歷程專區', content)
 }
 
 
@@ -451,7 +491,7 @@ export function newPost(args={}) {
 }
 
 
-export function newPoststu(args={}) {
+/*export function newPoststu(args={}) {
   var alertScript
   if(args.status=='請上傳檔案')
   {
@@ -494,38 +534,45 @@ export function newPoststu(args={}) {
 
   `
   )
-}
+}*/
 
 
 
 
-export function editpostui(post) {
+export function editpostui(post,args={}) {
+  var alertScript
+  if(args.status=='請上傳檔案'||args.status=='不可空白'||args.status=='不可輸入特殊符號'||args.status=='檔案類型錯誤，可接受檔案類型為pdf')
+  {
+ alertScript=`<script>
+  alert('${args.status}')
+  </script>`
+  }
+  else
+  alertScript=''
   return layout(post.title, `
- 
-<body>
-  <h1>編輯中</h1>
-  <form action="/${post.id}" enctype="multipart/form-data" method="post">
-  <p><input type="text" placeholder="機構名稱(全名)" name="title" value="${post.title}"></p>
+  ${alertScript}
+  <body>
+    <h1>新貼文</h1>
+    <form action="/editpost/${post.id}" enctype="multipart/form-data" method="post" >
+      <p><input type="text" placeholder="機構名稱(全名)" name="title" value="${post.title}"></p>
+      <p><input type="text" placeholder="入學級別和姓名(例如:108級王曉明)/老師姓名與職位(例如:黃大銘教授)" name="author" value="${post.username}"></p>
+      
+      <p><select name="content">
+      <option value="">文章類別</option>
+      <option value="兒少">兒少</option>
+      <option value="家庭" >家庭</option>
+      <option value="身心障礙">身心障礙</option>
+      <option value="老人與長照">老人與長照</option>
+      <option value="婦女">婦女</option>
+      <option value="law">法律與政策</option>
+      <option value="Medical">醫務</option>
+      <option value="other" >其他</option>
+    </select></p>
 
-  
-  <p><select name="content">
-  <option value="">文章類別</option>
-  <option value="兒少">兒少</option>
-  <option value="家庭" >家庭</option>
-  <option value="身心障礙">身心障礙</option>
-  <option value="老人與長照">老人與長照</option>
-  <option value="婦女">婦女</option>
-  <option value="law">法律與政策</option>
-  <option value="Medical">醫務</option>
-  <option value="other" >其他</option>
-</select></p>
-
-  <p><textarea placeholder="心得或給學弟妹的建議" name="body" rows="6" cols="40">${post.body}</textarea></p>
-  <p>檔案上傳: <input type="file" name="file"/></p>
-    <p><input type="submit" value="修改"></p>
-  </form>
-  
-
+      <p><textarea placeholder="心得或給學弟妹的建議(不可使用特殊符號：如${"[@`#$%^&*_+<>{}\/[\]])"}" name="body" >${post.body}</textarea></p>
+      <p>檔案上傳(僅限pdf!!!): <input type="file" name="file" accept="pdf"/></p>
+      <p><input type="submit" value="修改"></p>
+    </form>
   </body>
   `)
 }

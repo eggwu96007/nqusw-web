@@ -24,39 +24,54 @@ router.get('/', list)
   .get('/loginstu', loginUi)
   .post('/loginstu', loginstu)
   .get('/logout', logout)
-
-
+  .get('/editaccount',editaccount)
+  .get('/delaccount_user/:id',delaccount_user)
+  //帳號管理還差重複性問題
+  .post('/editpassword_user_for_root/:id',editpassword_user_for_root)
+  .get('/editpassword_user/:id',editpassword_userui)
+  .post('/editpassword_user/:id',editpassword_user)
+  .get('/editpassword_root/:id',editpassword_rootui)
+  .post('/editpassword_root/:id',editpassword_root)
+  .get('/editpost/:id',editpostui)
+  .post('/editpost/:id',editpost)
+  .get('/delpost/:id',delpost)
+  .post('/post', create)
+  .get('/post/new', add)
+  .post('/list_custom', list_custom)
+  .get('/list_custom', list_custom)
+  .post('/list_custom_stu', list_custom_stu)
+  .get('/list_custom_stu', list_custom_stu)
+  .get('/post/new', add)
+  .get('/post/:id', show)
+/*===上面示好的=== */
  
   
   
 
-  .get('/editpassword_root/:id',editpassword_rootui)
-  .post('/editpassword_root/:id',editpassword_root)
-  .get('/editpassword_user/:id',editpassword_userui)
-  .post('/editpassword_user/:id',editpassword_user)
-  .get('/editaccount',editaccount)
+  
+  
+  
+  
 
   
-  .post('/list_custom', list_custom)
-  .get('/list_custom', list_custom)
+  
   /*teacher login */
   
   /* student login*/
   
   /*create post*/
-  .get('/post/new', add)
-  .get('/post/newstu', addstu) 
-  .get('/post/:id', show)
-  .post('/post', create)
-  .post('/poststu', createstu)
+  
+  //.get('/post/newstu', addstu) 
+
+  
+  //.post('/poststu', createstu)不確定要不要加
    /*del post*/
-  .get('/delpost/:id',delpost)
+  
   /*del account*/
-  .get('/delaccount/:id',delaccount)
-  .get('/delaccount_root/:id',delaccount_root)
+  
+  //.get('/delaccount_root/:id',delaccount_root)=>該加還是不該加?
   /*edit post*/ 
-  .get('/editpost/:id',editpostui)
-  .post('/:id',editpost)
+  
   /*edit account*/ 
 
   
@@ -372,6 +387,7 @@ async function list(ctx) {
       orderby = orderby || 'id'
       let op = ctx.request.url.searchParams.get('op')
       op = op || 'ASC'
+      
       var posts = postQuery(`SELECT id,username, title, body ,file,content FROM posts ORDER BY ${orderby} ${op}`)
       ctx.response.body = await render.list(posts,safes.email);
     }
@@ -401,58 +417,118 @@ async function liststu(ctx) {
       let op = ctx.request.url.searchParams.get('op')
       op = op || 'ASC'
       var posts = postQuery(`SELECT id,username, title, body ,file,content FROM posts ORDER BY ${orderby} ${op}`)
-      ctx.response.body = await render.liststu(posts,safes);
+      console.log("1226",posts,safes)
+      ctx.response.body = await render.liststu(posts,safes.email);
      return;
   }
   
 }
 
-
+/*1223check */
 async function list_custom(ctx) {
   var usercheck = await ctx.state.session.get('user')
   const body = ctx.request.body()
-  var safe = user_teacherQuery(`SELECT id, username, password, email FROM users_teacher WHERE username='${usercheck.username}'`)
-    var safes = safe[0]
-  if (body.type === "form") {
-    var search = await parseFormBody(body)
-    var user = await ctx.state.session.get('user')
-    console.log("1223查詢",search.search)
-    if(usercheck != null)
-  {
-    let orderby = ctx.request.url.searchParams.get('orderby')
-    orderby = orderby || 'id'
-    let op = ctx.request.url.searchParams.get('op')
-    op = op || 'ASC'
-  
-    var posts = postQuery(`SELECT * FROM posts WHERE title = '${search.search}' OR content= '${search.search}' OR username = '${search.search}' OR body = '${search.search}';`)
-    var post = posts[0]
-    ctx.response.body = await render.list(posts,safes.email);
-    }
-    
-  else
+  if(usercheck==null)
   {
     ctx.response.body = render.loginUi({status:'請先登入'})
+    return;
   }
-
-
-
+  else
+  {
+    var safe = user_teacherQuery(`SELECT id, username, password, email FROM users_teacher WHERE username='${usercheck.username}'`)
+    var safes = safe[0]
+    if(safes==null)
+    {
+      ctx.response.body = render.loginUi({status:'請先登入'})
+    return;
+    }
+    else
+    {
+      if (body.type === "form") {
+        var search = await parseFormBody(body)
+        var user = await ctx.state.session.get('user')
+        if(usercheck != null)
+      {
+        /*let orderby = ctx.request.url.searchParams.get('orderby')
+        orderby = orderby || 'id'
+        let op = ctx.request.url.searchParams.get('op')
+        op = op || 'ASC'*/
+      
+        var posts = postQuery(`SELECT id,username, title, body ,file,content FROM posts WHERE title = '${search.search}' OR content= '${search.search}' OR username = '${search.search}' OR body = '${search.search}';`)
+        var post = posts[0]
+        ctx.response.body = await render.list(posts,safes.email);
+        return;
+        }
+        
+      else
+      {
+        ctx.response.body = render.loginUi({status:'請先登入'})
+        return;
+      }
+        
+      }
+    }
+    }
     
-  }
-
-
-
   
+}
 
+/*1223check */
+async function list_custom_stu(ctx) {
+  var usercheck = await ctx.state.session.get('user')
+  const body = ctx.request.body()
+  if(usercheck==null)
+  {
+    ctx.response.body = render.loginUi({status:'請先登入'})
+        return;
+  }
+  else
+  {
+    var safe = user_studentQuery(`SELECT id, username, password, email FROM users_student WHERE username='${usercheck.username}'`)
+    var safes = safe[0]
+    if(safes==null)
+    {
+      ctx.response.body = render.loginUi({status:'請先登入'})
+      return;
+    }
+    else
+    {
+      if (body.type === "form") {
+        var search = await parseFormBody(body)
+        console.log("1226查詢",search.search)
+        if(usercheck != null)
+      {
+       /* let orderby = ctx.request.url.searchParams.get('orderby')
+        orderby = orderby || 'id'
+        let op = ctx.request.url.searchParams.get('op')
+        op = op || 'ASC'*/
+      
+        var posts = postQuery(`SELECT id,username, title, body ,file,content FROM posts WHERE title = '${search.search}' OR content= '${search.search}' OR username = '${search.search}' OR body = '${search.search}';`)
+        var post = posts[0]
+        ctx.response.body = await render.liststu(posts,safes.email);
+        }
+        
+      else
+      {
+        ctx.response.body = render.loginUi({status:'請先登入'})
+        return;
+      }
+    }
+    
+      
+    }
+  }
   
 }
 
 
-
+/*1223check*/ 
 async function editaccount(ctx) {
   var usercheck = await ctx.state.session.get('user')
   if(usercheck==null)
   {
     ctx.response.body = render.loginUi({status:'請先登入'})
+    return;
 
   }
   else
@@ -461,14 +537,16 @@ async function editaccount(ctx) {
     var safes = safe[0]
     if(safes!=null)
     {
-      let users = user_studentQuery(`SELECT id,username, password FROM users_student `)
-      let roots = user_teacherQuery(`SELECT id,username, password FROM users_teacher `)
+      let users = user_studentQuery(`SELECT id,username, password,email FROM users_student `)
+      let roots = user_teacherQuery(`SELECT id,username, password,email FROM users_teacher `)
       ctx.response.body = await render.editaccount(users,roots);
+      return;
     }
 
     else 
     {
       ctx.response.body = render.loginUi({status:'請先登入'})
+      return;
     }
 
   }
@@ -479,71 +557,106 @@ async function editaccount(ctx) {
 
 
 
-
+/*1223check */
 async function add(ctx) {
   var user = await ctx.state.session.get('user')
   if (user != null) {
-    ctx.response.body = await render.newPost();
-  } else {
+    var safe = user_teacherQuery(`SELECT id, username, password, email FROM users_teacher WHERE username='${usercheck.username}'`)
+    var safes = safe[0]
+    if(safes==null)
+    {
+      ctx.response.body = render.loginUi({status:'請先登入'})
+    return;
+    }
+    else
+    {
+      ctx.response.body = await render.newPost();
+    }
+    
+  } 
+  else {
     ctx.response.body = render.loginUi({status:'請先登入'})
+    return;
   }
   
 }
 
-async function addstu(ctx) {
+/*async function addstu(ctx) {
   var user = await ctx.state.session.get('user')
   if (user != null) {
     ctx.response.body = await render.newPoststu();
   } else {
     ctx.response.body = render.loginUi({status:'請先登入'})
   }
-}
+}*/
 
 
-
+//1223check
 async function delpost(ctx) {
   var usercheck = await ctx.state.session.get('user')
-  var safe = user_teacherQuery(`SELECT id, username, password, email FROM users_teacher WHERE username='${usercheck.username}'`)
-  var safes = safe[0]
-  if(usercheck != null && safes!=null)
+  if(usercheck != null)
   {
+    var safe = user_teacherQuery(`SELECT id, username, password, email FROM users_teacher WHERE username='${usercheck.username}'`)
+    var safes = safe[0]
+    if(safes!=null)
+    {
     const pid = ctx.params.id;
     postQuery(`DELETE FROM posts WHERE id='${pid}'`)
     ctx.response.redirect('/');
+    return;
+    }
+    else
+    {
+      ctx.response.body = render.loginUi({status:'請先登入'})
+      return;
+    }
+    
   }
     
   else
   {
     ctx.response.body = render.loginUi({status:'請先登入'})
+    return;
     //ctx.response.redirect('/login');
   }
 
 
   
 }
-
-async function delaccount(ctx) {
+/*1223check*/ 
+async function delaccount_user(ctx) {
   var usercheck = await ctx.state.session.get('user')
-  var safe = user_teacherQuery(`SELECT id, username, password, email FROM users_teacher WHERE username='${usercheck.username}'`)
-  var safes = safe[0]
-  if(usercheck != null&&safes!=null)
+  if(usercheck != null)
   {
+    var safe = user_teacherQuery(`SELECT id, username, password, email FROM users_teacher WHERE username='${usercheck.username}'`)
+    var safes = safe[0]
+    if(safes!=null)
+    {
     const pid = ctx.params.id;
     postQuery(`DELETE FROM users_student WHERE id='${pid}'`)
     ctx.response.redirect('/editaccount');
+    return;  
+    }
+    
+    else
+    {
+    ctx.response.body = render.loginUi({status:'請先登入'})
+    return;
+    }
+
   }
     
   else
   {
     ctx.response.body = render.loginUi({status:'請先登入'})
-    //ctx.response.redirect('/login');
+    return;
   }
 
   
   
 }
-
-async function delaccount_root(ctx) {
+/*use or not???*/ 
+/*async function delaccount_root(ctx) {
   var usercheck = await ctx.state.session.get('user')
   var safe = user_teacherQuery(`SELECT id, username, password, email FROM users_teacher WHERE username='${usercheck.username}'`)
   var safes = safe[0]
@@ -562,17 +675,16 @@ async function delaccount_root(ctx) {
 
   
   
-}
+}*/
 
-
+//1223check
 async function editpostui(ctx) {
  
   var usercheck = await ctx.state.session.get('user')
-  var safe = user_teacherQuery(`SELECT id, username, password, email FROM users_teacher WHERE username='${usercheck.username}'`)
-  var safes = safe[0]
   if(usercheck==null)
   {
     ctx.response.body = render.loginUi({status:'請先登入'})
+    return;
 
   }
   else{
@@ -580,71 +692,91 @@ async function editpostui(ctx) {
     var safes = safe[0]
     if(safes!=null)
     {
-      const pid = ctx.params.id;
+    const pid = ctx.params.id;
     let posts = postQuery(`SELECT id, username, title, body,file,content FROM posts WHERE id=${pid}`)
     let post = posts[0]
     if (!post) ctx.throw(404, 'invalid post id');
     ctx.response.body = await render.editpostui(post);
+    return;
     }
 
     else 
     {
       ctx.response.body = render.loginUi({status:'請先登入'})
+      return;
     }
   }
   
 }
+//1223check
 async function editpost(ctx) 
 {
-  const body = ctx.request.body()
-  const form = await multiParser(ctx.request.serverRequest)
-  var user = await ctx.state.session.get('user')
-  var pattern=/[`~!@#$%^&*()_+<>?:"{},.\/;'[\]]/im;
-  var pattern_only=/[`@#$%^&*_+<>{}\/[\]]/im;
-    if (form ) {
-      var filename = form.files.file.filename
-      let content = form.files.file.content
-      if(filename==''){
-        ctx.response.body = await render.newPost({status:'請上傳檔案'});
-       return;
-      }
-      await Deno.writeFile(`./images/${filename}`, content);
-    }
-  
-    if( form.fields.title==''|| form.fields.body==''||form.fields.content=='')
+  const pid = ctx.params.id;
+  var usercheck = await ctx.state.session.get('user')
+  if(usercheck==null)
+  {
+    ctx.response.body = render.loginUi({status:'請先登入'})
+    return; 
+  }
+  else
+  {
+    var safe = user_teacherQuery(`SELECT id, username, password, email FROM users_teacher WHERE username='${usercheck.username}'`)
+    var safes = safe[0]
+    if(safes!=null)
     {
-      ctx.response.body = await render.newPost({status:'不可空白'});
-      return;
-    }
-
-    if(pattern.test(form.fields.title)||pattern_only.test(form.fields.body)||pattern.test(form.fields.content))
-    {
-      ctx.response.body = render.loginUi({status:'不可輸入特殊符號'})
-      return;
-    }
-
-    if (user != null) {
-      console.log('1223user=', user)
+      const body = ctx.request.body()
+      const form = await multiParser(ctx.request.serverRequest)
+      var user = await ctx.state.session.get('user')
+      var pattern=/[`~!@#$%^&*()_+<>?:"{},.\/;'[\]]/im;
+      var pattern_only=/[`@#$%^&*_+<>{}\/[\]]/im;
+      let posts = postQuery(`SELECT id, username, title, body,file,content FROM posts WHERE id=${pid}`)
+      let post = posts[0]
+      //console.log("1225",post)
+        if (form ) {
+          var filename = form.files.file.filename
+          let content = form.files.file.content
+          if(filename==''){
+            ctx.response.body = await render.editpostui(post,{status:'請上傳檔案'});
+           return;
+          }
+          await Deno.writeFile(`./images/${filename}`, content);
+        }
       
-      var validExts = new Array(".pdf");
-
-      var fileExt = filename;
-      fileExt = fileExt.substring(fileExt.lastIndexOf('.'));
-      if (validExts.indexOf(fileExt) < 0) {
-        ctx.response.body = await render.newPost({status:"檔案類型錯誤，可接受檔案類型為pdf"});
-        fileExt = null;
-        return ;
-      }
-      
+        if( form.fields.title==''|| form.fields.body==''||form.fields.content=='')
+        {
+          ctx.response.body = await render.editpostui(post,{status:'不可空白'});
+          return;
+        }
     
-
-      console.log(user.username, form.fields.title, form.fields.body,filename,form.fields.content)
-      sqlcmd("INSERT INTO posts (username, title, body,file,content) VALUES (?, ?, ?,?,?)", [form.fields.author, form.fields.title, form.fields.body,filename,form.fields.content]);
-    } 
-    else {
-      ctx.throw(404, 'not login yet!');
+        if(pattern.test(form.fields.title)||pattern_only.test(form.fields.body)||pattern.test(form.fields.content))
+        {
+          ctx.response.body = render.editpostui(post,{status:'不可輸入特殊符號'})
+          return;
+        }
+          
+          var validExts = new Array(".pdf");
+    
+          var fileExt = filename;
+          fileExt = fileExt.substring(fileExt.lastIndexOf('.'));
+          if (validExts.indexOf(fileExt) < 0) {
+            ctx.response.body = await render.editpostui(post,{status:"檔案類型錯誤，可接受檔案類型為pdf"});
+            fileExt = null;
+          //sqlcmd("INSERT INTO posts (username, title, body,file,content) VALUES (?, ?, ?,?,?)", [form.fields.author, form.fields.title, form.fields.body,filename,form.fields.content]);
+          return;
+        } 
+        console.log(form.fields.author,form.fields.title,form.fields.body,filename,form.fields.content,pid)
+        //sqlcmd("INSERT INTO posts (username, title, body,file,content) VALUES (?, ?, ?,?,?)", [form.fields.author, form.fields.title, form.fields.body,filename,form.fields.content]);
+        sqlcmd(`UPDATE posts SET "username"='${form.fields.author}',"title"='${form.fields.title}',"body"='${form.fields.body}',"file"='${filename}',"content"='${form.fields.content}'WHERE id='${pid}';`)
+        ctx.response.redirect('/');
+      return;
     }
-    ctx.response.redirect('/');
+    else
+    {
+      ctx.response.body = render.loginUi({status:'請先登入'})
+      return; 
+    }
+  }
+
   }
 
 /*1223check*/ 
@@ -654,10 +786,11 @@ async function editpassword_userui(ctx) {
   if(usercheck == null)
   {
     ctx.response.body = render.loginUi({status:'請先登入'})
+    return;
   }
   else
   {
-  var root = user_teacherQuery(`SELECT id, username, password, email FROM users_teacher WHERE username='${usercheck.username}'`)
+  var root = user_studentQuery(`SELECT id, username, password, email FROM users_student WHERE id='${pid}'`)
   var roots = root[0]
 
   var safe = user_studentQuery(`SELECT id, username, password, email FROM users_student WHERE username='${usercheck.username}' AND id=${pid}`)
@@ -666,21 +799,24 @@ async function editpassword_userui(ctx) {
   {
 
     ctx.response.body = await render.editpassword_userui(safes);
+    return;
   }
   else if(roots!=null)
   {
-    ctx.response.body = await render.editpassword_userui(roots);
+    ctx.response.body = await render.editpassword_user_for_rootui(roots);
+    return;
   }
   else
   {
     ctx.response.body = render.loginUi({status:'請先登入'})
+    return;
   }
   }
  
   
 
 }
-
+/*1223check*/ 
 async function editpassword_user(ctx) {
   const pid = ctx.params.id;
   const body = ctx.request.body()
@@ -692,6 +828,7 @@ async function editpassword_user(ctx) {
   if(usercheck == null)
   {
     ctx.response.body = render.loginUi({status:'請先登入'})
+    return;
   }
   else
   {
@@ -712,16 +849,18 @@ async function editpassword_user(ctx) {
     {
       sqlcmd(`UPDATE users_student SET "password"='${account.password_new}'WHERE id='${pid}';`)
       ctx.response.body = render.loginUi({status:'修改成功'})
+      return;
     }
     else if(body.type === "form"&&safes.password==account.password_check&&account.password_new!=account.password_new_check) 
     {
       ctx.response.body = await render.editpassword_userui(safes,{status:'新密碼與再次確認密碼有誤'});
+    return;
     }
 
     else
     {
       ctx.response.body = await render.editpassword_userui(safes,{status:'舊密碼錯誤'});
-    }
+    return;}
   }
 
   else if(roots!=null)
@@ -730,23 +869,26 @@ async function editpassword_user(ctx) {
       var account = await parseFormBody(body)
       sqlcmd(`UPDATE users_student SET "password"='${account.password_new}'WHERE id='${pid}';`)
       ctx.response.redirect('/editaccount');
+      return;
     }
   }
   else
   {
     ctx.response.body = render.loginUi({status:'請先登入'})
+    return;
   }
   }
 
   
 }
-
+/*1223check*/
 async function editpassword_rootui(ctx) {
   const pid = ctx.params.id;
   var usercheck = await ctx.state.session.get('user')
   if(usercheck == null)
   {
     ctx.response.body = render.loginUi({status:'請先登入'})
+    return;
   }
   else
   {
@@ -757,42 +899,95 @@ async function editpassword_rootui(ctx) {
   let users = user_teacherQuery(`SELECT id, username, password, email FROM users_teacher WHERE id=${pid}`)
   let user=users[0]
     ctx.response.body = await render.editpassword_rootui(user);
+    return;
   }
   else
   {
     ctx.response.body = render.loginUi({status:'請先登入'})
+    return;
   }
   }
  
   
 
 }
-/*這是已經好的*/ 
+/*1223check */
 async function editpassword_root(ctx) {
   const pid = ctx.params.id;
   const body = ctx.request.body()
+  var account = await parseFormBody(body)
   var usercheck = await ctx.state.session.get('user')
+  var pattern=/[`~!@#$%^&*()_+<>?:"{},.\/;'[\]]/im;
+  
   if(usercheck == null)
   {
     ctx.response.body = render.loginUi({status:'請先登入'})
+    return;
   }
   else
   {
   var safe = user_teacherQuery(`SELECT id, username, password, email FROM users_teacher WHERE username='${usercheck.username}'`)
   var safes = safe[0]
+  if(pattern.test(account.account)||pattern.test(account.password)||account.account==''||account.password=='')
+    {
+      ctx.response.body = await render.editpassword_rootui(safes,{status:'不可輸入特殊符號或空白'});
+      return;
+    }
+
   if(safes!=null)
   {
     if (body.type === "form") {
-      var account = await parseFormBody(body)
-      var user = await ctx.state.session.get('user')
-      sqlcmd(`UPDATE users_teacher SET "username"='${account.username}',"password"='${account.password}'WHERE id='${pid}';`)
+      sqlcmd(`UPDATE users_teacher SET "username"='${account.account}',"password"='${account.password}'WHERE id='${pid}';`)
       ctx.response.redirect('/editaccount');
+      return;
     }
   }
 
   else
   {
     ctx.response.body = render.loginUi({status:'請先登入'})
+    return;
+  }
+   
+  }
+  
+}
+
+/*1223check*/
+async function editpassword_user_for_root(ctx) {
+  const pid = ctx.params.id;
+  const body = ctx.request.body()
+  var account = await parseFormBody(body)
+  var usercheck = await ctx.state.session.get('user')
+  var pattern=/[`~!@#$%^&*()_+<>?:"{},.\/;'[\]]/im;
+  if(usercheck == null)
+  {
+    ctx.response.body = render.loginUi({status:'請先登入'})
+    return;
+  }
+  else
+  {
+  var safe = user_studentQuery(`SELECT id, username, password, email FROM users_student WHERE id='${pid}'`)
+  var safes = safe[0]
+  if(pattern.test(account.account)||pattern.test(account.password)||pattern.test(account.username)||account.account==''||account.password==''||account.username=='')
+    {
+      ctx.response.body = await render.editpassword_user_for_rootui(safes,{status:'不可輸入特殊符號或空白'});
+      return;
+    }
+  if(safes!=null)
+  {
+    if (body.type === "form") {
+     
+      sqlcmd(`UPDATE users_student SET "username"='${account.account}',"password"='${account.password}',"email"='${account.username}' WHERE id='${pid}';`)
+      ctx.response.redirect('/editaccount');
+      return;
+    }
+  }
+
+  else
+  {
+    ctx.response.body = render.loginUi({status:'請先登入'})
+    return;
   }
    
   }
@@ -800,6 +995,7 @@ async function editpassword_root(ctx) {
 }
 
 
+/*1223check*/
 async function create(ctx) {
   const body = ctx.request.body()
   const form = await multiParser(ctx.request.serverRequest)
@@ -824,12 +1020,11 @@ async function create(ctx) {
 
     if(pattern.test(form.fields.title)||pattern_only.test(form.fields.body)||pattern.test(form.fields.content))
     {
-      ctx.response.body = render.loginUi({status:'不可輸入特殊符號'})
+      ctx.response.body = render.newPost({status:'不可輸入特殊符號'})
       return;
     }
 
     if (user != null) {
-      console.log('1223user=', user)
       
       var validExts = new Array(".pdf");
 
@@ -854,7 +1049,7 @@ async function create(ctx) {
 
 
 }
-
+/*
 async function createstu(ctx) {
   const body = ctx.request.body()
   const form = await multiParser(ctx.request.serverRequest)
@@ -880,13 +1075,12 @@ async function createstu(ctx) {
 
 
 
-}
+}*/
 
 
-
+/*1223check */
 async function show(ctx) {
   const pid = ctx.params.id;
-  console.log("1215")
   let posts = postQuery(`SELECT id, username, title, body,file,content FROM posts WHERE id=${pid}`)
   let post = posts[0]
   if (!post) ctx.throw(404, 'invalid post id');
