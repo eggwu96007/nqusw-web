@@ -271,7 +271,7 @@ export function editaccount(users,roots) {
   let content = `
   <body>
   <article>
-  <p><a href="/signup_student">新增使用者帳號</a><a href="/signup_teacher">新增管理員帳號</a></p>
+  <p><a href="/signup_student">新增使用者帳號</a><a href="/signup_teacher">新增管理員帳號</a><a href="/">回首頁</a></p>
   <ul id="posts">
     ${list.join('\n')}
   </ul>
@@ -376,12 +376,7 @@ export function fail() {
 }
 
 export function list(posts, user) {
-  /*console.log("下午開始",posts)
-  console.log("剛開始要看這個1",posts[0][0])
-  console.log("剛開始要看這個2",posts[1][0])
-  console.log("剛開始要看這個3",posts[2])*/
-  //console.log("剛開始要看這個",posts[0][0])
-  //console.log("剛開始要看這個",posts)
+ 
   
   let list = []
   //    <p><a href="/post/${post.id}">查看完整內容</a></p>
@@ -393,6 +388,7 @@ export function list(posts, user) {
     <h2>機構名稱：${ post.title}<a href="/delpost/${post.id}">刪除貼文</a><a href="/editpost/${post.id}">編輯貼文</a></h2>
     <p>類別：${post.content}</p>
     <p>作者：${post.username}</p>
+    <p>入學級別與實習時間：${post.body}</p>
     <p><a href="/images/${post.file}">查看資料</a></p>
     </li>
     `)
@@ -420,7 +416,6 @@ export function list(posts, user) {
 
 export function liststu(posts, user) {
   let list = []
-  
   for (let post of posts) {
     
     list.push(`
@@ -429,6 +424,7 @@ export function liststu(posts, user) {
     <h2>機構名稱：${ post.title}</h2>
     <p>類別：${post.content}</p>
     <p>作者：${post.username}</p>
+    <p>入學級別與實習時間：${post.body}</p>
     <p><a href="/images/${post.file}">查看資料</a></p>
       </li>
     `)
@@ -436,7 +432,7 @@ export function liststu(posts, user) {
   let content = `
   <body>
   <article>
-  <p style="border: crimson;font-size: 30px; border-top: 100px; ">${(user==null)?'':'歡迎 '+user}<a href="/editpassword_user/${user.id}">變更密碼</a><a href="/logout">登出</a></p>
+  <p style="border: crimson;font-size: 30px; border-top: 100px; ">${(user==null)?'':'歡迎 '+user.email}<a href="/editpassword_user/${user.id}">變更密碼</a><a href="/logout">登出</a></p>
   <form action="/list_custom_stu" method="post">
   
   <input type="text" placeholder="關鍵字搜尋"  name="search" style="width:auto;">
@@ -470,21 +466,52 @@ export function newPost(args={}) {
     <h1>新貼文</h1>
     <form action="/post" enctype="multipart/form-data" method="post" >
       <p><input type="text" placeholder="機構名稱(全名)" name="title"></p>
-      <p><input type="text" placeholder="入學級別和姓名(例如:108級王曉明)/老師姓名與職位(例如:黃大銘教授)" name="author"></p>
-      
-      <p><select name="content">
-      <option value="">文章類別</option>
-      <option value="兒少">兒少</option>
-      <option value="家庭" >家庭</option>
-      <option value="身心障礙">身心障礙</option>
-      <option value="老人與長照">老人與長照</option>
-      <option value="婦女">婦女</option>
-      <option value="law">法律與政策</option>
-      <option value="Medical">醫務</option>
-      <option value="other" >其他</option>
+      <p><input type="text" placeholder="入學級別和姓名(例如:王曉明)/老師姓名與職位(例如:黃大銘教授)" name="author"></p>
+      <p>文章類別</p>
+  <input type="checkbox" id="vehicle1" name="content1" value="兒童/">
+  <label for="vehicle1">兒童</label>
+  <input type="checkbox" id="vehicle2" name="content2" value="少年/">
+  <label for="vehicle2">少年</label><br>
+  <input type="checkbox" id="vehicle3" name="content3" value="家庭/">
+  <label for="vehicle3">家庭</label>
+  <input type="checkbox" id="vehicle4" name="content4" value="身障/">
+  <label for="vehicle4">身障</label><br>
+  <input type="checkbox" id="vehicle5" name="content5" value="老人與長照/">
+  <label for="vehicle5">老人</label>
+  <input type="checkbox" id="vehicle6" name="content6" value="醫務/">
+  <label for="vehicle6">醫務</label><br><br>
+  <input type="checkbox" id="vehicle7" name="content7" value="法律與政策/">
+  <label for="vehicle7">法律與政策</label>
+  <input type="checkbox" id="vehicle8" name="content8" value="其他/">
+      <label for="vehicle8">其他</label><br>
+
+      <p><select name="body1">
+      <option value="">入學級別部別</option>
+      <option value="110日間部">110日間部</option>
+      <option value="110進修部">110進修部</option>
+      <option value="109日間部">109日間部</option>
+      <option value="109進修部">109進修部</option>
+      <option value="108日間部">108日間部</option>
+      <option value="108進修部">108進修部</option>
+      <option value="107日間部">107日間部</option>
+      <option value="107進修部">107進修部</option>
+      <option value="106日間部">106日間部</option>
+      <option value="106進修部">106進修部</option>
+      <option value="105日間部">105日間部</option>
+      <option value="105進修部">105進修部</option>
+      <option value="104日間部">104日間部</option>
+      <option value="104進修部">104進修部</option>
     </select></p>
 
-      <p><textarea placeholder="心得或給學弟妹的建議(不可使用特殊符號：如${"[@`#$%^&*_+<>{}\/[\]])"}" name="body"></textarea></p>
+    <p><select name="body2">
+    <option value="">實習期間</option>
+    <option value="期中">期中</option>
+    <option value="暑期" >暑期</option>
+    <option value="畢業成發">畢業成發</option>
+    <option value="其他">其他</option>
+    </select></p>
+
+  
       <p>檔案上傳(僅限pdf!!!): <input type="file" name="file" accept="pdf"/></p>
       <p><input type="submit" value="建立"></p>
     </form>
@@ -557,28 +584,66 @@ export function editpostui(post,args={}) {
   </script>`
   }
   else
+  
   alertScript=''
   return layout(post.title, `
+  
   ${alertScript}
+  
   <body>
     <h1>新貼文</h1>
     <form action="/editpost/${post.id}" enctype="multipart/form-data" method="post" >
       <p><input type="text" placeholder="機構名稱(全名)" name="title" value="${post.title}"></p>
-      <p><input type="text" placeholder="入學級別和姓名(例如:108級王曉明)/老師姓名與職位(例如:黃大銘教授)" name="author" value="${post.username}"></p>
+      <p><input type="text" placeholder="姓名(例如:王曉明)/老師姓名與職位(例如:黃大銘教授)" name="author" value="${post.username}"></p>
+      <p>文章類別</p>
+
+
+      <input type="checkbox" id="vehicle1" name="content1" value="兒童/">
+      <label for="vehicle1">兒童</label>
+      <input type="checkbox" id="vehicle2" name="content2" value="少年/">
+      <label for="vehicle2">少年</label><br>
+      <input type="checkbox" id="vehicle3" name="content3" value="家庭/">
+      <label for="vehicle3">家庭</label>
+      <input type="checkbox" id="vehicle4" name="content4" value="身障/">
+      <label for="vehicle4">身障</label><br>
+      <input type="checkbox" id="vehicle5" name="content5" value="老人與長照/">
+      <label for="vehicle5">老人</label>
+      <input type="checkbox" id="vehicle6" name="content6" value="醫務/">
+      <label for="vehicle6">醫務</label><br>
+      <input type="checkbox" id="vehicle7" name="content7" value="法律與政策/">
+      <label for="vehicle7">法律與政策</label>
+      <input type="checkbox" id="vehicle8" name="content8" value="其他/">
+          <label for="vehicle8">其他</label><br>
       
-      <p><select name="content">
-      <option value="">文章類別</option>
-      <option value="兒少">兒少</option>
-      <option value="家庭" >家庭</option>
-      <option value="身心障礙">身心障礙</option>
-      <option value="老人與長照">老人與長照</option>
-      <option value="婦女">婦女</option>
-      <option value="law">法律與政策</option>
-      <option value="Medical">醫務</option>
-      <option value="other" >其他</option>
+
+      <p><select name="body1">
+      <option value="">入學級別部別</option>
+      <option value="110日間部">110日間部</option>
+      <option value="110進修部">110進修部</option>
+      <option value="109日間部">109日間部</option>
+      <option value="109進修部">109進修部</option>
+      <option value="108日間部">108日間部</option>
+      <option value="108進修部">108進修部</option>
+      <option value="107日間部">107日間部</option>
+      <option value="107進修部">107進修部</option>
+      <option value="106日間部">106日間部</option>
+      <option value="106進修部">106進修部</option>
+      <option value="105日間部">105日間部</option>
+      <option value="105進修部">105進修部</option>
+      <option value="104日間部">104日間部</option>
+      <option value="104進修部">104進修部</option>
     </select></p>
 
-      <p><textarea placeholder="心得或給學弟妹的建議(不可使用特殊符號：如${"[@`#$%^&*_+<>{}\/[\]])"}" name="body" >${post.body}</textarea></p>
+    <p><select name="body2">
+    <option value="">實習期間</option>
+    <option value="期中">期中</option>
+    <option value="暑期" >暑期</option>
+    <option value="畢業成發">畢業成發</option>
+    <option value="其他">其他</option>
+    </select></p>
+
+
+
       <p>檔案上傳(僅限pdf!!!): <input type="file" name="file" accept="pdf"/></p>
       <p><input type="submit" value="修改"></p>
     </form>

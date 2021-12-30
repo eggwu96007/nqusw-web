@@ -418,7 +418,7 @@ async function liststu(ctx) {
       op = op || 'ASC'
       var posts = postQuery(`SELECT id,username, title, body ,file,content FROM posts ORDER BY ${orderby} ${op}`)
       console.log("1226",posts,safes)
-      ctx.response.body = await render.liststu(posts,safes.email);
+      ctx.response.body = await render.liststu(posts,safes);
      return;
   }
   
@@ -460,20 +460,14 @@ async function list_custom(ctx) {
        console.log("1228",see);
         var i=0
        var patten=[] 
-       //var postss = postQuery(`SELECT id,username, title, body ,file,content FROM posts WHERE title LIKE '%${see[i]}%' OR content LIKE '%${see[i]}%' OR username LIKE '%${see[i]}%' OR body LIKE '%${see[i]}%';`)
-        
+       
        while(see[i]!=null)
-       {
-        //console.log("1228照順序\n",see[i]) 
+       { 
         str=str+" OR title LIKE '%" + see[i]+ "%' OR content LIKE '%"+see[i]+ "%' OR username LIKE '%"+see[i]+  "%' OR body LIKE '%" +see[i]+"%'" 
         i++;
        }
-        //console.log("1229",str)
-       var posts = postQuery(`SELECT id,username, title, body ,file,content FROM posts WHERE title LIKE '%${search.search}%' OR content LIKE '%${search.search}%' OR username LIKE '%${search.search}%' OR body LIKE '%${search.search}%'${str};`)
-       //var posts = postQuery(`SELECT id,username, title, body ,file,content FROM posts WHERE title LIKE '%${search.search}%' OR content LIKE '%${search.search}%' OR username LIKE '%${search.search}%' OR body LIKE '%${search.search}%';`)
-       
-        //qvar posts = postQuery(`SELECT id,username, title, body ,file,content FROM posts WHERE title LIKE '%${search.search}%' OR content LIKE '%${search.search}%' OR username LIKE '%${search.search}%' OR body LIKE '%${search.search}%';`)
-        ctx.response.body = await render.list(posts,safes.email);
+       var posts = postQuery(`SELECT id,username, title, body ,file,content FROM posts WHERE title LIKE '%${search.search}%' OR content LIKE '%${search.search}%' OR username LIKE '%${search.search}%' OR body LIKE '%${search.search}%'${str};`) 
+      ctx.response.body = await render.list(posts,safes.email);
         return;
         }
         
@@ -520,9 +514,19 @@ async function list_custom_stu(ctx) {
         let op = ctx.request.url.searchParams.get('op')
         op = op || 'ASC'*/
       
-        var posts = postQuery(`SELECT id,username, title, body ,file,content FROM posts WHERE title = '${search.search}' OR content= '${search.search}' OR username = '${search.search}' OR body = '${search.search}';`)
-        var post = posts[0]
-        ctx.response.body = await render.liststu(posts,safes.email);
+        var see=search.search.split("")
+       var str = ''
+        var i=0
+       var patten=[] 
+       
+       while(see[i]!=null)
+       {
+        str=str+" OR title LIKE '%" + see[i]+ "%' OR content LIKE '%"+see[i]+ "%' OR username LIKE '%"+see[i]+  "%' OR body LIKE '%" +see[i]+"%'" 
+        i++;
+       }
+       var posts = postQuery(`SELECT id,username, title, body ,file,content FROM posts WHERE title LIKE '%${search.search}%' OR content LIKE '%${search.search}%' OR username LIKE '%${search.search}%' OR body LIKE '%${search.search}%'${str};`)
+       ctx.response.body = await render.liststu(posts,safes);
+        return;
         }
         
       else
@@ -635,7 +639,6 @@ async function delpost(ctx) {
   {
     ctx.response.body = render.loginUi({status:'請先登入'})
     return;
-    //ctx.response.redirect('/login');
   }
 
 
@@ -779,12 +782,13 @@ async function editpost(ctx)
           if (validExts.indexOf(fileExt) < 0) {
             ctx.response.body = await render.editpostui(post,{status:"檔案類型錯誤，可接受檔案類型為pdf"});
             fileExt = null;
-          //sqlcmd("INSERT INTO posts (username, title, body,file,content) VALUES (?, ?, ?,?,?)", [form.fields.author, form.fields.title, form.fields.body,filename,form.fields.content]);
-          return;
+           return;
         } 
-        console.log(form.fields.author,form.fields.title,form.fields.body,filename,form.fields.content,pid)
-        //sqlcmd("INSERT INTO posts (username, title, body,file,content) VALUES (?, ?, ?,?,?)", [form.fields.author, form.fields.title, form.fields.body,filename,form.fields.content]);
-        sqlcmd(`UPDATE posts SET "username"='${form.fields.author}',"title"='${form.fields.title}',"body"='${form.fields.body}',"file"='${filename}',"content"='${form.fields.content}'WHERE id='${pid}';`)
+        var re=/undefined/gi
+        var str=form.fields.content1+form.fields.content2+form.fields.content3+form.fields.content4+form.fields.content5+form.fields.content6+form.fields.content7+form.fields.content8
+        var content=str.replace(re, '');
+        var year =form.fields.body1+form.fields.body2 
+        sqlcmd(`UPDATE posts SET "username"='${form.fields.author}',"title"='${form.fields.title}',"body"='${year}',"file"='${filename}',"content"='${content}'WHERE id='${pid}';`)
         ctx.response.redirect('/');
       return;
     }
@@ -1053,11 +1057,12 @@ async function create(ctx) {
         fileExt = null;
         return ;
       }
-      
-    
-
-      console.log(user.username, form.fields.title, form.fields.body,filename,form.fields.content)
-      sqlcmd("INSERT INTO posts (username, title, body,file,content) VALUES (?, ?, ?,?,?)", [form.fields.author, form.fields.title, form.fields.body,filename,form.fields.content]);
+      var re=/undefined/gi
+        var str=form.fields.content1+form.fields.content2+form.fields.content3+form.fields.content4+form.fields.content5+form.fields.content6+form.fields.content7+form.fields.content8
+        var content=str.replace(re, '');
+        var year =form.fields.body1+form.fields.body2 
+//console.log(user.username, form.fields.title, form.fields.body,filename,form.fields.content)
+      sqlcmd("INSERT INTO posts (username, title, body,file,content) VALUES (?, ?, ?,?,?)", [form.fields.author, form.fields.title, year,filename,content]);
     } 
     else {
       ctx.throw(404, 'not login yet!');
