@@ -453,9 +453,26 @@ async function list_custom(ctx) {
         orderby = orderby || 'id'
         let op = ctx.request.url.searchParams.get('op')
         op = op || 'ASC'*/
-      
-        var posts = postQuery(`SELECT id,username, title, body ,file,content FROM posts WHERE title = '${search.search}' OR content= '${search.search}' OR username = '${search.search}' OR body = '${search.search}';`)
-        var post = posts[0]
+        var see=search.search.split("")
+       
+        //var see=search.search.split(/\s+/)
+       var str = ''
+       console.log("1228",see);
+        var i=0
+       var patten=[] 
+       //var postss = postQuery(`SELECT id,username, title, body ,file,content FROM posts WHERE title LIKE '%${see[i]}%' OR content LIKE '%${see[i]}%' OR username LIKE '%${see[i]}%' OR body LIKE '%${see[i]}%';`)
+        
+       while(see[i]!=null)
+       {
+        //console.log("1228照順序\n",see[i]) 
+        str=str+" OR title LIKE '%" + see[i]+ "%' OR content LIKE '%"+see[i]+ "%' OR username LIKE '%"+see[i]+  "%' OR body LIKE '%" +see[i]+"%'" 
+        i++;
+       }
+        //console.log("1229",str)
+       var posts = postQuery(`SELECT id,username, title, body ,file,content FROM posts WHERE title LIKE '%${search.search}%' OR content LIKE '%${search.search}%' OR username LIKE '%${search.search}%' OR body LIKE '%${search.search}%'${str};`)
+       //var posts = postQuery(`SELECT id,username, title, body ,file,content FROM posts WHERE title LIKE '%${search.search}%' OR content LIKE '%${search.search}%' OR username LIKE '%${search.search}%' OR body LIKE '%${search.search}%';`)
+       
+        //qvar posts = postQuery(`SELECT id,username, title, body ,file,content FROM posts WHERE title LIKE '%${search.search}%' OR content LIKE '%${search.search}%' OR username LIKE '%${search.search}%' OR body LIKE '%${search.search}%';`)
         ctx.response.body = await render.list(posts,safes.email);
         return;
         }
@@ -559,8 +576,8 @@ async function editaccount(ctx) {
 
 /*1223check */
 async function add(ctx) {
-  var user = await ctx.state.session.get('user')
-  if (user != null) {
+  var usercheck = await ctx.state.session.get('user')
+  if (usercheck != null) {
     var safe = user_teacherQuery(`SELECT id, username, password, email FROM users_teacher WHERE username='${usercheck.username}'`)
     var safes = safe[0]
     if(safes==null)
@@ -571,6 +588,7 @@ async function add(ctx) {
     else
     {
       ctx.response.body = await render.newPost();
+      return;
     }
     
   } 

@@ -376,6 +376,13 @@ export function fail() {
 }
 
 export function list(posts, user) {
+  /*console.log("下午開始",posts)
+  console.log("剛開始要看這個1",posts[0][0])
+  console.log("剛開始要看這個2",posts[1][0])
+  console.log("剛開始要看這個3",posts[2])*/
+  //console.log("剛開始要看這個",posts[0][0])
+  //console.log("剛開始要看這個",posts)
+  
   let list = []
   //    <p><a href="/post/${post.id}">查看完整內容</a></p>
   for (let post of posts) {
@@ -390,6 +397,7 @@ export function list(posts, user) {
     </li>
     `)
   }
+
   let content = `
   <body>
   <article>
@@ -407,6 +415,7 @@ export function list(posts, user) {
   `
   return layout('金大社工系學習歷程專區', content)
 }
+
 
 
 export function liststu(posts, user) {
