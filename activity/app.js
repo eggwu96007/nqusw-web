@@ -752,7 +752,7 @@ async function editpost(ctx)
       var pattern_only=/[`@#$%^&*_+<>{}\/[\]]/im;
       let posts = postQuery(`SELECT id, username, title, body,file,content FROM posts WHERE id=${pid}`)
       let post = posts[0]
-      //console.log("1225",post)
+     console.log("哪裡有問題")
         if (form ) {
           var filename = form.files.file.filename
           let content = form.files.file.content
@@ -784,10 +784,17 @@ async function editpost(ctx)
             fileExt = null;
            return;
         } 
-        var re=/undefined/gi
-        var str=form.fields.content1+form.fields.content2+form.fields.content3+form.fields.content4+form.fields.content5+form.fields.content6+form.fields.content7+form.fields.content8
-        var content=str.replace(re, '');
         var year =form.fields.body1+form.fields.body2 
+        if(form.fields.content1==null)form.fields.content1=''
+        if(form.fields.content2==null)form.fields.content2=''
+        if(form.fields.content3==null)form.fields.content3=''
+        if(form.fields.content4==null)form.fields.content4=''
+        if(form.fields.content5==null)form.fields.content5=''
+        if(form.fields.content6==null)form.fields.content6=''
+        if(form.fields.content7==null)form.fields.content7=''
+        if(form.fields.content8==null)form.fields.content8=''
+console.log("有跑到這裡1338")
+        var content=form.fields.content1+form.fields.content2+form.fields.content3+form.fields.content4+form.fields.content5+form.fields.content6+form.fields.content7+form.fields.content8
         sqlcmd(`UPDATE posts SET "username"='${form.fields.author}',"title"='${form.fields.title}',"body"='${year}',"file"='${filename}',"content"='${content}'WHERE id='${pid}';`)
         ctx.response.redirect('/');
       return;
@@ -1057,10 +1064,29 @@ async function create(ctx) {
         fileExt = null;
         return ;
       }
-      var re=/undefined/gi
-        var str=form.fields.content1+form.fields.content2+form.fields.content3+form.fields.content4+form.fields.content5+form.fields.content6+form.fields.content7+form.fields.content8
-        var content=str.replace(re, '');
+        
         var year =form.fields.body1+form.fields.body2 
+        if(form.fields.content1==null)form.fields.content1=''
+        if(form.fields.content2==null)form.fields.content2=''
+        if(form.fields.content3==null)form.fields.content3=''
+        if(form.fields.content4==null)form.fields.content4=''
+        if(form.fields.content5==null)form.fields.content5=''
+        if(form.fields.content6==null)form.fields.content6=''
+        if(form.fields.content7==null)form.fields.content7=''
+        if(form.fields.content8==null)form.fields.content8=''
+       /* console.log("改完後")
+        console.log("0105-6",form.fields.content1)
+        console.log("0105-6",form.fields.content2)
+        console.log("0105-6",form.fields.content3)
+        console.log("0105-6",form.fields.content4)
+        console.log("0105-6",form.fields.content5)
+        console.log("0105-6",form.fields.content6)
+        console.log("0105-6",form.fields.content7)
+        console.log("0105-6",form.fields.content8)*/
+       // var re=/undefined/gi
+        var content=form.fields.content1+form.fields.content2+form.fields.content3+form.fields.content4+form.fields.content5+form.fields.content6+form.fields.content7+form.fields.content8
+        //var content=str.replace(re, ' ');
+        //console.log("######",str)
 //console.log(user.username, form.fields.title, form.fields.body,filename,form.fields.content)
       sqlcmd("INSERT INTO posts (username, title, body,file,content) VALUES (?, ?, ?,?,?)", [form.fields.author, form.fields.title, year,filename,content]);
     } 

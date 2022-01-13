@@ -468,21 +468,24 @@ export function newPost(args={}) {
       <p><input type="text" placeholder="機構名稱(全名)" name="title"></p>
       <p><input type="text" placeholder="入學級別和姓名(例如:王曉明)/老師姓名與職位(例如:黃大銘教授)" name="author"></p>
       <p>文章類別</p>
-  <input type="checkbox" id="vehicle1" name="content1" value="兒童/">
+  <input type="checkbox" id="vehicle1" name="content1" value="#兒童">
   <label for="vehicle1">兒童</label>
-  <input type="checkbox" id="vehicle2" name="content2" value="少年/">
+
+  <input type="checkbox" id="vehicle2" name="content2" value="#少年">
   <label for="vehicle2">少年</label><br>
-  <input type="checkbox" id="vehicle3" name="content3" value="家庭/">
+
+  <input type="checkbox" id="vehicle3" name="content3" value="#家庭">
   <label for="vehicle3">家庭</label>
-  <input type="checkbox" id="vehicle4" name="content4" value="身障/">
+  
+  <input type="checkbox" id="vehicle4" name="content4" value="#身障">
   <label for="vehicle4">身障</label><br>
-  <input type="checkbox" id="vehicle5" name="content5" value="老人與長照/">
+  <input type="checkbox" id="vehicle5" name="content5" value="#老人與長照">
   <label for="vehicle5">老人</label>
-  <input type="checkbox" id="vehicle6" name="content6" value="醫務/">
-  <label for="vehicle6">醫務</label><br><br>
-  <input type="checkbox" id="vehicle7" name="content7" value="法律與政策/">
+  <input type="checkbox" id="vehicle6" name="content6" value="#醫務">
+  <label for="vehicle6">醫務</label><br>
+  <input type="checkbox" id="vehicle7" name="content7" value="#法律與政策">
   <label for="vehicle7">法律與政策</label>
-  <input type="checkbox" id="vehicle8" name="content8" value="其他/">
+  <input type="checkbox" id="vehicle8" name="content8" value="#其他">
       <label for="vehicle8">其他</label><br>
 
       <p><select name="body1">
@@ -505,9 +508,9 @@ export function newPost(args={}) {
 
     <p><select name="body2">
     <option value="">實習期間</option>
-    <option value="期中">期中</option>
-    <option value="暑期" >暑期</option>
-    <option value="畢業成發">畢業成發</option>
+    <option value="實習一">實習一</option>
+    <option value="實習二">實習二</option>
+    <option value="畢業專題">畢業專題</option>
     <option value="其他">其他</option>
     </select></p>
 
@@ -636,9 +639,9 @@ export function editpostui(post,args={}) {
 
     <p><select name="body2">
     <option value="">實習期間</option>
-    <option value="期中">期中</option>
-    <option value="暑期" >暑期</option>
-    <option value="畢業成發">畢業成發</option>
+    <option value="實習一">實習一</option>
+    <option value="實習二">實習二</option>
+    <option value="畢業專題">畢業專題</option>
     <option value="其他">其他</option>
     </select></p>
 
