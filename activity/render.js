@@ -7,6 +7,31 @@ export function layout(title, content) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" />
     <style>
+    .tooltip {
+      position: relative;
+      display: inline-block;
+      border-bottom: 1px dotted red;
+  }
+  
+  .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 120px;
+      background-color: red;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px 0;
+  
+      /* 定位 */
+      position: absolute;
+      z-index: 1;
+  }
+  
+  .tooltip:hover .tooltiptext {
+      visibility: visible;
+  }
+
+
     body {
       
       background-color:  #D1E9E9;
@@ -402,6 +427,17 @@ export function list(posts, user) {
   
   <input type="text" placeholder="關鍵字搜尋"  name="search" style="width:auto;">
   <input type="submit" value="搜尋">
+ 
+  <div class="tooltip">游標移過來
+  <span class="tooltiptext">搜尋說明：</span>
+</div>
+<p>進階搜尋</p>
+<input type="checkbox" id="vehicle1" name="title" value="title">
+<label for="vehicle1">機構名稱</label>
+<input type="checkbox" id="vehicle2" name="class" value="class">
+<label for="vehicle1">級別</label>
+<input type="checkbox" id="vehicle3" name="content" value="content">
+<label for="vehicle1">文章類別</label>
 </form></p>
   <ul id="posts">
     ${list.join('\n')}
@@ -430,6 +466,7 @@ export function liststu(posts, user) {
     `)
   }
   let content = `
+  
   <body>
   <article>
   <p style="border: crimson;font-size: 30px; border-top: 100px; ">${(user==null)?'':'歡迎 '+user.email}<a href="/editpassword_user/${user.id}">變更密碼</a><a href="/logout">登出</a></p>
@@ -437,6 +474,23 @@ export function liststu(posts, user) {
   
   <input type="text" placeholder="關鍵字搜尋"  name="search" style="width:auto;">
   <input type="submit" value="搜尋">
+  <div class="tooltip">游標移過來
+  <span class="tooltiptext">搜尋說明</span>
+  
+</div>
+<p>進階搜尋</p>
+<input type="checkbox" id="vehicle1" name="title" value="title">
+  <label for="vehicle1">機構名稱</label>
+
+  <input type="checkbox" id="vehicle2" name="body" value="body">
+  <label for="vehicle2">級別</label>
+
+  <input type="checkbox" id="vehicle3" name="content" value="content">
+  <label for="vehicle3">文章類別</label>
+
+  <input type="checkbox" id="vehicle4" name="username" value="username">
+  <label for="vehicle4">作者姓名</label>
+
 </form>
   <ul id="posts">
     ${list.join('\n')}

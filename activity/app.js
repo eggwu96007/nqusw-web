@@ -453,7 +453,7 @@ async function list_custom(ctx) {
         orderby = orderby || 'id'
         let op = ctx.request.url.searchParams.get('op')
         op = op || 'ASC'*/
-        var see=search.search.split("")
+        var see=search.search.split(" ")
        
         //var see=search.search.split(/\s+/)
        var str = ''
@@ -487,6 +487,8 @@ async function list_custom(ctx) {
 /*1223check */
 async function list_custom_stu(ctx) {
   var usercheck = await ctx.state.session.get('user')
+  //console.log("0127跑到這裡?")
+  //console.log("0127",form.fields.title)
   const body = ctx.request.body()
   if(usercheck==null)
   {
@@ -507,6 +509,10 @@ async function list_custom_stu(ctx) {
       if (body.type === "form") {
         var search = await parseFormBody(body)
         console.log("1226查詢",search.search)
+        console.log("1226查詢",search.body)
+        console.log("1226查詢",search.title)
+        console.log("1226查詢",search.username)
+        console.log("1226查詢",search.content)
         if(usercheck != null)
       {
        /* let orderby = ctx.request.url.searchParams.get('orderby')
@@ -514,18 +520,48 @@ async function list_custom_stu(ctx) {
         let op = ctx.request.url.searchParams.get('op')
         op = op || 'ASC'*/
       
-        var see=search.search.split("")
-       var str = ''
-        var i=0
-       var patten=[] 
+      var see=search.search.split(" ")
+      var str = ''
+      var i=0
+      
        
        while(see[i]!=null)
        {
-        str=str+" OR title LIKE '%" + see[i]+ "%' OR content LIKE '%"+see[i]+ "%' OR username LIKE '%"+see[i]+  "%' OR body LIKE '%" +see[i]+"%'" 
+        if(search.title!=null)
+        {
+          console.log("跑1")
+          str=str+" OR title LIKE '%" + see[i]+ "%' " 
+        }
+          
+        if(search.body!=null)
+        {
+          console.log("跑2")
+          str=str+" OR body LIKE '%" + see[i]+ "%' " 
+        }
+        
+        if(search.username!=null)
+        {
+          console.log("跑3")
+          str=str+" OR username LIKE '%" + see[i]+ "%' " 
+        }
+        
+        if(search.content!=null)
+        {
+          console.log("跑4")
+          str=str+" OR content LIKE '%" + see[i]+ "%' " 
+        }
+        
+        if(search.title==null&&search.body==null&&search.username==null&&search.content==null)
+        {
+          str=str+" OR title LIKE '%" + see[i]+ "%' OR content LIKE '%"+see[i]+ "%' OR username LIKE '%"+see[i]+  "%' OR body LIKE '%" +see[i]+"%'" 
+          console.log("跑5")
+        }
         i++;
        }
-       var posts = postQuery(`SELECT id,username, title, body ,file,content FROM posts WHERE title LIKE '%${search.search}%' OR content LIKE '%${search.search}%' OR username LIKE '%${search.search}%' OR body LIKE '%${search.search}%'${str};`)
+       console.log("GG啦",str)
+       var posts = postQuery(`SELECT id,username, title, body ,file,content FROM posts WHERE title LIKE '%真他媽聰明阿%' ${str};`)
        ctx.response.body = await render.liststu(posts,safes);
+       str=''
         return;
         }
         
@@ -752,7 +788,6 @@ async function editpost(ctx)
       var pattern_only=/[`@#$%^&*_+<>{}\/[\]]/im;
       let posts = postQuery(`SELECT id, username, title, body,file,content FROM posts WHERE id=${pid}`)
       let post = posts[0]
-     console.log("哪裡有問題")
         if (form ) {
           var filename = form.files.file.filename
           let content = form.files.file.content
@@ -793,7 +828,6 @@ async function editpost(ctx)
         if(form.fields.content6==null)form.fields.content6=''
         if(form.fields.content7==null)form.fields.content7=''
         if(form.fields.content8==null)form.fields.content8=''
-console.log("有跑到這裡1338")
         var content=form.fields.content1+form.fields.content2+form.fields.content3+form.fields.content4+form.fields.content5+form.fields.content6+form.fields.content7+form.fields.content8
         sqlcmd(`UPDATE posts SET "username"='${form.fields.author}',"title"='${form.fields.title}',"body"='${year}',"file"='${filename}',"content"='${content}'WHERE id='${pid}';`)
         ctx.response.redirect('/');
