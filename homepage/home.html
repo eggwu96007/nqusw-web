@@ -16,11 +16,15 @@ width: 200;
 height: 500px;
 }
 
+
+
 .slider_container div {
 position:absolute;
 top: 200px;
 margin-left: 300px;
-animation: round 25s linear infinite;
+opacity: 0;
+-webkit-animation: round 25s linear infinite;
+            animation: round 25s linear infinite;
 }
 
 
@@ -32,12 +36,12 @@ filter: alpha(opacity=100);
 }
 20% {
 opacity: 1;
-filter: alpha(opacity=100);
+filter: alpha(opacity=0);
 /* 1- 5秒靜止*/
 }
 24% {
 opacity: 0;
-filter: alpha(opacity=0);
+filter: alpha(opacity=100);
 /* 5-6秒淡出*/
 }
 }
@@ -68,17 +72,39 @@ animation-delay: 20s;
 }
 
 
+@-webkit-keyframes round {
+    4% {
+        opacity: 1;
+        filter: alpha(opacity=100);
+        /* 0 - 1秒 淡入*/
+    }
+    20% {
+        opacity: 1;
+        filter: alpha(opacity=100);
+        /* 1- 5秒靜止*/
+    }
+    24% {
+        opacity: 0;
+        filter: alpha(opacity=0);
+        /* 5-6秒淡出*/
+    }
+}
+
+
 /*bar*/
+
+
 ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
   overflow: hidden;
-  background-color: #333;
+  background-color: #7B9;
 
 }
 
 li {
+
   float: left;
  
 }
@@ -120,13 +146,26 @@ li.dropdown {
 .dropdown:hover .dropdown-content {
   display: block;
 }
+
+
+@media (min-width:500px){ 
+.barleft{display: none}
+.dropbtn1{display: none}}
+
+@media (min-width:1000px){ 
+.barleft{display:inline}
+.dropbtn1{display: inline-block}}
+
+
+
+
 </style>
 </head>
 <body>
 
 
     <ul>
-        <li class="barleft"><a href="#news">最新消息</a></li>
+        <li class="barleft" ><a href="#news">最新消息</a></li>
         <li class="dropdown">
           <a href="javascript:void(0)" class="dropbtn">學術活動 &#8595</a>
           <div class="dropdown-content">
@@ -136,7 +175,7 @@ li.dropdown {
           </div>
         </li>
         <li class="dropdown">
-          <a href="javascript:void(0)" class="dropbtn">系所介紹 &#8595</a>
+          <a href="javascript:void(0)" class="dropbtn dropbtn1" >系所介紹 &#8595</a>
           <div class="dropdown-content">
             <a href="#">Link 1</a>
             <a href="#">Link 2</a>

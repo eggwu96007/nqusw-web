@@ -1,4 +1,233 @@
 export function layout(title, content) {
+if(title=="學習歷程檔案登入")
+{
+  return `
+  <html>
+  <head>
+    <title>${title}</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" />
+    <style>
+    /*sidebar*/
+    .sidenav {
+      height: 100%;
+      width: 0;
+      position: fixed;
+      z-index: 3;
+      top: 0;
+      left: 0;
+      background-color: #111;
+      overflow-x: hidden;
+      transition: 0.5s;
+      padding-top: 60px;
+    }
+    
+    .sidenav a {
+      padding: 8px 8px 8px 32px;
+      text-decoration: none;
+      font-size: 25px;
+      color: #818181;
+      display: block;
+      transition: 0.3s;
+    }
+    
+    .sidenav a:hover {
+      color: #f1f1f1;
+    }
+    
+    .sidenav .closebtn {
+      position: absolute;
+      top: 0;
+      right: 25px;
+      font-size: 36px;
+      margin-left: 50px;
+    }
+    /*上面是sidebar*/
+
+
+    /*navbar*/
+    ul {
+      list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #38444d;
+    }
+    
+    li {
+      float: left;
+    }
+    
+    li a, .dropbtn {
+      display: inline-block;
+      color: white;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+    }
+    
+    li a:hover, .dropdown:hover .dropbtn {
+      background-color: red;
+    }
+    
+    li.dropdown {
+      display: inline-block;
+    }
+    
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #f9f9f9;
+      min-width: 160px;
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      z-index: 1;
+    }
+    
+    .dropdown-content a {
+      color: black;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+      text-align: left;
+    }
+    
+    .dropdown-content a:hover {background-color: #f1f1f1;}
+    
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+
+    /*上面是navbar*/
+
+    body {
+      
+      background-color:  #D1E9E9;
+        font-family: Arial, Helvetica, sans-serif;
+        font: 20px Helvetica, Arial;
+      }
+
+
+  /*登入textarea*/
+      input[type=text],input[type=password],
+      textarea {
+        border: 1px solid #eee;
+        border-radius: 2px;
+        padding: 15px;
+        font-size: .8em;
+      }
+
+      /*圖片輪播UI*/
+      .slider_container {
+        margin: 30px;
+        width: auto;
+        height: auto;
+        }
+        
+        .slider_container img{
+          position:absolute
+        width: 960px;
+        height: 480px;
+        }
+        
+        
+        
+        .slider_container div {
+        position:absolute;
+        top: 200px;
+        margin-left: 300px;
+        opacity: 0;
+        -webkit-animation: round 25s linear infinite;
+                    animation: round 25s linear infinite;
+        }
+        
+        
+        @keyframes round {
+        4% {
+        opacity: 1;
+        filter: alpha(opacity=100);
+        /* 0 - 1秒 淡入*/
+        }
+        20% {
+        opacity: 1;
+        filter: alpha(opacity=0);
+        /* 1- 5秒靜止*/
+        }
+        24% {
+        opacity: 0;
+        filter: alpha(opacity=100);
+        /* 5-6秒淡出*/
+        }
+        }
+        
+        .slider_container div:nth-child(5) {
+        -webkit-animation-delay: 0s;
+        animation-delay: 0s;
+        }
+        
+        .slider_container div:nth-child(4) {
+        -webkit-animation-delay: 5s;
+        animation-delay: 5s;
+        }
+        
+        .slider_container div:nth-child(3) {
+        -webkit-animation-delay: 10s;
+        animation-delay: 10s;
+        }
+        
+        .slider_container div:nth-child(2) {
+        -webkit-animation-delay: 15s;
+        animation-delay: 15s;
+        }
+        
+        .slider_container div:nth-child(1) {
+        -webkit-animation-delay: 20s;
+        animation-delay: 20s;
+        }
+        
+        @-webkit-keyframes round {
+            4% {
+                opacity: 1;
+                filter: alpha(opacity=100);
+                /* 0 - 1秒 淡入*/
+            }
+            20% {
+                opacity: 1;
+                filter: alpha(opacity=100);
+                /* 1- 5秒靜止*/
+            }
+            24% {
+                opacity: 0;
+                filter: alpha(opacity=0);
+                /* 5-6秒淡出*/
+            }
+        }
+        /*上面是圖片輪播*/
+
+
+/*大小設定*/
+        @media (min-width:500px){ 
+          .see{display:inline}
+          .nosee{display: none}
+          .dropbtn1{display:none}}
+          
+          @media (min-width:1000px){
+          .see{display:none} 
+          .nosee{display:inline}
+          .dropbtn1{display:inline-block}
+        }
+
+    </style>
+  </head>
+ 
+  ${content}
+ 
+  </html>
+  `
+}
+
+
+else
+{
   return `
   <html>
   <head>
@@ -7,6 +236,7 @@ export function layout(title, content) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" />
     <style>
+
     body {
       
       background-color:  #D1E9E9;
@@ -53,10 +283,7 @@ export function layout(title, content) {
       text-align: center;
       display: inline-block;
       top: 25%;
-      left:20%;
-     
-      
-      
+      left:20%; 
     }
 
     
@@ -128,6 +355,9 @@ export function layout(title, content) {
   </html>
   `
 }
+
+  
+}
 /*1223check*/
 export function loginUi(args={})  {
   var alertScript
@@ -162,28 +392,71 @@ export function loginUi(args={})  {
   <body id="bodylogin">
   ${alertScriptshow}
 
-  <div class="formloginleft">
-  <h1>管理員登入</h1>
+  <ul>
+  <div id="mySidenav" class="sidenav">
+      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+      <a href="#">關於機構</a>
+      <a href="#">畢業專題</a>
+      <a href="#">實習報告書</a>
+      <a href="#">聯絡我們</a>
+    </div>
+    
+    <span class="see" style="font-size:30px;float:left;cursor:pointer" onclick="openNav()">&#9776; </span>
+    
+  <li class="nosee"><a href="#home">回首頁</a></li>
   
-  <form action="/login" method="post" >
-    <p><input type="text" placeholder="帳號"  name="username" style="width:auto;"></p>
-    <p><input type="password" placeholder="密碼" name="password" style = "width:auto;"></p>
-    <p><input type="submit" value="登入"></p>
-  </form>
- <p>${alertScript}</p>
+  <li class="dropdown">
+    <a href="javascript:void(0)" class="dropbtn dropbtn1">關於機構</a>
+    <div class="dropdown-content">
+      <a href="#">依地區</a>
+      <a href="#">依領域</a>
+      <a href="#">查看所有機構</a>
+    </div>
+  </li>
+  <li class="nosee"><a href="#news">畢業專題</a></li>
+  <li class="nosee"><a href="#news">實習報告書</a></li>
+  <li class="nosee"><a href="#news">聯絡我們</a></li>
+  <li class="dropdown">
+    <a href="javascript:void(0)" class="dropbtn dropbtn1">常見問題</a>
+    <div class="dropdown-content">
+      <a href="#">忘記密碼</a>
+      <a href="#">Q2</a>
+      <a href="#">Q3</a>
+    </div>
+  </li>
+  <li style="float:right"><a class="active" href="#about">登入</a></li>
+</ul>
 
- </div>
 
- <div class="formloginright">
- <h1>學生端登入</h1>
-  
- <form action="/loginstu" method="post" >
-   <p><input type="text" placeholder="帳號"  name="username" style="width:auto;"></p>
-   <p><input type="password" placeholder="密碼" name="password" style = "width:auto;"></p>
-   <p><input type="submit" value="登入"></p>
- </form>
-<p>${alertScriptstu}</p>
+<div class="slider_container">
+<div>
+<img src="images/1.jpg" alt="pure css3 slider" />
 </div>
+<div>
+<img src="images/2.jpg" alt="pure css3 slider" />
+</div>
+<div>
+<img src="images/3.jpg" alt="pure css3 slider" />
+</div>
+<div>
+<img src="images/4.jpg" alt="pure css3 slider" />
+</div>
+<div>
+<img  src="images/5.jpg"  alt="pure css3 slider" />
+</div>
+</div>
+
+
+
+    <script>
+    function openNav() {
+      document.getElementById("mySidenav").style.width = "150px";
+    }
+    
+    function closeNav() {
+      document.getElementById("mySidenav").style.width = "0";
+    }
+    </script>
   </body>
   `)
 }

@@ -793,7 +793,6 @@ async function editpost(ctx)
         if(form.fields.content6==null)form.fields.content6=''
         if(form.fields.content7==null)form.fields.content7=''
         if(form.fields.content8==null)form.fields.content8=''
-console.log("有跑到這裡1338")
         var content=form.fields.content1+form.fields.content2+form.fields.content3+form.fields.content4+form.fields.content5+form.fields.content6+form.fields.content7+form.fields.content8
         sqlcmd(`UPDATE posts SET "username"='${form.fields.author}',"title"='${form.fields.title}',"body"='${year}',"file"='${filename}',"content"='${content}'WHERE id='${pid}';`)
         ctx.response.redirect('/');

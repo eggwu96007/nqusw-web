@@ -1,79 +1,135 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
 
 
 .slider_container {
-margin: 30px auto;
-width: 400px;
-height: 280px;
-position:absolute;
-border: 20px solid;
-border-color: #fff;
-border-bottom-width: 100px;
-background-color: #f5f5f5;
-box-shadow: #666 0 0 5px;
+margin: 30px;
+width: auto;
+height: 700px;
 }
 
 .slider_container div {
-position: absolute;
-top: 0;
-left: 0;
-opacity: 0;
-filter: alpha(opacity=0);
--webkit-animation: round 25s linear infinite;
-animation: round 25s linear infinite;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    filter: alpha(opacity=0);
+}
+.slider_container div {
+    -webkit-animation: round 25s linear infinite;
+            animation: round 25s linear infinite;
 }
 
+@media (min-width:500px){ 
+ body{
+   
+   background-color: green;
+ }
+}
+@media(min-width:1000px){ 
+ body{
+   width: 1000px;
+   background-color: blue;
+ }
+}
 
+@-webkit-keyframes round {
+    4% {
+        opacity: 1;
+        filter: alpha(opacity=100);
+        /* 0 - 1秒 淡入*/
+    }
+    20% {
+        opacity: 1;
+        filter: alpha(opacity=100);
+        /* 1- 5秒靜止*/
+    }
+    24% {
+        opacity: 0;
+        filter: alpha(opacity=0);
+        /* 5-6秒淡出*/
+    }
+}
 @keyframes round {
-4% {
-opacity: 1;
-filter: alpha(opacity=100);
-/* 0 - 1秒 淡入*/
-}
-20% {
-opacity: 1;
-filter: alpha(opacity=100);
-/* 1- 5秒靜止*/
-}
-24% {
-opacity: 0;
-filter: alpha(opacity=0);
-/* 5-6秒淡出*/
-}
+    4% {
+        opacity: 1;
+        filter: alpha(opacity=100);
+        /* 0 - 1秒 淡入*/
+    }
+    20% {
+        opacity: 1;
+        filter: alpha(opacity=100);
+        /* 1- 5秒靜止*/
+    }
+    24% {
+        opacity: 0;
+        filter: alpha(opacity=0);
+        /* 5-6秒淡出*/
+    }
 }
 
 .slider_container div:nth-child(5) {
--webkit-animation-delay: 0s;
-animation-delay: 0s;
+    -webkit-animation-delay: 0s;
+            animation-delay: 0s;
 }
 
 .slider_container div:nth-child(4) {
--webkit-animation-delay: 5s;
-animation-delay: 5s;
+    -webkit-animation-delay: 5s;
+            animation-delay: 5s;
 }
 
 .slider_container div:nth-child(3) {
--webkit-animation-delay: 10s;
-animation-delay: 10s;
+    -webkit-animation-delay: 10s;
+            animation-delay: 10s;
 }
 
 .slider_container div:nth-child(2) {
--webkit-animation-delay: 15s;
-animation-delay: 15s;
+    -webkit-animation-delay: 15s;
+            animation-delay: 15s;
 }
 
 .slider_container div:nth-child(1) {
--webkit-animation-delay: 20s;
-animation-delay: 20s;
+    -webkit-animation-delay: 20s;
+            animation-delay: 20s;
 }
 
+.slider_container span {    
+    color: #000;
+    background: #fff;
+    position: absolute;
+    left: 0%;
+    top: 280px;
+    width: 400px;
+    height: 100px;
+    font-size: 30px;
+    text-align: center;
+    line-height: 100px;
+    -webkit-transform:scaleY(0);
+        -ms-transform:scaleY(0);
+            transform:scaleY(0);
+    -webkit-transition: all 0.5s ease-in-out;
+            transition: all 0.5s ease-in-out;
+}
 
+.slider_container:hover span {
+    width: 100%;
+    -webkit-transform:scaleY(1);
+        -ms-transform:scaleY(1);
+            transform:scaleY(1);
+}
+
+.slider_container:hover div {
+    -webkit-animation-play-state: paused;
+            animation-play-state: paused;
+}
 </style>
 </head>
 <body>
+
+  
   <div class="slider_container">
     <div>
     <img src="images/1.jpg" alt="pure css3 slider" width="300px" height="100px"/>
@@ -88,7 +144,7 @@ animation-delay: 20s;
     <img src="images/4.jpg" alt="pure css3 slider" width="300px" height="100px"/>
     </div>
     <div>
-    <img src="images/5.jpg" alt="pure css3 slider" width="300px" height="100px"/>
+    <img  src="images/5.jpg"  alt="pure css3 slider" width="300px" height="100px"/>
     </div>
     </div>
    
