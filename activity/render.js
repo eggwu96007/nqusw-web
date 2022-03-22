@@ -7,7 +7,51 @@ if(title=="學習歷程檔案登入")
     <title>${title}</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" />
+    <link rel="stylesheet" href="images/css/slick.css">
+    <link rel="stylesheet" href="images/css/slick-theme.css">
     <style>
+
+    /*slider*/
+    html, body {
+      margin: 0;
+      padding: 0;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    .slider {
+        width: 50%;
+        margin: 20px;
+    }
+
+    .slick-slide {
+      margin: 20px 20px;
+    }
+
+    
+
+    .slick-prev:before,
+    .slick-next:before {
+      color: black;
+    }
+
+
+    .slick-slide {
+      transition: all ease-in-out .3s;
+      opacity: .2;
+    }
+    
+    .slick-active {
+      opacity: .5;
+    }
+
+    .slick-current {
+      opacity: 1;
+    }
+    /*slider*/
+
     /*sidebar*/
     .sidenav {
       height: 100%;
@@ -47,11 +91,7 @@ if(title=="學習歷程檔案登入")
 
     /*navbar*/
     ul {
-      list-style-type: none;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  background-color: #38444d;
+      
     }
     
     li {
@@ -107,114 +147,25 @@ if(title=="學習歷程檔案登入")
       }
 
 
-  /*登入textarea*/
-      input[type=text],input[type=password],
-      textarea {
-        border: 1px solid #eee;
-        border-radius: 2px;
-        padding: 15px;
-        font-size: .8em;
-      }
+ 
 
-      /*圖片輪播UI*/
-      .slider_container {
-        margin: 30px;
-        width: auto;
-        height: auto;
-        }
-        
-        .slider_container img{
-          position:absolute
-        width: 960px;
-        height: 480px;
-        }
-        
-        
-        
-        .slider_container div {
-        position:absolute;
-        top: 200px;
-        margin-left: 300px;
-        opacity: 0;
-        -webkit-animation: round 25s linear infinite;
-                    animation: round 25s linear infinite;
-        }
-        
-        
-        @keyframes round {
-        4% {
-        opacity: 1;
-        filter: alpha(opacity=100);
-        /* 0 - 1秒 淡入*/
-        }
-        20% {
-        opacity: 1;
-        filter: alpha(opacity=0);
-        /* 1- 5秒靜止*/
-        }
-        24% {
-        opacity: 0;
-        filter: alpha(opacity=100);
-        /* 5-6秒淡出*/
-        }
-        }
-        
-        .slider_container div:nth-child(5) {
-        -webkit-animation-delay: 0s;
-        animation-delay: 0s;
-        }
-        
-        .slider_container div:nth-child(4) {
-        -webkit-animation-delay: 5s;
-        animation-delay: 5s;
-        }
-        
-        .slider_container div:nth-child(3) {
-        -webkit-animation-delay: 10s;
-        animation-delay: 10s;
-        }
-        
-        .slider_container div:nth-child(2) {
-        -webkit-animation-delay: 15s;
-        animation-delay: 15s;
-        }
-        
-        .slider_container div:nth-child(1) {
-        -webkit-animation-delay: 20s;
-        animation-delay: 20s;
-        }
-        
-        @-webkit-keyframes round {
-            4% {
-                opacity: 1;
-                filter: alpha(opacity=100);
-                /* 0 - 1秒 淡入*/
-            }
-            20% {
-                opacity: 1;
-                filter: alpha(opacity=100);
-                /* 1- 5秒靜止*/
-            }
-            24% {
-                opacity: 0;
-                filter: alpha(opacity=0);
-                /* 5-6秒淡出*/
-            }
-        }
-        /*上面是圖片輪播*/
+     
 
 
 /*大小設定*/
         @media (min-width:500px){ 
           .see{display:inline}
+          .small{width: 10px;}
           .nosee{display: none}
           .dropbtn1{display:none}}
           
           @media (min-width:1000px){
-          .see{display:none} 
+            .small{width: auto;}
           .nosee{display:inline}
           .dropbtn1{display:inline-block}
         }
+
+       
 
     </style>
   </head>
@@ -236,8 +187,14 @@ else
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" />
     <style>
-<<<<<<< HEAD
-=======
+    /*登入textarea*/
+    input[type=text],input[type=password],
+    textarea {
+      border: 1px solid #eee;
+      border-radius: 2px;
+      padding: 15px;
+      font-size: .8em;
+    }
     .tooltip {
       position: relative;
       display: inline-block;
@@ -262,7 +219,6 @@ else
       visibility: visible;
   }
 
->>>>>>> ecf1b468bf0b34cb139056bd42a03351d5b35814
 
     body {
       
@@ -416,10 +372,17 @@ export function loginUi(args={})  {
     alertScriptshow = ''
   }
   return layout('學習歷程檔案登入', `
+
+  
   <body id="bodylogin">
+
   ${alertScriptshow}
 
-  <ul>
+  <ul style="list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #38444d;">
   <div id="mySidenav" class="sidenav">
       <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
       <a href="#">關於機構</a>
@@ -455,25 +418,37 @@ export function loginUi(args={})  {
 </ul>
 
 
-<div class="slider_container">
-<div>
-<img src="images/1.jpg" alt="pure css3 slider" />
-</div>
-<div>
-<img src="images/2.jpg" alt="pure css3 slider" />
-</div>
-<div>
-<img src="images/3.jpg" alt="pure css3 slider" />
-</div>
-<div>
-<img src="images/4.jpg" alt="pure css3 slider" />
-</div>
-<div>
-<img  src="images/5.jpg"  alt="pure css3 slider" />
-</div>
-</div>
+ 
+    <div class="container">
+    <div>
+      <div class="image">
+        <img class="small" style="display:block; margin:auto;" src="images/1.jpg" />
+      </div>
+    </div>
+    <div>
+      <div class="image">
+        <img class="small" style="display:block; margin:auto;" src="images/1.jpg" />
+      </div>
+    </div>
+    <div>
+      <div class="image">
+        <img class="small" style="display:block; margin:auto;" src="images/1.jpg" />
+      </div>
+    </div>
+  </div>
 
-
+    <script type="text/javascript" src="images/js/1.js"></script>
+    <script type="text/javascript" src="images/js/2.js"></script>
+    <script type="text/javascript" src="images/js/slick.min.js"></script>
+    <script type="text/javascript" src="images/js/slick.js"></script>
+<script type="text/javascript">
+$('.container').slick({
+  slidesToShow: 1,
+  slidesToScroll: 1,
+  autoplay: true,
+  autoplaySpeed: 5000,
+});
+</script>
 
     <script>
     function openNav() {

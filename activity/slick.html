@@ -6,7 +6,10 @@
 <link rel="stylesheet" href="css/slick.css">
 <link rel="stylesheet" href="css/slick-theme.css">
 <style type="text/css">
-    
+    html, body {
+      margin: 0;
+      padding: 0;
+    }
 
     * {
       box-sizing: border-box;
@@ -25,7 +28,7 @@
 
     .slick-prev:before,
     .slick-next:before {
-      color: green;
+      color: black;
     }
 
 
@@ -41,38 +44,17 @@
     .slick-current {
       opacity: 1;
     }
-
-    @media (min-width:500px){ 
-          .see{width: 10px;}
-          }
-          
-          @media (min-width:1000px){
-            .see{width: 1000px;}
-          
-        }
   </style>
 </head>
 <body>
 <!--連結照片-->
-  
-
-    <div class="container">
-      <div>
-        <div class="image">
-          <img class="see" style="display:block; margin:auto;" src="images/1.jpg" />
-        </div>
-      </div>
-      <div>
-        <div class="image">
-          <img class="see" style="display:block; margin:auto;" src="images/1.jpg" />
-        </div>
-      </div>
-      <div>
-        <div class="image">
-          <img class="see" style="display:block; margin:auto;" src="images/1.jpg" />
-        </div>
-      </div>
-    </div>
+    <ul class="container">
+        <li><a href="https://www.youtube.com/watch?v=xZJcJ6QRvfY&t=183s"><img src="images/1.jpg" width="500dp" height="200dp"  ></a></li>
+        <li><a href="https://www.youtube.com/watch?v=xZJcJ6QRvfY&t=183s"><img src="images/1.jpg" width="500dp" height="200dp"  ></a></li>
+        <li><a href="https://www.youtube.com/watch?v=xZJcJ6QRvfY&t=183s"><img src="images/1.jpg" width="500dp" height="200dp"  ></a></li>
+        <li><a href="https://www.youtube.com/watch?v=xZJcJ6QRvfY&t=183s"><img src="images/1.jpg" width="500dp" height="200dp"  ></a></li>
+        <li><a href="https://www.youtube.com/watch?v=xZJcJ6QRvfY&t=183s"><img src="images/1.jpg" width="500dp" height="200dp"  ></a></li>
+    </ul>
 
 
     <script type="text/javascript" src="js/1.js"></script>
@@ -84,7 +66,7 @@ $('.container').slick({
   slidesToShow: 1,
   slidesToScroll: 1,
   autoplay: true,
-  autoplaySpeed: 1000,
+  autoplaySpeed: 5000,
 });
 </script>
 </body>
