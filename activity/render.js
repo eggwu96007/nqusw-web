@@ -17,25 +17,18 @@ if(title=="學習歷程檔案登入")
       padding: 0;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+   
 
-    .slider {
-        width: 50%;
-        margin: 20px;
-    }
+   
 
     .slick-slide {
-      margin: 20px 20px;
+      margin: 20px 20px -100px 20px;
+     
     }
 
     
 
-    .slick-prev:before,
-    .slick-next:before {
-      color: black;
-    }
+    
 
 
     .slick-slide {
@@ -147,20 +140,19 @@ if(title=="學習歷程檔案登入")
       }
 
 
- 
-
-     
 
 
 /*大小設定*/
         @media (min-width:500px){ 
           .see{display:inline}
-          .small{width: 10px;}
+          
+          .small{width: 500px;}
           .nosee{display: none}
           .dropbtn1{display:none}}
           
           @media (min-width:1000px){
-            .small{width: auto;}
+            .see{display:none}
+            .small{width: 1000px;height:600px}
           .nosee{display:inline}
           .dropbtn1{display:inline-block}
         }
@@ -379,7 +371,7 @@ export function loginUi(args={})  {
   ${alertScriptshow}
 
   <ul style="list-style-type: none;
-  margin: 0;
+
   padding: 0;
   overflow: hidden;
   background-color: #38444d;">
@@ -420,21 +412,9 @@ export function loginUi(args={})  {
 
  
     <div class="container">
-    <div>
-      <div class="image">
+        <img class="small" style="display:block; margin:auto; " src="images/1.jpg" />
         <img class="small" style="display:block; margin:auto;" src="images/1.jpg" />
-      </div>
-    </div>
-    <div>
-      <div class="image">
         <img class="small" style="display:block; margin:auto;" src="images/1.jpg" />
-      </div>
-    </div>
-    <div>
-      <div class="image">
-        <img class="small" style="display:block; margin:auto;" src="images/1.jpg" />
-      </div>
-    </div>
   </div>
 
     <script type="text/javascript" src="images/js/1.js"></script>
