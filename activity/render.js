@@ -1,6 +1,18 @@
-export function layout(title, content) {
-if(title=="學習歷程檔案登入")
-{
+export function layout(title, content,user) {
+  var loginstatus
+  console.log("0411",user)
+  if(user!=undefined)
+  {
+    console.log("到這裡?",user)  
+loginstatus= `<p style="border: crimson;font-size: 30px; border-top: 100px; ">'歡迎 '<a href="/editpassword_user/${user.id}">變更密碼</a><a href="/logout">登出</a></p>`
+
+}
+  else if (user==undefined)
+  {
+    console.log("還是到這裡?",user) 
+    loginstatus=`<li style="float:right"><a class="active" href="/login">登入</a></li>`
+    
+  }
   return `
   <html>
   <head>
@@ -11,25 +23,86 @@ if(title=="學習歷程檔案登入")
     <link rel="stylesheet" href="images/css/slick-theme.css">
     <style>
 
+   
+
+   
+
+    #posts {
+      margin: 0;
+      padding: 0;
+    }
+
+    #posts li {
+      padding: 20px;
+      border-style:solid;
+      list-style: none;
+    }
+    
+    /*游標*/
+    .tooltip {
+      position: relative;
+      display: inline-block;
+      border-bottom: 1px dotted red;
+  }
+  
+  .tooltiptext {
+      visibility: hidden;
+      width: 120px;
+      background-color: red;
+      color: #fff;
+      text-align: center;
+      border-radius: 10px;
+      padding: 5px 0;
+      }
+  .tooltip:hover .tooltiptext {
+        visibility: visible;
+    }
+/*登入小圈圈*/
+.formloginright
+    {
+      
+      background-color: #FFC1E0 ;
+      width:400px;
+      height:400px;
+      padding:30px;
+      text-align: center;
+      display:block;
+      border-radius:999em;
+    }
+
+    .formloginleft
+    {
+     
+      background-color: #FFC1E0 ;
+      padding:30px;
+      width:400px;
+      height:400px;
+      border-radius:999em;
+      text-align: center;
+      display:block;
+      
+    }
+
+  
+    input[type=text],input[type=password],
+    textarea {
+      border: 1px solid #eee;
+      padding: 15px;
+      font-size: .8em;
+    }
+
+   
+
     /*slider*/
     html, body {
       margin: 0;
       padding: 0;
     }
 
-   
-
-   
-
     .slick-slide {
       margin: 20px 20px -100px 20px;
      
     }
-
-    
-
-    
-
 
     .slick-slide {
       transition: all ease-in-out .3s;
@@ -140,36 +213,72 @@ if(title=="學習歷程檔案登入")
       }
 
 
-
-
 /*大小設定*/
         @media (min-width:500px){ 
           .see{display:inline}
-          
           .small{width: 500px;}
           .nosee{display: none}
-          .dropbtn1{display:none}}
+          .dropbtn1{display:none}
+          .formloginright{position:relative; margin-left: auto;
+            margin-right: auto;margin-top: 50px;}
+          .formloginleft{position:relative; margin-left: auto;
+            margin-right: auto;}
+        }
+          
           
           @media (min-width:1000px){
             .see{display:none}
             .small{width: 1000px;height:600px}
           .nosee{display:inline}
           .dropbtn1{display:inline-block}
+          .login{display:inline}
+          .formloginleft{position:absolute;top: 25%;
+            left: 10%;}
+          .formloginright{position:absolute;top: 25%;
+            left:60%;;margin-top: auto;}
         }
-
-       
-
     </style>
   </head>
+
+  <body id="bodylogin">
+  <!--側欄-->
+  <ul style="list-style-type: none;padding: 0;overflow: hidden;background-color: #38444d;">
+  <div id="mySidenav" class="sidenav">
+      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+      <a href="#">關於機構</a>
+      <a href="#">畢業專題</a>
+      <a href="#">實習報告書</a>
+      <a href="#">聯絡我們</a>
+    </div>
+    <!--側欄點擊按鈕-->
+    <span class="see" style="font-size:30px;float:left;cursor:pointer" onclick="openNav()">&#9776; </span>
+    <!--上面那欄-->
+  <li class="nosee"><a href="/home">回首頁</a></li>
+  <li class="nosee"><a href="#news">畢業專題</a></li>
+  <li class="nosee"><a href="#news">實習報告書</a></li>
+  <li class="nosee"><a href="/about">關於機構</a></li>
+  <li class="nosee"><a href="#news">聯絡我們</a></li>
+
+</li>
+  <li class="dropdown">
+    <a href="javascript:void(0)" class="dropbtn1">常見問題</a>
+    <div class="dropdown-content">
+      <a href="#">忘記密碼</a>
+      <a href="#">Q2</a>
+      <a href="#">Q3</a>
+    </div>
+  </li>
+  ${loginstatus}
+  
+</ul>
  
   ${content}
- 
+  </body>
   </html>
   `
 }
 
-
-else
+/*else
 {
   return `
   <html>
@@ -179,37 +288,11 @@ else
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" />
     <style>
-    /*登入textarea*/
-    input[type=text],input[type=password],
-    textarea {
-      border: 1px solid #eee;
-      border-radius: 2px;
-      padding: 15px;
-      font-size: .8em;
-    }
-    .tooltip {
-      position: relative;
-      display: inline-block;
-      border-bottom: 1px dotted red;
-  }
+    /*登入textarea
+    
+    
   
-  .tooltip .tooltiptext {
-      visibility: hidden;
-      width: 120px;
-      background-color: red;
-      color: #fff;
-      text-align: center;
-      border-radius: 6px;
-      padding: 5px 0;
-  
-      /* 定位 */
-      position: absolute;
-      z-index: 1;
-  }
-  
-  .tooltip:hover .tooltiptext {
-      visibility: visible;
-  }
+ 
 
 
     body {
@@ -230,38 +313,6 @@ else
       }
     
 
-    .formloginright
-    {
-      position: absolute;
-      background-color: #FFC1E0 ;
-      width:400px;
-      height:400px;
-      padding:30px;
-      text-align: center;
-      display:inline-block;
-      border-radius:999em;
-      top: 25%;
-      left: 55%;
-      
-     
-      
-    }
-
-    .formloginleft
-    {
-      position: absolute;
-      background-color: #FFC1E0 ;
-      padding:30px;
-      width:400px;
-      height:400px;
-      border-radius:999em;
-      text-align: center;
-      display: inline-block;
-      top: 25%;
-      left:20%; 
-    }
-
-    
   
       h1 {
         font-size: 2em;
@@ -284,22 +335,7 @@ else
   
      
   
-      textarea {
-        width: 500px;
-        height: 300px;
-      }
-  
-      input[type=text],input[type=password],
-      textarea {
-        border: 1px solid #eee;
-        border-radius: 2px;
-        padding: 15px;
-        font-size: .8em;
-      }
-  
-      input[type=text],input[type=password] {
-        width: 500px;
-      }
+      
 
       header{
         font-size: 50px;
@@ -334,7 +370,7 @@ else
   
 }
 /*1223check*/
-export function loginUi(args={})  {
+export function loginUi(args={},user)  {
   var alertScript
   var alertScriptshow
   var alertScriptstu
@@ -369,54 +405,43 @@ export function loginUi(args={})  {
   <body id="bodylogin">
 
   ${alertScriptshow}
+  <div class="login">
+  <div class="formloginleft">
+  <img class="small" style="width:200px;height:200px " src="images/管理員登入.png" />
+  <form action="/login" method="post" >
+  <p>管理者登入</p>
+  <p><input type="text" placeholder="帳號"  name="username" style="width:auto;"></p>
+  <p><input type="password" placeholder="密碼" name="password" style = "width:auto;"></p>
+  <p><input type="submit" value="登入"></p>
+  ${alertScript}
+  </div>
+</form>
+</div>
 
-  <ul style="list-style-type: none;
+<div class="formloginright">
+<img class="small" style="width:200px;height:200px " src="images/使用者登入.png" />
+<form action="/loginstu" method="post" >
+<p>使用者登入</p>
+<p><input type="text" placeholder="帳號"  name="username" style="width:auto;"></p>
+<p><input type="password" placeholder="密碼" name="password" style = "width:auto;"></p>
+<p><input type="submit" value="登入"></p>
+${alertScriptstu}
+</form>
+</div>
+  </body>
+  `,user)
+}
 
-  padding: 0;
-  overflow: hidden;
-  background-color: #38444d;">
-  <div id="mySidenav" class="sidenav">
-      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-      <a href="#">關於機構</a>
-      <a href="#">畢業專題</a>
-      <a href="#">實習報告書</a>
-      <a href="#">聯絡我們</a>
-    </div>
-    
-    <span class="see" style="font-size:30px;float:left;cursor:pointer" onclick="openNav()">&#9776; </span>
-    
-  <li class="nosee"><a href="#home">回首頁</a></li>
-  
-  <li class="dropdown">
-    <a href="javascript:void(0)" class="dropbtn dropbtn1">關於機構</a>
-    <div class="dropdown-content">
-      <a href="#">依地區</a>
-      <a href="#">依領域</a>
-      <a href="#">查看所有機構</a>
-    </div>
-  </li>
-  <li class="nosee"><a href="#news">畢業專題</a></li>
-  <li class="nosee"><a href="#news">實習報告書</a></li>
-  <li class="nosee"><a href="#news">聯絡我們</a></li>
-  <li class="dropdown">
-    <a href="javascript:void(0)" class="dropbtn dropbtn1">常見問題</a>
-    <div class="dropdown-content">
-      <a href="#">忘記密碼</a>
-      <a href="#">Q2</a>
-      <a href="#">Q3</a>
-    </div>
-  </li>
-  <li style="float:right"><a class="active" href="#about">登入</a></li>
-</ul>
-
-
- 
+export function homeUi(user)  { 
+  return layout('學習歷程檔案首頁', `
     <div class="container">
         <img class="small" style="display:block; margin:auto; " src="images/1.jpg" />
-        <img class="small" style="display:block; margin:auto;" src="images/1.jpg" />
-        <img class="small" style="display:block; margin:auto;" src="images/1.jpg" />
+        <img class="small" style="display:block; margin:auto;" src="images/2.jpg" />
+        <img class="small" style="display:block; margin:auto;" src="images/3.jpg" />
+        <img class="small" style="display:block; margin:auto;" src="images/4.jpg" />
+        <img class="small" style="display:block; margin:auto;" src="images/5.jpg" />
+        
   </div>
-
     <script type="text/javascript" src="images/js/1.js"></script>
     <script type="text/javascript" src="images/js/2.js"></script>
     <script type="text/javascript" src="images/js/slick.min.js"></script>
@@ -432,16 +457,50 @@ $('.container').slick({
 
     <script>
     function openNav() {
-      document.getElementById("mySidenav").style.width = "150px";
+      document.getElementById("mySidenav").style.width = "200px";
     }
     
     function closeNav() {
       document.getElementById("mySidenav").style.width = "0";
     }
     </script>
-  </body>
-  `)
+ 
+  `,user)
 }
+
+export function aboutUi(user)  { 
+  return layout('關於機構', `
+  <map name="taiwan">
+	<area shape="poly" coords="364,36,390,35,382,54" href="place/基隆市.html">
+      <area shape="poly" coords="338,38,354,24,366,63,347,60" href="place/台北市.html">
+      <area shape="poly" coords="316,40,356,12,421,61,341,116" href="place/新北市.html">
+      <area shape="poly" coords="316,41,342,116,327,133,267,70" href="place/桃園市.html">
+      <area shape="poly" coords="264,75,323,140,316,158,268,113,281,102,260,80" href="place/新竹縣.html">
+      <area shape="poly" coords="257,90,268,101,252,105" href="place/新竹市.html">
+      <area shape="poly" coords="248,110,310,161,257,182,206,161" href="place/苗栗縣.html">
+      <area shape="poly" coords="203,165,253,189,274,188,312,169,332,179,315,199,219,236,185,199" href="place/台中市.html">
+      <area shape="poly" coords="180,203,213,231,208,265,147,262" href="place/彰化縣.html">
+      <area shape="poly" coords="147,265,207,273,219,309,172,303,131,323" href="place/雲林縣.html">
+      <area shape="poly" coords="123,326,174,303,229,313,247,331,204,366,174,341,121,348" href="place/嘉義縣.html">
+
+      <area shape="poly" coords="123,363,160,350,179,349,196,384,152,426,127,422" href="place/台南市.html">
+      <area shape="poly" coords="131,450,163,491,170,445,205,432,236,437,229,403,261,340" href="place/高雄市.html">
+      <area shape="poly" coords="174,505,185,457,234,450,213,478,238,562,229,597" href="place/屏東縣.html">
+      <area shape="poly" coords="237,535,226,485,247,462,265,367,429,457,362,624" href="place/台東縣.html">
+      <area shape="poly" coords="308,386,277,352,306,305,344,186,382,188,343,334" href="place/花蓮縣.html">
+      <area shape="poly" coords="321,161,405,86,387,171" href="place/宜蘭縣.html">
+      <area shape="poly" coords="311,208,272,326,213,290,218,241" href="place/南投縣.html">
+      <area shape="poly" coords="7,259,53,257,53,326,3,332" href="place/澎湖縣.html">
+      <area shape="poly" coords="10,11,114,11,118,80,12,81" href="place/金門縣.html">
+      <area shape="poly" coords="8,93,115,92,115,164,12,165" href="place/連江縣.html">
+    </map>
+    <img style="display:block; margin:auto;" src="/images/taiwan.png" usemap="#taiwan">
+  
+  
+  `,user)
+}
+
+
 export function signup_teacherUi(args={}) {
   var alertScript
   if (args.status != null) {
@@ -631,7 +690,7 @@ export function fail() {
 }
 
 export function list(posts, user) {
- 
+ console.log("怪怪的",user)
   
   let list = []
   //    <p><a href="/post/${post.id}">查看完整內容</a></p>
@@ -675,7 +734,7 @@ export function list(posts, user) {
   </article>
   </body>
   `
-  return layout('金大社工系學習歷程專區', content)
+  return layout('金大社工系學習歷程專區', content,user)
 }
 
 
@@ -728,7 +787,7 @@ export function liststu(posts, user) {
   </article>
   </body>
   `
-  return layout('金大社工系學習歷程專區', content)
+  return layout('金大社工系學習歷程專區', content,user)
 }
 
 

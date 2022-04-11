@@ -14,6 +14,8 @@ const router = new Router();
 
 router.get('/', list)
 /*1223check*/ 
+.get('/home', homeUi)
+.get('/about', aboutUi)
   .get('/stu', liststu)
   .get('/signup_teacher', signup_teacherUi)
   .post('/signup_teacher', signup_teacher)
@@ -21,6 +23,7 @@ router.get('/', list)
   .post('/signup_student', signup_student)
   .get('/login', loginUi)
   .post('/login', login)
+
   .get('/loginstu', loginUi)
   .post('/loginstu', loginstu)
   .get('/logout', logout)
@@ -145,7 +148,18 @@ async function parseFormBody(body) {
 /*從這裡開始*/
 /*1223check*/ 
 async function loginUi(ctx) {
-  ctx.response.body = await render.loginUi();
+  var user = await ctx.state.session.get('user')
+  ctx.response.body = await render.loginUi(user);
+}
+
+async function homeUi(ctx) {
+  var user = await ctx.state.session.get('user')
+  ctx.response.body = await render.homeUi(user);
+}
+
+async function aboutUi(ctx) {
+  var user = await ctx.state.session.get('user')
+  ctx.response.body = await render.aboutUi(user);
 }
 
 /*1223check*/
@@ -1173,6 +1187,6 @@ async function show(ctx) {
 
 
 
-console.log('Server run at http://127.0.0.1:8025/login');
+console.log('Server run at http://127.0.0.1:8025/home');
 
 await app.listen({port: 8025 });

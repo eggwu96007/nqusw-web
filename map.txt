@@ -1,0 +1,27 @@
+<map name="taiwan">
+	<area shape="poly" coords="364,36,390,35,382,54" href="place/基隆市.html">
+      <area shape="poly" coords="338,38,354,24,366,63,347,60" href="place/台北市.html">
+      <area shape="poly" coords="316,40,356,12,421,61,341,116" href="place/新北市.html">
+      <area shape="poly" coords="316,41,342,116,327,133,267,70" href="place/桃園市.html">
+      <area shape="poly" coords="250,106,314,162,133,267,70" href="place/新竹縣.html">
+      <area shape="poly" coords="253,89,275,101,252,104" href="place/新竹市.html">
+      <area shape="poly" coords="248,110,310,161,257,182,206,161" href="place/苗栗縣.html">
+      <area shape="poly" coords="203,165,253,189,274,188,312,169,332,179,315,199,219,236,185,199" href="place/台中市.html">
+      <area shape="poly" coords="180,203,213,231,208,265,147,262" href="place/彰化縣.html">
+      <area shape="poly" coords="147,265,207,273,219,309,172,303,131,323" href="place/雲林縣.html">
+      <area shape="poly" coords="123,326,174,303,229,313,247,331,204,366,174,341,121,348" href="place/嘉義縣.html">
+      <area shape="poly" coords="166,323,186,329,174,333" href="place/嘉義市.html">
+
+      <area shape="poly" coords="162,411,176,417,216,399,230,429,252,432,212,484,171,488" href="place/台南.html">
+      <area shape="poly" coords="170,486,206,488,307,387,319,414,284,495,220,501,209,564" href="place/高雄.html">
+      <area shape="poly" coords="211,560,222,498,282,497,292,525,268,568,294,615,285,670" href="place/屏東.html">
+      <area shape="poly" coords="322,412,359,450,397,387,417,656,294,608,267,553,298,507" href="place/台東.html">
+      <area shape="poly" coords="309,401,385,225,446,230,398,394,358,452" href="place/花蓮.html">
+      <area shape="poly" coords="466,109,443,226,367,213,389,159" href="place/宜蘭.html">
+      <area shape="poly" coords="251,279,273,286,372,241,320,392,279,360" href="place/南投.html">
+      <area shape="rect" coords="40,317,110,460" href="place/澎湖.html">
+      <area shape="rect" coords="10,14,114,81" href="place/金門.html">
+      
+    </map>
+    <img style="display:block; margin:auto;" src="/images/taiwan.png" usemap="#taiwan">
+  
