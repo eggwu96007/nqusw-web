@@ -154,12 +154,54 @@ async function loginUi(ctx) {
 
 async function homeUi(ctx) {
   var user = await ctx.state.session.get('user')
-  ctx.response.body = await render.homeUi(user);
+  if(user==undefined)
+  {
+    console.log("04180751",user)
+    ctx.response.body = await render.homeUi(user)
+    
+  }
+  else
+  {
+    var safe = user_studentQuery(`SELECT id, username, password, email FROM users_student WHERE username='${user.username}'`)
+    var safes = safe[0]
+    console.log("看一下這裡safe?",safes)
+    if(safes==null)
+    {
+      console.log("看一下這裡safe??",safes)
+      var safe = user_teacherQuery(`SELECT id, username, password, email FROM users_teacher WHERE username='${user.username}'`)
+      var safes = safe[0]
+    }
+    
+   
+    console.log("04180751",safes.email)
+    ctx.response.body = await render.homeUi(safes.email);
+  }
+  
+  
 }
 
 async function aboutUi(ctx) {
+  
+
   var user = await ctx.state.session.get('user')
-  ctx.response.body = await render.aboutUi(user);
+  if(user==undefined)
+  ctx.response.body = await render.aboutUi(user)
+  else
+  {
+    var safe = user_studentQuery(`SELECT id, username, password, email FROM users_student WHERE username='${user.username}'`)
+    var safes = safe[0]
+    console.log("看一下這裡safe?",safes)
+    if(safes==null)
+    {
+      console.log("看一下這裡safe??",safes)
+      var safe = user_teacherQuery(`SELECT id, username, password, email FROM users_teacher WHERE username='${user.username}'`)
+      var safes = safe[0]
+    }
+    
+   
+    console.log("04180751",safes.email)
+    ctx.response.body = await render.aboutUi(safes.email);
+  }
 }
 
 /*1223check*/
@@ -381,8 +423,11 @@ async function signup_student(ctx) {
 
 /*1223check*/
 async function logout(ctx) {
+  console.log('0419session.user=', await ctx.state.session.get('user'))
    ctx.state.session.set('user', null)
-   ctx.response.redirect('/login')
+   console.log('0419_1session.user=', await ctx.state.session.get('user'))
+   //ctx.response.redirect('/login')
+   ctx.response.body = render.loginUi()
 }
 /*1223check */
 async function list(ctx) {
@@ -403,7 +448,7 @@ async function list(ctx) {
       op = op || 'ASC'
       
       var posts = postQuery(`SELECT id,username, title, body ,file,content FROM posts ORDER BY ${orderby} ${op}`)
-      ctx.response.body = await render.list(posts,safes.email);
+      ctx.response.body = await render.list(posts,safes);
     }
     
     else
@@ -415,12 +460,10 @@ async function list(ctx) {
 }
 /*1223check */
 async function liststu(ctx) {
-
-  var usercheck = await ctx.state.session.get('user')
+ var usercheck = await ctx.state.session.get('user')
   if(usercheck==null)
   {
     ctx.response.body = render.loginUi({status:'請先登入'})
-    return;
   }
   else if(usercheck!=null)
   {

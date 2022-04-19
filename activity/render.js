@@ -1,16 +1,19 @@
 export function layout(title, content,user) {
   var loginstatus
-  console.log("0411",user)
+
   if(user!=undefined)
   {
-    console.log("到這裡?",user)  
-loginstatus= `<p style="border: crimson;font-size: 30px; border-top: 100px; ">'歡迎 '<a href="/editpassword_user/${user.id}">變更密碼</a><a href="/logout">登出</a></p>`
+    if(user.username==undefined)
+    loginstatus= `<li style="float:right">歡迎${user} <a href="/editpassword_user/${user.id}">變更密碼</a><a href="/logout">登出</a></li>`
+    else
+    
+loginstatus= `<li style="float:right">歡迎${user.email} <a href="/editpassword_user/${user.id}">變更密碼</a><a href="/logout">登出</a></li>`
 
-}
+} 
   else if (user==undefined)
   {
-    console.log("還是到這裡?",user) 
-    loginstatus=`<li style="float:right"><a class="active" href="/login">登入</a></li>`
+    loginstatus=`<li style="float:right"><div style="cursor:hand" onclick="isHidden('div1')"><a class="active" >登入</a></div></li>
+    `
     
   }
   return `
@@ -214,7 +217,7 @@ loginstatus= `<p style="border: crimson;font-size: 30px; border-top: 100px; ">'�
 
 
 /*大小設定*/
-        @media (min-width:500px){ 
+        @media (min-width:400px){ 
           .see{display:inline}
           .small{width: 500px;}
           .nosee{display: none}
@@ -255,7 +258,7 @@ loginstatus= `<p style="border: crimson;font-size: 30px; border-top: 100px; ">'�
     <!--上面那欄-->
   <li class="nosee"><a href="/home">回首頁</a></li>
   <li class="nosee"><a href="#news">畢業專題</a></li>
-  <li class="nosee"><a href="#news">實習報告書</a></li>
+  <li class="nosee"><a href="/">實習報告書</a></li>
   <li class="nosee"><a href="/about">關於機構</a></li>
   <li class="nosee"><a href="#news">聯絡我們</a></li>
 
@@ -270,10 +273,39 @@ loginstatus= `<p style="border: crimson;font-size: 30px; border-top: 100px; ">'�
   </li>
   ${loginstatus}
   
+  
 </ul>
- 
-  ${content}
+
+   
+    <div id ="div2" style="display:block"><div class="login">
+    <div class="formloginleft">
+    <img class="small" style="width:200px;height:200px " src="images/管理員登入.png" />
+    <form action="/login" method="post" >
+    <p>管理者登入</p>
+    <p><input type="text" placeholder="帳號"  name="username" style="width:auto;"></p>
+    <p><input type="password" placeholder="密碼" name="password" style = "width:auto;"></p>
+    <p><input type="submit" value="登入"></p>
+    
+    
+  </form>
+  </div>
+  </div></div>
+  <div id ="div1" style="display:block">
+    ${content}
+    </div>
+  
   </body>
+  <script>
+  function isHidden(oDiv){
+    var vDiv = document.getElementById(oDiv);
+    
+    if(vDiv.style.display == 'block')
+    vDiv.style.display = 'none';
+    else
+    vDiv.style.display = 'block'
+    
+  }
+</script>
   </html>
   `
 }
@@ -414,8 +446,9 @@ export function loginUi(args={},user)  {
   <p><input type="password" placeholder="密碼" name="password" style = "width:auto;"></p>
   <p><input type="submit" value="登入"></p>
   ${alertScript}
-  </div>
+  
 </form>
+</div>
 </div>
 
 <div class="formloginright">
@@ -718,7 +751,7 @@ export function list(posts, user) {
   <input type="submit" value="搜尋">
  
   <div class="tooltip">游標移過來
-  <span class="tooltiptext">搜尋說明：</span>
+  <span class="tooltiptext">搜尋說明：如果要搜尋"松柏園"。關鍵字打"松"或"柏""園"都可以出來歐</span>
 </div>
 <p>進階搜尋</p>
 <input type="checkbox" id="vehicle1" name="title" value="title">
@@ -740,6 +773,7 @@ export function list(posts, user) {
 
 
 export function liststu(posts, user) {
+  console.log("怪怪的不怪",user)
   let list = []
   for (let post of posts) {
     
@@ -764,7 +798,7 @@ export function liststu(posts, user) {
   <input type="text" placeholder="關鍵字搜尋"  name="search" style="width:auto;">
   <input type="submit" value="搜尋">
   <div class="tooltip">游標移過來
-  <span class="tooltiptext">搜尋說明</span>
+  <span class="tooltiptext">搜尋說明：如果要搜尋"松柏園"。關鍵字打"松"或"柏""園"都可以出來歐</span>
   
 </div>
 <p>進階搜尋</p>
