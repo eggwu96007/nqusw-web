@@ -1,20 +1,30 @@
+var mem
+var mem_title 
 export function layout(title, content,user) {
-  var loginstatus
+  var view 
+  if(title!='')
+  {
+     mem = content
+     mem_title = title
+    view =mem
+  }
 
+  if(title =='')
+  {
+    title = mem_title
+    view =  mem + content 
+  }
+  
+  var loginstatus
   if(user!=undefined)
   {
-    if(user.username==undefined)
-    loginstatus= `<li style="float:right">歡迎${user} <a href="/editpassword_user/${user.id}">變更密碼</a><a href="/logout">登出</a></li>`
-    else
-    
 loginstatus= `<li style="float:right">歡迎${user.email} <a href="/editpassword_user/${user.id}">變更密碼</a><a href="/logout">登出</a></li>`
 
 } 
   else if (user==undefined)
   {
-    loginstatus=`<li style="float:right"><div style="cursor:hand" onclick="isHidden('div1')"><a class="active" >登入</a></div></li>
-    `
-    
+    loginstatus=`<li style="float:right"><div style="cursor:hand" onclick="isHidden()"><a class="active" >登入</a></div></li>
+    ` 
   }
   return `
   <html>
@@ -75,7 +85,7 @@ loginstatus= `<li style="float:right">歡迎${user.email} <a href="/editpassword
 
     .formloginleft
     {
-     
+      
       background-color: #FFC1E0 ;
       padding:30px;
       width:400px;
@@ -257,7 +267,7 @@ loginstatus= `<li style="float:right">歡迎${user.email} <a href="/editpassword
     <span class="see" style="font-size:30px;float:left;cursor:pointer" onclick="openNav()">&#9776; </span>
     <!--上面那欄-->
   <li class="nosee"><a href="/home">回首頁</a></li>
-  <li class="nosee"><a href="#news">畢業專題</a></li>
+  <li class="nosee"><a href="/list_gratuate">畢業專題</a></li>
   <li class="nosee"><a href="/">實習報告書</a></li>
   <li class="nosee"><a href="/about">關於機構</a></li>
   <li class="nosee"><a href="#news">聯絡我們</a></li>
@@ -277,38 +287,44 @@ loginstatus= `<li style="float:right">歡迎${user.email} <a href="/editpassword
 </ul>
 
    
-    <div id ="div2" style="display:block"><div class="login">
-    <div class="formloginleft">
+    <div id ="div2" style="display:block;opacity:0.0;"><div class="login">
+    <div class="formloginleft"style="z-index:2;" >
     <img class="small" style="width:200px;height:200px " src="images/管理員登入.png" />
     <form action="/login" method="post" >
     <p>管理者登入</p>
     <p><input type="text" placeholder="帳號"  name="username" style="width:auto;"></p>
     <p><input type="password" placeholder="密碼" name="password" style = "width:auto;"></p>
     <p><input type="submit" value="登入"></p>
+    <p onclick="recover()">再看看</p>
     
     
   </form>
   </div>
   </div></div>
-  <div id ="div1" style="display:block">
-    ${content}
-    </div>
+
+  <div id ="div1" style="display:block;opacity:1.0; " >
+  ${view}
+  </div>
   
   </body>
   <script>
-  function isHidden(oDiv){
-    var vDiv = document.getElementById(oDiv);
-    
-    if(vDiv.style.display == 'block')
-    vDiv.style.display = 'none';
-    else
-    vDiv.style.display = 'block'
-    
+  function isHidden(){    
+      div1.style.opacity='0.05'; 
+      div2.style.opacity='2.0';
   }
+
+  function recover(){
+   
+    div2.style.opacity='0.0'; 
+    div1.style.opacity='1.0';
+     
+}
 </script>
   </html>
   `
 }
+
+
 
 /*else
 {
@@ -465,6 +481,13 @@ ${alertScriptstu}
   `,user)
 }
 
+export function middle(args={},user){
+  return layout(
+    '',`<script>
+    alert('${args.status}')
+    </script>`,user)
+}
+
 export function homeUi(user)  { 
   return layout('學習歷程檔案首頁', `
     <div class="container">
@@ -484,7 +507,7 @@ $('.container').slick({
   slidesToShow: 1,
   slidesToScroll: 1,
   autoplay: true,
-  autoplaySpeed: 5000,
+  autoplaySpeed: 2000,
 });
 </script>
 
@@ -708,25 +731,10 @@ ${alertScript}
 }
 
 
-export function success() {
-  return layout('Success', `
-  <h1>Success!</h1>
-  You may <a href="/">read all Post</a> again !
-  `)
-}
-
-export function fail() {
-  return layout('Fail', `
-  <h1>請重新登入</h1>
-  You may <a href="/">read all Post</a> or <a href="JavaScript:window.history.back()">go back</a> !
-  `)
-}
-
 export function list(posts, user) {
  console.log("怪怪的",user)
   
   let list = []
-  //    <p><a href="/post/${post.id}">查看完整內容</a></p>
   for (let post of posts) {
     
     list.push(`

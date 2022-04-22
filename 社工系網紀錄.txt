@@ -56,5 +56,15 @@
 
 03/14(3hr)
 1.RWD=>手機與電腦網頁同時設計
-03/24
+03/24(3hr)
 1.slide RWD(check)
+04/18(3hr)
+1.login bar bug fixed
+
+04/19(4hr)
+1.login bar designed
+2.logout bug fixed
+
+04/20(3hr)
+1.system code optimization
+2.account password bug fixed
