@@ -18,7 +18,7 @@ export function layout(title, content,user) {
   var loginstatus
   if(user!=undefined)
   {
-loginstatus= `<li style="float:right">歡迎${user.email} <a href="/editpassword_user/${user.id}">變更密碼</a><a href="/logout">登出</a></li>`
+loginstatus= `<li style="float:right">歡迎${user} <a href="/editpassword_user/${user.id}">變更密碼</a><a href="/logout">登出</a></li>`
 
 } 
   else if (user==undefined)
@@ -35,16 +35,12 @@ loginstatus= `<li style="float:right">歡迎${user.email} <a href="/editpassword
     <link rel="stylesheet" href="images/css/slick.css">
     <link rel="stylesheet" href="images/css/slick-theme.css">
     <style>
-
    
-
    
-
     #posts {
       margin: 0;
       padding: 0;
     }
-
     #posts li {
       padding: 20px;
       border-style:solid;
@@ -82,7 +78,6 @@ loginstatus= `<li style="float:right">歡迎${user.email} <a href="/editpassword
       display:block;
       border-radius:999em;
     }
-
     .formloginleft
     {
       
@@ -95,7 +90,6 @@ loginstatus= `<li style="float:right">歡迎${user.email} <a href="/editpassword
       display:block;
       
     }
-
   
     input[type=text],input[type=password],
     textarea {
@@ -103,20 +97,16 @@ loginstatus= `<li style="float:right">歡迎${user.email} <a href="/editpassword
       padding: 15px;
       font-size: .8em;
     }
-
    
-
     /*slider*/
     html, body {
       margin: 0;
       padding: 0;
     }
-
     .slick-slide {
       margin: 20px 20px -100px 20px;
      
     }
-
     .slick-slide {
       transition: all ease-in-out .3s;
       opacity: .2;
@@ -125,12 +115,10 @@ loginstatus= `<li style="float:right">歡迎${user.email} <a href="/editpassword
     .slick-active {
       opacity: .5;
     }
-
     .slick-current {
       opacity: 1;
     }
     /*slider*/
-
     /*sidebar*/
     .sidenav {
       height: 100%;
@@ -166,8 +154,6 @@ loginstatus= `<li style="float:right">歡迎${user.email} <a href="/editpassword
       margin-left: 50px;
     }
     /*上面是sidebar*/
-
-
     /*navbar*/
     ul {
       
@@ -215,17 +201,13 @@ loginstatus= `<li style="float:right">歡迎${user.email} <a href="/editpassword
     .dropdown:hover .dropdown-content {
       display: block;
     }
-
     /*上面是navbar*/
-
     body {
       
       background-color:  #D1E9E9;
         font-family: Arial, Helvetica, sans-serif;
         font: 20px Helvetica, Arial;
       }
-
-
 /*大小設定*/
         @media (min-width:400px){ 
           .see{display:inline}
@@ -252,7 +234,6 @@ loginstatus= `<li style="float:right">歡迎${user.email} <a href="/editpassword
         }
     </style>
   </head>
-
   <body id="bodylogin">
   <!--側欄-->
   <ul style="list-style-type: none;padding: 0;overflow: hidden;background-color: #38444d;">
@@ -271,7 +252,6 @@ loginstatus= `<li style="float:right">歡迎${user.email} <a href="/editpassword
   <li class="nosee"><a href="/">實習報告書</a></li>
   <li class="nosee"><a href="/about">關於機構</a></li>
   <li class="nosee"><a href="#news">聯絡我們</a></li>
-
 </li>
   <li class="dropdown">
     <a href="javascript:void(0)" class="dropbtn1">常見問題</a>
@@ -285,14 +265,13 @@ loginstatus= `<li style="float:right">歡迎${user.email} <a href="/editpassword
   
   
 </ul>
-
    
     <div id ="div2" style="display:block;opacity:0.0;"><div class="login">
     <div class="formloginleft"style="z-index:2;" >
     <img class="small" style="width:200px;height:200px " src="images/管理員登入.png" />
     <form action="/login" method="post" >
     <p>管理者登入</p>
-    <p><input type="text" placeholder="帳號"  name="username" style="width:auto;"></p>
+    <p><input type="text" placeholder="帳號"  name="account" style="width:auto;"></p>
     <p><input type="password" placeholder="密碼" name="password" style = "width:auto;"></p>
     <p><input type="submit" value="登入"></p>
     <p onclick="recover()">再看看</p>
@@ -301,7 +280,6 @@ loginstatus= `<li style="float:right">歡迎${user.email} <a href="/editpassword
   </form>
   </div>
   </div></div>
-
   <div id ="div1" style="display:block;opacity:1.0; " >
   ${view}
   </div>
@@ -312,7 +290,6 @@ loginstatus= `<li style="float:right">歡迎${user.email} <a href="/editpassword
       div1.style.opacity='0.05'; 
       div2.style.opacity='2.0';
   }
-
   function recover(){
    
     div2.style.opacity='0.0'; 
@@ -341,8 +318,6 @@ loginstatus= `<li style="float:right">歡迎${user.email} <a href="/editpassword
     
   
  
-
-
     body {
       
       background-color:  #D1E9E9;
@@ -350,8 +325,6 @@ loginstatus= `<li style="float:right">歡迎${user.email} <a href="/editpassword
         padding: 100px;
         font: 16px Helvetica, Arial;
       }
-
-
     #bodylogin {
       
       background-color:  #D1E9E9;
@@ -360,12 +333,10 @@ loginstatus= `<li style="float:right">歡迎${user.email} <a href="/editpassword
         font: 20px Helvetica, Arial;
       }
     
-
   
       h1 {
         font-size: 2em;
       }
-
       h2 {
         font-size: 1.2em;
       }
@@ -384,7 +355,6 @@ loginstatus= `<li style="float:right">歡迎${user.email} <a href="/editpassword
      
   
       
-
       header{
         font-size: 50px;
         font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
@@ -414,7 +384,6 @@ loginstatus= `<li style="float:right">歡迎${user.email} <a href="/editpassword
   </html>
   `
 }
-
   
 }
 /*1223check*/
@@ -448,17 +417,15 @@ export function loginUi(args={},user)  {
     alertScriptshow = ''
   }
   return layout('學習歷程檔案登入', `
-
   
   <body id="bodylogin">
-
   ${alertScriptshow}
   <div class="login">
   <div class="formloginleft">
   <img class="small" style="width:200px;height:200px " src="images/管理員登入.png" />
   <form action="/login" method="post" >
   <p>管理者登入</p>
-  <p><input type="text" placeholder="帳號"  name="username" style="width:auto;"></p>
+  <p><input type="text" placeholder="帳號"  name="account" style="width:auto;"></p>
   <p><input type="password" placeholder="密碼" name="password" style = "width:auto;"></p>
   <p><input type="submit" value="登入"></p>
   ${alertScript}
@@ -466,12 +433,11 @@ export function loginUi(args={},user)  {
 </form>
 </div>
 </div>
-
 <div class="formloginright">
 <img class="small" style="width:200px;height:200px " src="images/使用者登入.png" />
 <form action="/loginstu" method="post" >
 <p>使用者登入</p>
-<p><input type="text" placeholder="帳號"  name="username" style="width:auto;"></p>
+<p><input type="text" placeholder="帳號"  name="account" style="width:auto;"></p>
 <p><input type="password" placeholder="密碼" name="password" style = "width:auto;"></p>
 <p><input type="submit" value="登入"></p>
 ${alertScriptstu}
@@ -482,6 +448,7 @@ ${alertScriptstu}
 }
 
 export function middle(args={},user){
+  console.log("這middle是啥",user)
   return layout(
     '',`<script>
     alert('${args.status}')
@@ -510,7 +477,6 @@ $('.container').slick({
   autoplaySpeed: 2000,
 });
 </script>
-
     <script>
     function openNav() {
       document.getElementById("mySidenav").style.width = "200px";
@@ -538,7 +504,6 @@ export function aboutUi(user)  {
       <area shape="poly" coords="180,203,213,231,208,265,147,262" href="place/彰化縣.html">
       <area shape="poly" coords="147,265,207,273,219,309,172,303,131,323" href="place/雲林縣.html">
       <area shape="poly" coords="123,326,174,303,229,313,247,331,204,366,174,341,121,348" href="place/嘉義縣.html">
-
       <area shape="poly" coords="123,363,160,350,179,349,196,384,152,426,127,422" href="place/台南市.html">
       <area shape="poly" coords="131,450,163,491,170,445,205,432,236,437,229,403,261,340" href="place/高雄市.html">
       <area shape="poly" coords="174,505,185,457,234,450,213,478,238,562,229,597" href="place/屏東縣.html">
@@ -570,9 +535,9 @@ export function signup_teacherUi(args={}) {
   return layout('管理員註冊',` 
   <h1>每個選項都要填(別新增太多!!)</h1>
   <form action="/signup_teacher" method="post">
-    <p><input type="text" placeholder="帳號" name="username"></p>
+    <p><input type="text" placeholder="帳號" name="account"></p>
     <p><input type="password" placeholder="密碼" name="password"></p>
-    <p><input type="text" placeholder="手機號碼" name="email"></p>
+    <p><input type="text" placeholder="手機號碼" name="username"></p>
     <p><input type="submit" value="新增"></p>
   </form>
   ${alertScript}
@@ -593,9 +558,9 @@ export function signup_studentUi(args={}) {
   return layout('使用者註冊',` 
   <h1>每個選項都要填</h1>
   <form action="/signup_student" method="post">
-    <p><input type="text" placeholder="學號" name="username"></p>
+    <p><input type="text" placeholder="學號" name="account"></p>
     <p><input type="password" placeholder="密碼" name="password"></p>
-    <p><input type="text" placeholder="入學級別和姓名(例如:108級王曉明)/老師姓名與職位(例如:黃大銘教授)" name="email"></p>
+    <p><input type="text" placeholder="入學級別和姓名(例如:108級王曉明)/老師姓名與職位(例如:黃大銘教授)" name="username"></p>
     <p><input type="submit" value="註冊"></p>
   </form>
   ${alertScript}
@@ -620,9 +585,9 @@ export function editaccount(users,roots) {
   for (let user of users) {
     list.push(`
     <li style="border-color: crimson">
-    <p>帳號：${user.username}</p>
+    <p>帳號：${user.account}</p>
       <p>密碼：${user.password}</p>
-      <p>級別姓名：${user.email}</p>
+      <p>級別姓名：${user.username}</p>
       <p><a href="/delaccount_user/${user.id}">刪除</a></p>
       <p><a href="/editpassword_user/${user.id}">編輯</a></p>
       </li>
@@ -663,7 +628,7 @@ export function editpassword_userui(user,args={}) {
     alertScript = ''
   }
 
-  return layout(user.email+'正在修改密碼', `
+  return layout(user.username+'正在修改密碼', `
  
 <body>
 ${alertScript}
@@ -690,15 +655,15 @@ export function editpassword_user_for_rootui(user,args={}) {
   else {
     alertScript = ''
   }
-  return layout("正在編輯"+user.email, `
+  return layout("正在編輯"+user.username, `
  
 <body>
 ${alertScript}
   <h1>編輯中</h1>
   <form action="/editpassword_user_for_root/${user.id}"  method="post">
-  <p>變更帳號：<input type="text" placeholder="帳號" name="account" value="${user.username}"></p>
+  <p>變更帳號：<input type="text" placeholder="帳號" name="account" value="${user.account}"></p>
   <p>變更密碼：<input type="text" placeholder="密碼" name="password" value="${user.password}"></p>
-  <p>變更姓名及級別<input type="text" placeholder="名稱" name="username" value="${user.email}"></p>
+  <p>變更姓名及級別<input type="text" placeholder="名稱" name="username" value="${user.username}"></p>
     <p><input type="submit" value="修改"></p>
   </form>
   </body>
@@ -722,7 +687,7 @@ export function editpassword_rootui(user,args={}) {
 ${alertScript}
   <h1>編輯中${user.id}</h1>
   <form action="/editpassword_root/${user.id}"  method="post">
-  <p><input type="text" placeholder="使用者帳號" name="account" value="${user.username}"></p>
+  <p><input type="text" placeholder="使用者帳號" name="account" value="${user.account}"></p>
   <p><input type="text" placeholder="使用者密碼" name="password" value="${user.password}"></p>
     <p><input type="submit" value="修改"></p>
   </form>
@@ -800,7 +765,7 @@ export function liststu(posts, user) {
   
   <body>
   <article>
-  <p style="border: crimson;font-size: 30px; border-top: 100px; ">${(user==null)?'':'歡迎 '+user.email}<a href="/editpassword_user/${user.id}">變更密碼</a><a href="/logout">登出</a></p>
+  <p style="border: crimson;font-size: 30px; border-top: 100px; ">${(user==null)?'':'歡迎 '+user.username}<a href="/editpassword_user/${user.id}">變更密碼</a><a href="/logout">登出</a></p>
   <form action="/list_custom_stu" method="post">
   
   <input type="text" placeholder="關鍵字搜尋"  name="search" style="width:auto;">
@@ -812,16 +777,12 @@ export function liststu(posts, user) {
 <p>進階搜尋</p>
 <input type="checkbox" id="vehicle1" name="title" value="title">
   <label for="vehicle1">機構名稱</label>
-
   <input type="checkbox" id="vehicle2" name="body" value="body">
   <label for="vehicle2">級別</label>
-
   <input type="checkbox" id="vehicle3" name="content" value="content">
   <label for="vehicle3">文章類別</label>
-
   <input type="checkbox" id="vehicle4" name="username" value="username">
   <label for="vehicle4">作者姓名</label>
-
 </form>
   <ul id="posts">
     ${list.join('\n')}
@@ -855,10 +816,8 @@ export function newPost(args={}) {
       <p>文章類別</p>
   <input type="checkbox" id="vehicle1" name="content1" value="#兒童">
   <label for="vehicle1">兒童</label>
-
   <input type="checkbox" id="vehicle2" name="content2" value="#少年">
   <label for="vehicle2">少年</label><br>
-
   <input type="checkbox" id="vehicle3" name="content3" value="#家庭">
   <label for="vehicle3">家庭</label>
   
@@ -872,7 +831,6 @@ export function newPost(args={}) {
   <label for="vehicle7">法律與政策</label>
   <input type="checkbox" id="vehicle8" name="content8" value="#其他">
       <label for="vehicle8">其他</label><br>
-
       <p><select name="body1">
       <option value="">入學級別部別</option>
       <option value="110日間部">110日間部</option>
@@ -890,7 +848,6 @@ export function newPost(args={}) {
       <option value="104日間部">104日間部</option>
       <option value="104進修部">104進修部</option>
     </select></p>
-
     <p><select name="body2">
     <option value="">實習期間</option>
     <option value="實習一">實習一</option>
@@ -898,7 +855,6 @@ export function newPost(args={}) {
     <option value="畢業專題">畢業專題</option>
     <option value="其他">其他</option>
     </select></p>
-
   
       <p>檔案上傳(僅限pdf!!!): <input type="file" name="file" accept="pdf"/></p>
       <p><input type="submit" value="建立"></p>
@@ -907,9 +863,6 @@ export function newPost(args={}) {
   ${alertScript}
   
   
-
-
-
   `
   )
 }
@@ -944,7 +897,6 @@ export function newPost(args={}) {
       <option value="Medical">醫務</option>
       <option value="other" >其他</option>
     </select></p>
-
       <p><textarea placeholder="心得或給學弟妹的建議" name="body"></textarea></p>
       <p>檔案上傳: <input type="file" name="file"/></p>
       <p><input type="submit" value="新增"></p>
@@ -953,9 +905,6 @@ export function newPost(args={}) {
   ${alertScript}
   
   
-
-
-
   `
   )
 }*/
@@ -984,8 +933,6 @@ export function editpostui(post,args={}) {
       <p><input type="text" placeholder="機構名稱(全名)" name="title" value="${post.title}"></p>
       <p><input type="text" placeholder="姓名(例如:王曉明)/老師姓名與職位(例如:黃大銘教授)" name="author" value="${post.username}"></p>
       <p>文章類別</p>
-
-
       <input type="checkbox" id="vehicle1" name="content1" value="兒童/">
       <label for="vehicle1">兒童</label>
       <input type="checkbox" id="vehicle2" name="content2" value="少年/">
@@ -1003,7 +950,6 @@ export function editpostui(post,args={}) {
       <input type="checkbox" id="vehicle8" name="content8" value="其他/">
           <label for="vehicle8">其他</label><br>
       
-
       <p><select name="body1">
       <option value="">入學級別部別</option>
       <option value="110日間部">110日間部</option>
@@ -1021,7 +967,6 @@ export function editpostui(post,args={}) {
       <option value="104日間部">104日間部</option>
       <option value="104進修部">104進修部</option>
     </select></p>
-
     <p><select name="body2">
     <option value="">實習期間</option>
     <option value="實習一">實習一</option>
@@ -1029,9 +974,6 @@ export function editpostui(post,args={}) {
     <option value="畢業專題">畢業專題</option>
     <option value="其他">其他</option>
     </select></p>
-
-
-
       <p>檔案上傳(僅限pdf!!!): <input type="file" name="file" accept="pdf"/></p>
       <p><input type="submit" value="修改"></p>
     </form>
@@ -1047,7 +989,6 @@ export function show(post) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
   <body>
-
     <h1>機構名稱：${post.title} </h1>
     <p>類別：${post.content}</p>
     <p>作者：${post.username}</p>

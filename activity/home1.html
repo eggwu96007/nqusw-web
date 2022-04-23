@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="images/css/slick.css">
+  <link rel="stylesheet" href="images/css/slick-theme.css">
+<style>
+* {
+  box-sizing: border-box;
+}
+/*http://fetchrss.com/rss/626369bc99e9901d684d159362636a3992832e7624430192.xml*/
+body {
+  font-family: Arial;
+  padding: 10px;
+  background: #f1f1f1;
+}
+
+/* Header/Blog Title */
+.header {
+  display: block;
+  padding: 10px;
+  text-align: center;
+  background: #f1f1f1;
+}
+
+.header h1 {
+  font-size: 50px;
+}
+
+/* Style the top navigation bar */
+.topnav {
+  overflow: hidden;
+  background-color: #333;
+}
+
+/* Style the topnav links */
+.topnav a {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+/* Change color on hover */
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+/* Create two unequal columns that floats next to each other */
+/* Left column */
+.leftcolumn {   
+  float: left;
+  width: 75%;
+}
+
+/* Right column */
+.rightcolumn {
+  float: left;
+  width: 25%;
+  background-color: #f1f1f1;
+  padding-left: 20px;
+}
+
+/* Fake image */
+.fakeimg {
+  background-color: #aaa;
+  width: 100%;
+  padding: 20px;
+}
+
+/* Add a card effect for articles */
+.card {
+  background-color: white;
+  padding: 10px;
+ 
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Footer */
+.footer {
+  padding: 20px;
+  text-align: center;
+  background: #ddd;
+  margin-top: 20px;
+}
+
+/* Responsive layout - when the screen is less than 800px wide, make the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 800px) {
+  .leftcolumn, .rightcolumn {   
+    width: 100%;
+    padding: 0;
+  }
+}
+
+/* Responsive layout - when the screen is less than 400px wide, make the navigation links stack on top of each other instead of next to each other */
+@media screen and (max-width: 400px) {
+  .topnav a {
+    float: none;
+    width: 100%;
+  }
+}
+</style>
+</head>
+<body>
+  <img  style="display:block; " src="images/nquhomepage.png" />
+  <h1>國立金門大學社會工作學系</h1>
+  <!--<img  style="display:block; margin-left: 30px;width: 50%;height: 50%; " src="images/socialwork.JPG" />-->
+<div class="header">
+ 
+  <div class="container" style="width: 50%;height: 40%; margin: auto;">
+    <img  style="display:block; margin:auto; width: 20px; " src="images/1.jpg" />
+    <img  style="display:block; margin:auto; width: 20px" src="images/2.jpg" />
+    <img  style="display:block; margin:auto; width: 20px" src="images/3.jpg" />
+    <img  style="display:block; margin:auto; width: 20px" src="images/4.jpg" />
+    <img  style="display:block; margin:auto; width: 20px" src="images/5.jpg" />
+    
+</div>
+<script  src="images/js/1.js"></script>
+<script  src="images/js/2.js"></script>
+<script  src="images/js/slick.min.js"></script>
+<script  src="images/js/slick.js"></script>
+<script >
+$('.container').slick({
+slidesToShow: 1,
+slidesToScroll: 1,
+autoplay: true,
+autoplaySpeed: 2000,
+});
+</script>
+
+
+</div>
+
+
+
+<div class="row">
+  <div class="leftcolumn">
+    <div class="card">
+      <img  style="display:inline-block; ;width: 20%;height: 30px;height: 50%  " src="images/news.png" />
+      <a href=""><img  style="display:inline-block; margin-left: 57%;width: 20%;height: 50%;  " src="images/more.png" /></a>
+       <table style="width:100%">
+        <tr >
+          <td><img  style="display:block; margin-left: 5%;width: 20%;height: 20%;  " src="images/import.JPG" /></td>
+          <td>2022-03-23</td>
+          <td>◎社會工作學系111學年度新生Line群組◎</td>
+        </tr>
+        <tr>
+          <td><img  style="display:block; margin-left: 5%;width: 20%;height: 20%;  " src="images/talk.JPG" /></td>
+          <td>2022-04-18</td>
+          <td>111 年 4 月 21 日 (四) 與精神障礙者相處之道</td>
+        </tr>
+        <tr>
+          <td><img  style="display:block; margin-left: 5%;width: 20%;height: 20%;  " src="images/prime.JPG" /></td>
+          <td>2022-03-31</td>
+          <td>狂賀！本系系友考取111年第一次高考社會工作師專業證照</td>
+        </tr>
+        <tr>
+          <td><img  style="display:block; margin-left: 5%;width: 20%;height: 20%;  " src="images/practice.JPG" /></td>
+          <td>2022-03-21</td>
+          <td>財團法人創世社會福利基金會轉知實習資訊</td>
+        </tr>
+      </table>
+      
+       </div>
+   
+  </div>
+  <div class="rightcolumn">
+    <div class="card">
+      
+      <img  style="display:block;width: 70%;height: 70%; " src="images/mainpage.png"/>
+      <h1>這邊在等昭昭做</h1>
+      <img  style="display:block;width: 70%;height: 70%; " src="images/mainpage.png"/>
+      <img  style="display:block;width: 70%;height: 70%; " src="images/mainpage.png"/>
+      <img  style="display:block;width: 70%;height: 70%; " src="images/mainpage.png"/>
+      <img  style="display:block;width: 70%;height: 70%; " src="images/mainpage.png"/>
+    </div>
+    <div class="card">
+      <img  style="display:block;width: 70%;height: 70%; " src="images/Relate_link.png"/>
+      <img  style="display:block;width: 70%;height: 70%; " src="images/examination.jpg"/>
+      <img  style="display:block;width: 70%;height: 70%; " src="images/Union SocialWork.png"/>
+      <img  style="display:block;width: 70%;height: 70%; " src="images/Assistment.png"/>
+      </div>
+    
+  </div>
+</div>
+
+<div class="footer">
+  <h2>版權所有乾我屁事</h2>
+</div>
+
+</body>
+</html>
+
+

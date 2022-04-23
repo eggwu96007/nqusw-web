@@ -68,3 +68,12 @@
 04/20(3hr)
 1.system code optimization
 2.account password bug fixed
+
+04/22(7hr)
+1.design diguess
+2.rename variable
+fix database
+
+04/23()
+1.RSS homepage generate
+2.database upgrate

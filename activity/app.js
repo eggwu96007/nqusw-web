@@ -7,8 +7,8 @@ import { oakCors } from "https://deno.land/x/cors/mod.ts";
 
 const db = new DB("blog.db");
 db.query("CREATE TABLE IF NOT EXISTS posts (id INTEGER PRIMARY KEY AUTOINCREMENT,title TEXT, username TEXT, body TEXT, file TEXT , content TEXT)");
-db.query("CREATE TABLE IF NOT EXISTS users_student (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, password TEXT, email TEXT)");
-db.query("CREATE TABLE IF NOT EXISTS users_teacher (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, password TEXT, email TEXT)");
+db.query("CREATE TABLE IF NOT EXISTS users_student (id INTEGER PRIMARY KEY AUTOINCREMENT, account TEXT, password TEXT, username TEXT)");
+db.query("CREATE TABLE IF NOT EXISTS users_teacher (id INTEGER PRIMARY KEY AUTOINCREMENT, account TEXT, password TEXT, username TEXT)");
 
 const router = new Router();
 
@@ -22,7 +22,6 @@ router.get('/', list)
   .post('/signup_student', signup_student)
   .get('/login', loginUi)
   .post('/login', login)
-
   .get('/loginstu', loginUi)
   .post('/loginstu', loginstu)
   .get('/logout', logout)
@@ -93,19 +92,19 @@ function postQuery(sql) {
 
 function userQuery(sql) {
   let list = []
-  for (const [id, username, password, email] of sqlcmd(sql)) {
-    list.push({id, username, password, email})
+  for (const [id, account, password, username] of sqlcmd(sql)) {
+    list.push({id, account, password, username})
   }
   return list
 }
 
-function user_studentQuery(sql) {
+/*function userQuery(sql) {
   let list = []
   for (const [id, username, password, email] of sqlcmd(sql)) {
     list.push({id, username, password, email})
   }
   return list
-}
+}*/
 
 async function parseFormBody(body) {
   const pairs = await body.value
@@ -129,18 +128,21 @@ async function homeUi(ctx) {
   {
     ctx.response.body = await render.homeUi(user)
   }
-  else
+  else if (user!=undefined)
   {
-    var safe = userQuery(`SELECT id, username, password, email FROM users_teacher WHERE username='${user.username}'`)
+    var safe = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE account='${user.username}'`)
     var safes = safe[0]
-    var user = user_studentQuery(`SELECT id, username, password, email FROM users_student WHERE username='${user.username}'`)
+
+    var user = userQuery(`SELECT id, account, password, username FROM users_student WHERE account='${user.username}'`)
     var users = user[0]
     if(safes!=null)
     {
+      console.log("safe是啥",safes)
       ctx.response.body = await render.homeUi(safes);  
     }
     else if(users!=null)
     {
+      console.log("user是啥",users)
       ctx.response.body = await render.homeUi(users);  
     }
     
@@ -160,9 +162,9 @@ async function aboutUi(ctx) {
 
   else
   {
-    var safe = user_teacherQuery(`SELECT id, username, password, email FROM users_teacher WHERE username='${user.username}'`)
+    var safe = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE username='${user.username}'`)
     var safes = safe[0]
-    var user = user_studentQuery(`SELECT id, username, password, email FROM users_student WHERE username='${user.username}'`)
+    var user = userQuery(`SELECT id, account, password, username FROM users_student WHERE username='${user.username}'`)
     var users = user[0]
     if(safes!=null)
     {
@@ -179,45 +181,43 @@ async function aboutUi(ctx) {
 /*1223check*/
 /*大問題，密碼錯誤要怎麼跳回原本的樣子*/ 
 async function login(ctx) {
+  var usercheck = await ctx.state.session.get('user')
   const body = ctx.request.body()
   if (body.type === "form") {
-    var user = await parseFormBody(body)
-    var dbUsers = user_teacherQuery(`SELECT id, username, password, email FROM users_teacher WHERE username='${user.username}'`) // userMap[user.username]
-    var dbUser = dbUsers[0]
-    var user_stu= user_studentQuery(`SELECT id, username, password, email FROM users_student WHERE username='${user.username}'`)
-    var user_stus = user_stu[0];
+    var input = await parseFormBody(body)
+    var root = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE account='${input.account}'`) // userMap[user.username]
+    var roots = root[0]
+    var user = userQuery(`SELECT id, account, password, username FROM users_student WHERE account='${input.account}'`)
+    var users = user[0]
     var pattern=/[`~!@#$%^&*()_+<>?:"{},.\/;'[\]]/im;
-    if(pattern.test(user.password)||pattern.test(user.username))
+    if(pattern.test(input.password)||pattern.test(input.account))
     {
-      ctx.response.body = render.loginUi({status:'不可輸入特殊符號'})
+      ctx.response.body = render.middle({status:'不可輸入特殊符號'},usercheck)
       return;
     }
-    else
-    {
+console.log("幹右怎麼了",input.password,roots.password,roots)
       //管理者
-      if (dbUser != null && dbUser.password === user.password ) {
-        ctx.state.session.set('user', user)
-        console.log('session.user=', await ctx.state.session.get('user'))
-        console.log("")
-        ctx.response.redirect('/list_gratuate');
+      if (roots != null &&roots.password === input.password) {
+        console.log("你好1")
+        ctx.state.session.set('user', roots)
+       
+        //ctx.response.redirect('/list_gratuate');
+        ctx.response.redirect('/');
         return;
       }
   //使用者
-      else if(user_stus != null && user_stus.password === user.password)
+      else if(users != null && users.password === input.password)
       {
-        ctx.state.session.set('user', user)
-        ctx.response.redirect('/list_gratuate');
-        return;
+        ctx.state.session.set('user', users)
+       ctx.response.redirect('/'); 
+       return;
       } 
 //密碼錯誤
       else 
       {
-        ctx.response.body = render.middle();
+        console.log("你好3")
+        ctx.response.body = render.middle({status:'密碼錯誤'},usercheck);
       }
-
-    }
-    
-   
   }
 }
 
@@ -226,7 +226,7 @@ async function loginstu(ctx) {
   const body = ctx.request.body()
   if (body.type === "form") {
     var user = await parseFormBody(body)
-    var dbUsers = user_studentQuery(`SELECT id, username, password, email FROM users_student WHERE username='${user.username}'`) // userMap[user.username]
+    var dbUsers = userQuery(`SELECT id, account, password, username FROM users_student WHERE username='${user.username}'`) // userMap[user.username]
     var dbUser = dbUsers[0]
     var pattern=/[`~!@#$%^&*()_+<>?:"{},.\/;'[\]]/im;
     if(pattern.test(user.password)||pattern.test(user.username))
@@ -265,7 +265,7 @@ async function signup_teacherUi(ctx) {
 
   else if(usercheck!=null)
   {
-  var safe = user_teacherQuery(`SELECT id, username, password, email FROM users_teacher WHERE username='${usercheck.username}'`)
+  var safe = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE username='${usercheck.username}'`)
   var safes = safe[0]
     if(safes!=null)
     {
@@ -297,7 +297,7 @@ async function signup_teacher(ctx) {
   else
   {
     
-    var safe = user_teacherQuery(`SELECT id, username, password, email FROM users_teacher WHERE username='${usercheck.username}'`)
+    var safe = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE username='${usercheck.username}'`)
     var safes = safe[0]
     if(safes!=null)
     {
@@ -308,10 +308,10 @@ async function signup_teacher(ctx) {
       }
       if (body.type === "form") 
       {
-      var dbUsers = user_teacherQuery(`SELECT id, username, password, email FROM users_teacher WHERE username='${user.username}'`)
+      var dbUsers = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE username='${user.username}'`)
       if (dbUsers.length === 0) 
       {
-        sqlcmd("INSERT INTO users_teacher (username, password, email) VALUES (?, ?, ?)", [user.username, user.password, user.email]);
+        sqlcmd("INSERT INTO users_teacher (account, password, username) VALUES (?, ?, ?)", [user.account, user.password, user.username]);
         ctx.response.body = render.loginUi({status:'帳號創立成功，請重新登入'})
       } 
       else
@@ -339,7 +339,7 @@ async function signup_studentUi(ctx) {
   }
   else if(usercheck!=null)
   {
-    var safe = user_teacherQuery(`SELECT id, username, password, email FROM users_teacher WHERE username='${usercheck.username}'`)
+    var safe = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE username='${usercheck.username}'`)
     var safes = safe[0]
     if(safes!=null)
     {
@@ -370,7 +370,7 @@ async function signup_student(ctx) {
   else
   {
     
-    var safe = user_teacherQuery(`SELECT id, username, password, email FROM users_teacher WHERE username='${usercheck.username}'`)
+    var safe = userQuery(`SELECT id,account, password, username FROM users_teacher WHERE username='${usercheck.username}'`)
     var safes = safe[0]
     if(safes!=null)
     {
@@ -381,10 +381,10 @@ async function signup_student(ctx) {
       }
       if (body.type === "form") 
       {
-      var dbUsers = user_studentQuery(`SELECT id, username, password, email FROM users_student WHERE username='${user.username}'`)
+      var dbUsers = userQuery(`SELECT id, account, password, username FROM users_student WHERE username='${user.username}'`)
       if (dbUsers.length === 0) 
       {
-        sqlcmd("INSERT INTO users_student (username, password, email) VALUES (?, ?, ?)", [user.username, user.password, user.email]);
+        sqlcmd("INSERT INTO users_student (account, password, username) VALUES (?, ?, ?)", [user.username, user.password, user.email]);
         ctx.response.body = render.loginUi({status:'帳號創立成功，請重新登入'})
       } 
       else
@@ -412,19 +412,28 @@ async function logout(ctx) {
 /*1223check */
 async function list(ctx) {
   var usercheck = await ctx.state.session.get('user')
+  console.log("usercheck是啥",usercheck)
   if(usercheck==null)
   {
-    var user = await ctx.state.session.get('user')
-
     //ctx.response.body = render.loginUi({status:'請先登入'})
-    ctx.response.body = render.middle({status:'請先登入'},user);
+    ctx.response.body = render.middle({status:'請先登入'},usercheck);
   }
   else if(usercheck!=null)
   {
+    let orderby = ctx.request.url.searchParams.get('orderby')
+    orderby = orderby || 'id'
+    let op = ctx.request.url.searchParams.get('op')
+    op = op || 'ASC'
+      
+    var posts = postQuery(`SELECT id,username, title, body ,file,content FROM posts ORDER BY ${orderby} ${op}`)
+    ctx.response.body = await render.list(posts,usercheck.username);
+    }
+
+  }
    
-    var safe = user_teacherQuery(`SELECT id, username, password, email FROM users_teacher WHERE username='${usercheck.username}'`)
+    /*var safe = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE username='${usercheck.username}'`)
     var safes = safe[0]
-    var user = user_studentQuery(`SELECT id, username, password, email FROM users_student WHERE username='${usercheck.username}'`)
+    var user = userQuery(`SELECT id, account, password, username FROM users_student WHERE username='${usercheck.username}'`)
     var users = user[0]
 
     if(safes!=null)
@@ -470,7 +479,7 @@ async function liststu(ctx) {
   }
   else if(usercheck!=null)
   {
-    var safe = user_studentQuery(`SELECT id, username, password, email FROM users_student WHERE username='${usercheck.username}'`)
+    var safe = userQuery(`SELECT id, username, password, email FROM users_student WHERE username='${usercheck.username}'`)
     var safes = safe[0]
       let orderby = ctx.request.url.searchParams.get('orderby')
       orderby = orderby || 'id'
@@ -487,9 +496,9 @@ async function liststu(ctx) {
 
 async function list_gratuate(ctx) {
   var usercheck = await ctx.state.session.get('user')
-  var safe = user_teacherQuery(`SELECT id, username, password, email FROM users_teacher WHERE username='${usercheck.username}'`)
+  var safe = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE username='${usercheck.username}'`)
     var safes = safe[0]
-    var user = user_studentQuery(`SELECT id, username, password, email FROM users_student WHERE username='${usercheck.username}'`)
+    var user = userQuery(`SELECT id, account, password, username FROM users_student WHERE username='${usercheck.username}'`)
     var users = user[0]
     if(safes!=null)
     var checkuser=safes
@@ -523,7 +532,7 @@ async function list_custom(ctx) {
   }
   else
   {
-    var safe = user_teacherQuery(`SELECT id, username, password, email FROM users_teacher WHERE username='${usercheck.username}'`)
+    var safe = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE username='${usercheck.username}'`)
     var safes = safe[0]
     if(safes==null)
     {
@@ -584,7 +593,7 @@ async function list_custom_stu(ctx) {
   }
   else
   {
-    var safe = user_studentQuery(`SELECT id, username, password, email FROM users_student WHERE username='${usercheck.username}'`)
+    var safe = userQuery(`SELECT id, account, password, username FROM users_student WHERE username='${usercheck.username}'`)
     var safes = safe[0]
     if(safes==null)
     {
@@ -667,12 +676,12 @@ async function editaccount(ctx) {
   }
   else
   {
-    var safe = user_teacherQuery(`SELECT id, username, password, email FROM users_teacher WHERE username='${usercheck.username}'`)
+    var safe = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE username='${usercheck.username}'`)
     var safes = safe[0]
     if(safes!=null)
     {
-      let users = user_studentQuery(`SELECT id,username, password,email FROM users_student `)
-      let roots = user_teacherQuery(`SELECT id,username, password,email FROM users_teacher `)
+      let users = userQuery(`SELECT id,account, password, username FROM users_student `)
+      let roots = userQuery(`SELECT id,account, password, username FROM users_teacher `)
       ctx.response.body = await render.editaccount(users,roots);
       return;
     }
@@ -695,7 +704,7 @@ async function editaccount(ctx) {
 async function add(ctx) {
   var usercheck = await ctx.state.session.get('user')
   if (usercheck != null) {
-    var safe = user_teacherQuery(`SELECT id, username, password, email FROM users_teacher WHERE username='${usercheck.username}'`)
+    var safe = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE username='${usercheck.username}'`)
     var safes = safe[0]
     if(safes==null)
     {
@@ -731,7 +740,7 @@ async function delpost(ctx) {
   var usercheck = await ctx.state.session.get('user')
   if(usercheck != null)
   {
-    var safe = user_teacherQuery(`SELECT id, username, password, email FROM users_teacher WHERE username='${usercheck.username}'`)
+    var safe = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE username='${usercheck.username}'`)
     var safes = safe[0]
     if(safes!=null)
     {
@@ -762,7 +771,7 @@ async function delaccount_user(ctx) {
   var usercheck = await ctx.state.session.get('user')
   if(usercheck != null)
   {
-    var safe = user_teacherQuery(`SELECT id, username, password, email FROM users_teacher WHERE username='${usercheck.username}'`)
+    var safe = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE username='${usercheck.username}'`)
     var safes = safe[0]
     if(safes!=null)
     {
@@ -792,7 +801,7 @@ async function delaccount_user(ctx) {
 /*use or not???*/ 
 /*async function delaccount_root(ctx) {
   var usercheck = await ctx.state.session.get('user')
-  var safe = user_teacherQuery(`SELECT id, username, password, email FROM users_teacher WHERE username='${usercheck.username}'`)
+  var safe = userQuery(`SELECT id, username, password, email FROM users_teacher WHERE username='${usercheck.username}'`)
   var safes = safe[0]
   if(usercheck != null&&safes!=null)
   {
@@ -822,7 +831,7 @@ async function editpostui(ctx) {
 
   }
   else{
-    var safe = user_teacherQuery(`SELECT id, username, password, email FROM users_teacher WHERE username='${usercheck.username}'`)
+    var safe = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE username='${usercheck.username}'`)
     var safes = safe[0]
     if(safes!=null)
     {
@@ -854,7 +863,7 @@ async function editpost(ctx)
   }
   else
   {
-    var safe = user_teacherQuery(`SELECT id, username, password, email FROM users_teacher WHERE username='${usercheck.username}'`)
+    var safe = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE username='${usercheck.username}'`)
     var safes = safe[0]
     if(safes!=null)
     {
@@ -930,10 +939,10 @@ async function editpassword_userui(ctx) {
   }
   else
   {
-  var safe = user_teacherQuery(`SELECT id, username, password, email FROM users_teacher WHERE username='${usercheck.username}' AND id=${pid}`)
+  var safe = userQuery(`SELECT id,account, password, username FROM users_teacher WHERE username='${usercheck.username}' AND id=${pid}`)
   var safes = safe[0]
   
-  var user = user_studentQuery(`SELECT id, username, password, email FROM users_student WHERE username='${usercheck.username}' AND id=${pid}`)
+  var user = userQuery(`SELECT id, account, password, username FROM users_student WHERE username='${usercheck.username}' AND id=${pid}`)
   var users = user[0]
   if(safes!=null)
   {
@@ -967,10 +976,10 @@ async function editpassword_user(ctx) {
   }
   else
   {
-    var user = user_studentQuery(`SELECT id, username, password, email FROM users_student WHERE username='${usercheck.username}' AND id=${pid}`)
+    var user = userQuery(`SELECT id, account, password, username FROM users_student WHERE username='${usercheck.username}' AND id=${pid}`)
     var users = user[0]
   
-    var safe = user_teacherQuery(`SELECT id, username, password, email FROM users_teacher WHERE username='${usercheck.username}' AND id=${pid}`)
+    var safe = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE username='${usercheck.username}' AND id=${pid}`)
     var safes = safe[0]
     
 //檢查輸入是否有特殊自原
@@ -1052,11 +1061,11 @@ async function editpassword_rootui(ctx) {
   }
   else
   {
-  var safe = user_teacherQuery(`SELECT id, username, password, email FROM users_teacher WHERE username='${usercheck.username}'`)
+  var safe = userQuery(`SELECT id,account, password, username FROM users_teacher WHERE username='${usercheck.username}'`)
   var safes = safe[0]
   if(safes!=null)
   {
-  let users = user_teacherQuery(`SELECT id, username, password, email FROM users_teacher WHERE id=${pid}`)
+  let users = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE id=${pid}`)
   let user=users[0]
     ctx.response.body = await render.editpassword_rootui(user);
     return;
@@ -1086,7 +1095,7 @@ async function editpassword_root(ctx) {
   }
   else
   {
-  var safe = user_teacherQuery(`SELECT id, username, password, email FROM users_teacher WHERE username='${usercheck.username}'`)
+  var safe = userQuery(`SELECT id,account, password, username FROM users_teacher WHERE username='${usercheck.username}'`)
   var safes = safe[0]
   if(pattern.test(account.account)||pattern.test(account.password)||account.account==''||account.password=='')
     {
@@ -1095,6 +1104,7 @@ async function editpassword_root(ctx) {
     }
 
   if(safes!=null)
+
   {
     if (body.type === "form") {
       sqlcmd(`UPDATE users_teacher SET "username"='${account.account}',"password"='${account.password}'WHERE id='${pid}';`)
@@ -1127,7 +1137,7 @@ async function editpassword_user_for_root(ctx) {
   }
   else
   {
-  var safe = user_studentQuery(`SELECT id, username, password, email FROM users_student WHERE id='${pid}'`)
+  var safe = userQuery(`SELECT id, account, password, username FROM users_student WHERE id='${pid}'`)
   var safes = safe[0]
   if(pattern.test(account.account)||pattern.test(account.password)||pattern.test(account.username)||account.account==''||account.password==''||account.username=='')
     {
@@ -1138,7 +1148,7 @@ async function editpassword_user_for_root(ctx) {
   {
     if (body.type === "form") {
      
-      sqlcmd(`UPDATE users_student SET "username"='${account.account}',"password"='${account.password}',"email"='${account.username}' WHERE id='${pid}';`)
+      sqlcmd(`UPDATE users_student SET "account"='${account.account}',"password"='${account.password}',"username"='${account.username}' WHERE id='${pid}';`)
       ctx.response.redirect('/editaccount');
       return;
     }
