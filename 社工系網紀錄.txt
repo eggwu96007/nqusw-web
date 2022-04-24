@@ -81,3 +81,5 @@ fix database
 04/24(7hr)
 1.loginUI redesign
 2.listUl redesign
+3.Homepage link add
+4.homepage text img replace 
