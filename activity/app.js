@@ -13,7 +13,7 @@ db.query("CREATE TABLE IF NOT EXISTS users_teacher (id INTEGER PRIMARY KEY AUTOI
 const router = new Router();
 
 router.get('/', list) 
-.get('/home', homeUi)
+.get('/home', homeUi)//V
 .get('/about', aboutUi)
   //.get('/stu', liststu)
   .get('/signup_teacher', signup_teacherUi)
@@ -23,7 +23,7 @@ router.get('/', list)
   .get('/login', loginUi)
   .post('/login', login)
   .get('/loginstu', loginUi)
-  .post('/loginstu', loginstu)
+ // .post('/loginstu', loginstu)
   .get('/logout', logout)
   .get('/editaccount',editaccount)
   .get('/delaccount_user/:id',delaccount_user)
@@ -115,6 +115,9 @@ async function parseFormBody(body) {
   return obj
 }
 
+
+
+
 /*從這裡開始*/
 /*1223check*/ 
 async function loginUi(ctx) {
@@ -123,46 +126,49 @@ async function loginUi(ctx) {
 }
 
 async function homeUi(ctx) {
-  var user = await ctx.state.session.get('user')
-  if(user==undefined)
-  {
-    ctx.response.body = await render.homeUi(user)
-  }
-  else if (user!=undefined)
-  {
-    var safe = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE account='${user.username}'`)
-    var safes = safe[0]
-
-    var user = userQuery(`SELECT id, account, password, username FROM users_student WHERE account='${user.username}'`)
-    var users = user[0]
-    if(safes!=null)
-    {
-      console.log("safe是啥",safes)
-      ctx.response.body = await render.homeUi(safes);  
-    }
-    else if(users!=null)
-    {
-      console.log("user是啥",users)
-      ctx.response.body = await render.homeUi(users);  
-    }
-    
-  }
-  
-  
+  var usercheck = await ctx.state.session.get('user')
+  if(usercheck==undefined)
+    ctx.response.body = await render.homeUi()
+  else if (usercheck!=undefined)
+    ctx.response.body = await render.homeUi(usercheck.username);  
+    return;
 }
 
-async function aboutUi(ctx) {
-  
 
-  var user = await ctx.state.session.get('user')
-  if(user==undefined)
+async function list_gratuate(ctx) {
+  
+  var usercheck = await ctx.state.session.get('user')
+  if(usercheck==null)
   {
-    ctx.response.body = await render.aboutUi(user)
+    ctx.response.body = render.middle({status:'請先登入'})
+    return;
+  }
+  else{
+    /*var root = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE username='${usercheck.username}'`)
+    var roots = root[0]
+    var user = userQuery(`SELECT id, account, password, username FROM users_student WHERE username='${usercheck.username}'`)
+    var users = user[0]
+    if(roots!=null)
+    usercheck=roots
+    if(users!=null)
+    usercheck = users*/
+    var posts = postQuery(`SELECT id,username, title, body ,file,content FROM posts WHERE body LIKE '%畢業專題%';`) 
+    ctx.response.body = await render.list_gratuate(posts,usercheck.username);
   }
 
+}
+
+
+async function aboutUi(ctx) {
+  var usercheck = await ctx.state.session.get('user')
+  if(usercheck==undefined)
+  {
+    ctx.response.body = await render.aboutUi()
+  }
   else
   {
-    var safe = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE username='${user.username}'`)
+    ctx.response.body = await render.aboutUi(usercheck.username);
+   /* var safe = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE username='${user.username}'`)
     var safes = safe[0]
     var user = userQuery(`SELECT id, account, password, username FROM users_student WHERE username='${user.username}'`)
     var users = user[0]
@@ -173,7 +179,7 @@ async function aboutUi(ctx) {
     else if(users!=null)
     {
       ctx.response.body = await render.aboutUi(users);
-    }
+    }*/
     
   }
 }
@@ -195,7 +201,7 @@ async function login(ctx) {
       ctx.response.body = render.middle({status:'不可輸入特殊符號'},usercheck)
       return;
     }
-console.log("幹右怎麼了",input.password,roots.password,roots)
+
       //管理者
       if (roots != null &&roots.password === input.password) {
         console.log("你好1")
@@ -215,14 +221,14 @@ console.log("幹右怎麼了",input.password,roots.password,roots)
 //密碼錯誤
       else 
       {
-        console.log("你好3")
-        ctx.response.body = render.middle({status:'密碼錯誤'},usercheck);
+        ctx.response.body = render.middle({status:'帳號或密碼錯誤'},usercheck);
+        return;
       }
   }
 }
 
 /*1223check*/
-async function loginstu(ctx) {
+/*async function loginstu(ctx) {
   const body = ctx.request.body()
   if (body.type === "form") {
     var user = await parseFormBody(body)
@@ -251,7 +257,7 @@ async function loginstu(ctx) {
     }
    
   }
-}
+}*/
 
 
 /*signup teacher */
@@ -277,8 +283,6 @@ async function signup_teacherUi(ctx) {
       ctx.response.body = render.loginUi({status:'請先登入'})
     }
   }
-  
-
   
 }
 
@@ -494,31 +498,7 @@ async function liststu(ctx) {
 }
 */
 
-async function list_gratuate(ctx) {
-  var usercheck = await ctx.state.session.get('user')
-  var safe = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE username='${usercheck.username}'`)
-    var safes = safe[0]
-    var user = userQuery(`SELECT id, account, password, username FROM users_student WHERE username='${usercheck.username}'`)
-    var users = user[0]
-    if(safes!=null)
-    var checkuser=safes
-    if(users!=null)
-    var checkuser = users
-  const body = ctx.request.body()
-  if(usercheck==null)
-  {
-    ctx.response.body = render.loginUi({status:'請先登入'})
-   
-    return;
-  }
-  
-  else{
-    var posts = postQuery(`SELECT id,username, title, body ,file,content FROM posts WHERE body LIKE '%畢業專題%';`) 
-    ctx.response.body = await render.list(posts,checkuser);
 
-  }
-
-}
 
 
 /*1223check */

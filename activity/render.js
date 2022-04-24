@@ -67,28 +67,18 @@ loginstatus= `<li style="float:right">歡迎${user} <a href="/editpassword_user/
         visibility: visible;
     }
 /*登入小圈圈*/
-.formloginright
+    .formlogin
     {
-      
-      background-color: #FFC1E0 ;
+      display: block;
+      background-color: #FFFFFF ;
       width:400px;
       height:400px;
-      padding:30px;
+      border-radius:4em;
       text-align: center;
-      display:block;
-      border-radius:999em;
-    }
-    .formloginleft
-    {
-      
-      background-color: #FFC1E0 ;
-      padding:30px;
-      width:400px;
-      height:400px;
-      border-radius:999em;
-      text-align: center;
-      display:block;
-      
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
     }
   
     input[type=text],input[type=password],
@@ -214,10 +204,7 @@ loginstatus= `<li style="float:right">歡迎${user} <a href="/editpassword_user/
           .small{width: 500px;}
           .nosee{display: none}
           .dropbtn1{display:none}
-          .formloginright{position:relative; margin-left: auto;
-            margin-right: auto;margin-top: 50px;}
-          .formloginleft{position:relative; margin-left: auto;
-            margin-right: auto;}
+          
         }
           
           
@@ -226,11 +213,8 @@ loginstatus= `<li style="float:right">歡迎${user} <a href="/editpassword_user/
             .small{width: 1000px;height:600px}
           .nosee{display:inline}
           .dropbtn1{display:inline-block}
-          .login{display:inline}
-          .formloginleft{position:absolute;top: 25%;
-            left: 10%;}
-          .formloginright{position:absolute;top: 25%;
-            left:60%;;margin-top: auto;}
+          
+
         }
     </style>
   </head>
@@ -266,20 +250,16 @@ loginstatus= `<li style="float:right">歡迎${user} <a href="/editpassword_user/
   
 </ul>
    
-    <div id ="div2" style="display:block;opacity:0.0;"><div class="login">
-    <div class="formloginleft"style="z-index:2;" >
-    <img class="small" style="width:200px;height:200px " src="images/管理員登入.png" />
+<div class="formlogin" style="z-index:2;opacity:0.0;" id ="div2" >   
+    <img class="small" style="width:30px;height:30px " src="images/管理員登入.png" />
     <form action="/login" method="post" >
-    <p>管理者登入</p>
-    <p><input type="text" placeholder="帳號"  name="account" style="width:auto;"></p>
-    <p><input type="password" placeholder="密碼" name="password" style = "width:auto;"></p>
+    <p>登入窗口</p>
+    <p><a>帳號：</a><input type="text" placeholder="帳號"  name="account" style="width:auto;"></p>
+    <p><a>密碼：</a><input type="password" placeholder="密碼" name="password" style = "width:auto;"></p>
     <p><input type="submit" value="登入"></p>
-    <p onclick="recover()">再看看</p>
-    
-    
+    <p onclick="recover()">等等再登入</p>
   </form>
   </div>
-  </div></div>
   <div id ="div1" style="display:block;opacity:1.0; " >
   ${view}
   </div>
@@ -448,7 +428,6 @@ ${alertScriptstu}
 }
 
 export function middle(args={},user){
-  console.log("這middle是啥",user)
   return layout(
     '',`<script>
     alert('${args.status}')
@@ -742,6 +721,57 @@ export function list(posts, user) {
   `
   return layout('金大社工系學習歷程專區', content,user)
 }
+
+
+export function list_gratuate(posts, user) {
+  console.log("怪怪的嗎?",user)
+   
+   let list = []
+   for (let post of posts) {
+     
+     list.push(`
+    
+     <li style="border-color: blue">
+     <h2>專題名稱：${ post.title}<a href="/delpost/${post.id}">刪除貼文</a><a href="/editpost/${post.id}">編輯貼文</a></h2>
+     <p>類別：${post.content}</p>
+     <p>作者：${post.username}</p>
+     <p>入學級別與實習時間：${post.body}</p>
+     <p><a href="/images/${post.file}">查看資料</a></p>
+     </li>
+     `)
+   }
+ 
+   let content = `
+   <body>
+   <article>
+   <p style="border: crimson;font-size: 30px; border-top: 100px; ">${(user==null)?'':'歡迎 '+user}<a href="/post/new">上傳檔案</a><a href="/editaccount">帳號管理</a><a href="/logout">登出</a> 
+   <form action="/list_custom" method="post">
+   
+   <input type="text" placeholder="關鍵字搜尋"  name="search" style="width:auto;">
+   <input type="submit" value="搜尋">
+  
+   <div class="tooltip">游標移過來
+   <span class="tooltiptext">搜尋說明：如果要搜尋"松柏園"。關鍵字打"松"或"柏""園"都可以出來歐</span>
+ </div>
+ <p>進階搜尋</p>
+ <input type="checkbox" id="vehicle1" name="title" value="title">
+ <label for="vehicle1">機構名稱</label>
+ <input type="checkbox" id="vehicle2" name="class" value="class">
+ <label for="vehicle1">級別</label>
+ <input type="checkbox" id="vehicle3" name="content" value="content">
+ <label for="vehicle1">文章類別</label>
+ </form></p>
+   <ul id="posts">
+     ${list.join('\n')}
+   </ul>
+   </article>
+   </body>
+   `
+   return layout('金大社工系學習歷程專區', content,user)
+ }
+ 
+
+
 
 
 

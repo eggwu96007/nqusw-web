@@ -74,6 +74,8 @@
 2.rename variable
 fix database
 
-04/23()
+04/23(8hr)
 1.RSS homepage generate
 2.database upgrate
+3.homepage design
+04/24()
