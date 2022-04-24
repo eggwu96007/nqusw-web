@@ -36,22 +36,29 @@ loginstatus= `<li style="float:right">歡迎${user} <a href="/editpassword_user/
     <link rel="stylesheet" href="images/css/slick-theme.css">
     <style>
    
-   
+    body {
+      margin: 0;
+      padding: 0;
+    background-color:  #D1E9E9;
+      font-family: Arial, Helvetica, sans-serif;
+      font: 2vh Helvetica, Arial;
+    }
+
+
     #posts {
       margin: 0;
       padding: 0;
     }
     #posts li {
-      padding: 20px;
-      border-style:solid;
+      width:30%;
       list-style: none;
     }
     
-    /*游標*/
+    /*游標 搜尋標記*/
     .tooltip {
       position: relative;
       display: inline-block;
-      border-bottom: 1px dotted red;
+      border-bottom: 10px dotted red;
   }
   
   .tooltiptext {
@@ -66,10 +73,10 @@ loginstatus= `<li style="float:right">歡迎${user} <a href="/editpassword_user/
   .tooltip:hover .tooltiptext {
         visibility: visible;
     }
-/*登入小圈圈*/
+/*登入UI*/
     .formlogin
     {
-      display: block;
+      display: none;
       background-color: #FFFFFF ;
       width:400px;
       height:400px;
@@ -89,15 +96,9 @@ loginstatus= `<li style="float:right">歡迎${user} <a href="/editpassword_user/
     }
    
     /*slider*/
-    html, body {
-      margin: 0;
-      padding: 0;
-    }
+   
     .slick-slide {
       margin: 20px 20px -100px 20px;
-     
-    }
-    .slick-slide {
       transition: all ease-in-out .3s;
       opacity: .2;
     }
@@ -109,6 +110,8 @@ loginstatus= `<li style="float:right">歡迎${user} <a href="/editpassword_user/
       opacity: 1;
     }
     /*slider*/
+
+    
     /*sidebar*/
     .sidenav {
       height: 100%;
@@ -145,9 +148,6 @@ loginstatus= `<li style="float:right">歡迎${user} <a href="/editpassword_user/
     }
     /*上面是sidebar*/
     /*navbar*/
-    ul {
-      
-    }
     
     li {
       float: left;
@@ -192,12 +192,7 @@ loginstatus= `<li style="float:right">歡迎${user} <a href="/editpassword_user/
       display: block;
     }
     /*上面是navbar*/
-    body {
-      
-      background-color:  #D1E9E9;
-        font-family: Arial, Helvetica, sans-serif;
-        font: 20px Helvetica, Arial;
-      }
+    
 /*大小設定*/
         @media (min-width:400px){ 
           .see{display:inline}
@@ -251,7 +246,6 @@ loginstatus= `<li style="float:right">歡迎${user} <a href="/editpassword_user/
 </ul>
    
 <div class="formlogin" style="z-index:2;opacity:0.0;" id ="div2" >   
-    <img class="small" style="width:30px;height:30px " src="images/管理員登入.png" />
     <form action="/login" method="post" >
     <p>登入窗口</p>
     <p><a>帳號：</a><input type="text" placeholder="帳號"  name="account" style="width:auto;"></p>
@@ -269,12 +263,13 @@ loginstatus= `<li style="float:right">歡迎${user} <a href="/editpassword_user/
   function isHidden(){    
       div1.style.opacity='0.05'; 
       div2.style.opacity='2.0';
+      div2.style.display='block';
   }
   function recover(){
    
     div2.style.opacity='0.0'; 
     div1.style.opacity='1.0';
-     
+    div2.style.display='none';
 }
 </script>
   </html>
@@ -676,21 +671,27 @@ ${alertScript}
 
 
 export function list(posts, user) {
- console.log("怪怪的",user)
-  
   let list = []
+  var color_choose = 1;
+  var color
   for (let post of posts) {
+    if(color_choose%2==0)
+    color="#b0dfda"
+    else if(color_choose%2==1)
+    color="#eecbe7"
     
+
     list.push(`
    
-    <li style="border-color: blue">
-    <h2>機構名稱：${ post.title}<a href="/delpost/${post.id}">刪除貼文</a><a href="/editpost/${post.id}">編輯貼文</a></h2>
-    <p>類別：${post.content}</p>
+    <li style="background:${color}; margin:10px">
+    <p>${post.title}<a style="padding: 0" href="/delpost/${post.id}">刪除貼文</a><a style="padding: 0" href="/editpost/${post.id}">編輯貼文</a></p>
     <p>作者：${post.username}</p>
     <p>入學級別與實習時間：${post.body}</p>
-    <p><a href="/images/${post.file}">查看資料</a></p>
+    <p>類別：${post.content}</p>
+    <p><a padding: 0 href="/images/${post.file}">查看資料</a></p>
     </li>
     `)
+    color_choose=color_choose+1;
   }
 
   let content = `
@@ -713,7 +714,7 @@ export function list(posts, user) {
 <input type="checkbox" id="vehicle3" name="content" value="content">
 <label for="vehicle1">文章類別</label>
 </form></p>
-  <ul id="posts">
+  <ul id="posts" >
     ${list.join('\n')}
   </ul>
   </article>
@@ -724,7 +725,6 @@ export function list(posts, user) {
 
 
 export function list_gratuate(posts, user) {
-  console.log("怪怪的嗎?",user)
    
    let list = []
    for (let post of posts) {
@@ -771,50 +771,51 @@ export function list_gratuate(posts, user) {
  }
  
 
-
-
-
-
 export function liststu(posts, user) {
-  console.log("怪怪的不怪",user)
   let list = []
+  var color_choose = 1;
+  var color
   for (let post of posts) {
+    if(color_choose%2==0)
+    color="#b0dfda"
+    else if(color_choose%2==1)
+    color="#eecbe7"
     
+
     list.push(`
    
-    <li style="border-color: blue">
-    <h2>機構名稱：${ post.title}</h2>
-    <p>類別：${post.content}</p>
+    <li style="background:${color}; margin:10px">
+    <p>${post.title}</p>
     <p>作者：${post.username}</p>
     <p>入學級別與實習時間：${post.body}</p>
-    <p><a href="/images/${post.file}">查看資料</a></p>
-      </li>
+    <p>類別：${post.content}</p>
+    <p><a padding: 0 href="/images/${post.file}">查看資料</a></p>
+    </li>
     `)
+    color_choose=color_choose+1;
   }
+
   let content = `
-  
   <body>
   <article>
-  <p style="border: crimson;font-size: 30px; border-top: 100px; ">${(user==null)?'':'歡迎 '+user.username}<a href="/editpassword_user/${user.id}">變更密碼</a><a href="/logout">登出</a></p>
-  <form action="/list_custom_stu" method="post">
+  <p style="border: crimson;font-size: 30px; border-top: 100px; ">${(user==null)?'':'歡迎 '+user}<a href="/post/new">上傳檔案</a><a href="/editaccount">帳號管理</a><a href="/logout">登出</a> 
+  <form action="/list_custom" method="post">
   
   <input type="text" placeholder="關鍵字搜尋"  name="search" style="width:auto;">
   <input type="submit" value="搜尋">
+ 
   <div class="tooltip">游標移過來
   <span class="tooltiptext">搜尋說明：如果要搜尋"松柏園"。關鍵字打"松"或"柏""園"都可以出來歐</span>
-  
 </div>
 <p>進階搜尋</p>
 <input type="checkbox" id="vehicle1" name="title" value="title">
-  <label for="vehicle1">機構名稱</label>
-  <input type="checkbox" id="vehicle2" name="body" value="body">
-  <label for="vehicle2">級別</label>
-  <input type="checkbox" id="vehicle3" name="content" value="content">
-  <label for="vehicle3">文章類別</label>
-  <input type="checkbox" id="vehicle4" name="username" value="username">
-  <label for="vehicle4">作者姓名</label>
-</form>
-  <ul id="posts">
+<label for="vehicle1">機構名稱</label>
+<input type="checkbox" id="vehicle2" name="class" value="class">
+<label for="vehicle1">級別</label>
+<input type="checkbox" id="vehicle3" name="content" value="content">
+<label for="vehicle1">文章類別</label>
+</form></p>
+  <ul id="posts" >
     ${list.join('\n')}
   </ul>
   </article>

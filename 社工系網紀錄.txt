@@ -78,4 +78,6 @@ fix database
 1.RSS homepage generate
 2.database upgrate
 3.homepage design
-04/24()
+04/24(7hr)
+1.loginUI redesign
+2.listUl redesign

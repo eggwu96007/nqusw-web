@@ -15,7 +15,7 @@ const router = new Router();
 router.get('/', list) 
 .get('/home', homeUi)//V
 .get('/about', aboutUi)
-  //.get('/stu', liststu)
+  .get('/stu', liststu)
   .get('/signup_teacher', signup_teacherUi)
   .post('/signup_teacher', signup_teacher)
   .get('/signup_student', signup_studentUi)
@@ -215,7 +215,7 @@ async function login(ctx) {
       else if(users != null && users.password === input.password)
       {
         ctx.state.session.set('user', users)
-       ctx.response.redirect('/'); 
+       ctx.response.redirect('/stu'); 
        return;
       } 
 //密碼錯誤
@@ -473,8 +473,7 @@ async function list(ctx) {
     }
   }
   
-}
-/*跟list合併
+}*/
 async function liststu(ctx) {
  var usercheck = await ctx.state.session.get('user')
   if(usercheck==null)
@@ -483,7 +482,7 @@ async function liststu(ctx) {
   }
   else if(usercheck!=null)
   {
-    var safe = userQuery(`SELECT id, username, password, email FROM users_student WHERE username='${usercheck.username}'`)
+    var safe = userQuery(`SELECT id, account, password, username FROM users_student WHERE username='${usercheck.username}'`)
     var safes = safe[0]
       let orderby = ctx.request.url.searchParams.get('orderby')
       orderby = orderby || 'id'
@@ -491,12 +490,12 @@ async function liststu(ctx) {
       op = op || 'ASC'
       var posts = postQuery(`SELECT id,username, title, body ,file,content FROM posts ORDER BY ${orderby} ${op}`)
       console.log("1226",posts,safes)
-      ctx.response.body = await render.liststu(posts,safes);
+      ctx.response.body = await render.liststu(posts,safes.username);
      return;
   }
   
 }
-*/
+
 
 
 
