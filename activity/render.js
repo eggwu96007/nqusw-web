@@ -48,11 +48,12 @@ loginstatus= `<li style="float:right">歡迎${user} <a href="/editpassword_user/
 
 
     #posts {
-      margin: 0;
-      padding: 0;
+      margin: auto;
     }
     #posts li {
       width:30%;
+      height:30%;
+      margin:1%;
       list-style: none;
     }
     
@@ -97,10 +98,10 @@ loginstatus= `<li style="float:right">歡迎${user} <a href="/editpassword_user/
       font-size: .8em;
     }
    
-    /*slider*/
+    /*slider輪播動畫*/
    
     .slick-slide {
-      margin: 20px 20px -100px 20px;
+      margin: auto;
       transition: all ease-in-out .3s;
       opacity: .2;
     }
@@ -114,39 +115,39 @@ loginstatus= `<li style="float:right">歡迎${user} <a href="/editpassword_user/
     /*slider*/
 
     
-    /*sidebar*/
+    /*sidebar側欄*/
     .sidenav {
       height: 100%;
       width: 0;
       position: fixed;
       z-index: 3;
-      top: 0;
-      left: 0;
       background-color: #111;
       overflow-x: hidden;
       transition: 0.5s;
-      padding-top: 60px;
+      padding-top: 25%;
+      
     }
     
     .sidenav a {
-      padding: 8px 8px 8px 32px;
+      text-align: center;
+      padding:30px;
       text-decoration: none;
-      font-size: 25px;
+      font-size: 7vw;
       color: #818181;
       display: block;
       transition: 0.3s;
     }
     
+
+    /*游標在上面時會出現的顏色*/
     .sidenav a:hover {
       color: #f1f1f1;
     }
     
-    .sidenav .closebtn {
+    .closebtn {
       position: absolute;
       top: 0;
       right: 25px;
-      font-size: 36px;
-      margin-left: 50px;
     }
     /*上面是sidebar*/
     /*navbar*/
@@ -198,20 +199,15 @@ loginstatus= `<li style="float:right">歡迎${user} <a href="/editpassword_user/
 /*大小設定*/
         @media (min-width:400px){ 
           .see{display:inline}
-          .small{width: 500px;}
           .nosee{display: none}
           .dropbtn1{display:none}
           
         }
-          
-          
+
           @media (min-width:1000px){
             .see{display:none}
-            .small{width: 1000px;height:600px}
           .nosee{display:inline}
           .dropbtn1{display:inline-block}
-          
-
         }
     </style>
   </head>
@@ -224,7 +220,7 @@ loginstatus= `<li style="float:right">歡迎${user} <a href="/editpassword_user/
       <a href="#">畢業專題</a>
       <a href="#">實習報告書</a>
       <a href="#">聯絡我們</a>
-    </div>
+  </div>
     <!--側欄點擊按鈕-->
     <span class="see" style="font-size:30px;float:left;cursor:pointer" onclick="openNav()">&#9776; </span>
     <!--上面那欄-->
@@ -243,8 +239,7 @@ loginstatus= `<li style="float:right">歡迎${user} <a href="/editpassword_user/
     </div>
   </li>
   ${loginstatus}
-  
-  
+
 </ul>
    
 <div class="formlogin" style="z-index:2;opacity:0.0;" id ="div2" >   
@@ -256,11 +251,20 @@ loginstatus= `<li style="float:right">歡迎${user} <a href="/editpassword_user/
     <p onclick="recover()">等等再登入</p>
   </form>
   </div>
-  <div id ="div1" style="display:block;opacity:1.0; " >
+  <div id ="div1" style="display:block;opacity:1.0;" >
   ${view}
   </div>
   
   </body>
+   <script>
+    function openNav() {
+      document.getElementById("mySidenav").style.width = "100%";
+    }
+    
+    function closeNav() {
+      document.getElementById("mySidenav").style.width = "0";
+    }
+    </script>
   <script>
   function isHidden(){    
       div1.style.opacity='0.05'; 
@@ -278,152 +282,6 @@ loginstatus= `<li style="float:right">歡迎${user} <a href="/editpassword_user/
   `
 }
 
-
-
-/*else
-{
-  return `
-  <html>
-  <head>
-  
-    <title>${title}</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" />
-    <style>
-    /*登入textarea
-    
-    
-  
- 
-    body {
-      
-      background-color:  #D1E9E9;
-        font-family: Arial, Helvetica, sans-serif;
-        padding: 100px;
-        font: 16px Helvetica, Arial;
-      }
-    #bodylogin {
-      
-      background-color:  #D1E9E9;
-        font-family: Arial, Helvetica, sans-serif;
-        padding: 50px;
-        font: 20px Helvetica, Arial;
-      }
-    
-  
-      h1 {
-        font-size: 2em;
-      }
-      h2 {
-        font-size: 1.2em;
-      }
-  
-      #posts {
-        margin: 0;
-        padding: 0;
-      }
-  
-      #posts li {
-        padding: 20px;
-        border-style:solid;
-        list-style: none;
-      }
-  
-     
-  
-      
-      header{
-        font-size: 50px;
-        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-         background-color:cyan;
-         margin-top: -80px;
-         text-align: center;
-         height:70px;
-      }
-     
-      article{
-        width:auto;
-        height:auto;
-      }
-      
-    main
-    {
-      
-      height:300px;
-      width:300px;
-    }
-    
-    </style>
-  </head>
- 
-  ${content}
- 
-  </html>
-  `
-}
-  
-}
-/*1223check*/
-/*export function loginUi(args={},user)  {
-  var alertScript
-  var alertScriptshow
-  var alertScriptstu
-  if (args.status == '這是傳給老師的') {
-    alertScript = `<p>帳號或密碼有誤<p>`
-    alertScriptstu = ''
-    alertScriptshow = ''
-  } 
-
-  else if (args.status == '這是傳給學生的') {
-    alertScript = ''
-    alertScriptshow = ''
-    alertScriptstu = `<p>帳號或密碼有誤<p>`
-  } 
-
-  else if (args.status == '請先登入'||args.status == '不可輸入特殊符號'||args.status == '修改成功') {
-    alertScript = ''
-    alertScriptstu = ''
-    alertScriptshow = `<script>
-    alert('${args.status}')
-    </script>`
-  } 
-  
-  else {
-    alertScript = ''
-    alertScriptstu = ''
-    alertScriptshow = ''
-  }
-  return layout('學習歷程檔案登入', `
-  
-  <body id="bodylogin">
-  ${alertScriptshow}
-  <div class="login">
-  <div class="formloginleft">
-  <img class="small" style="width:200px;height:200px " src="images/管理員登入.png" />
-  <form action="/login" method="post" >
-  <p>管理者登入</p>
-  <p><input type="text" placeholder="帳號"  name="account" style="width:auto;"></p>
-  <p><input type="password" placeholder="密碼" name="password" style = "width:auto;"></p>
-  <p><input type="submit" value="登入"></p>
-  ${alertScript}
-  
-</form>
-</div>
-</div>
-<div class="formloginright">
-<img class="small" style="width:200px;height:200px " src="images/使用者登入.png" />
-<form action="/loginstu" method="post" >
-<p>使用者登入</p>
-<p><input type="text" placeholder="帳號"  name="account" style="width:auto;"></p>
-<p><input type="password" placeholder="密碼" name="password" style = "width:auto;"></p>
-<p><input type="submit" value="登入"></p>
-${alertScriptstu}
-</form>
-</div>
-  </body>
-  `,user)
-}*/
-
 export function middle(args={},user){
   return layout(
     '',`<script>
@@ -433,12 +291,12 @@ export function middle(args={},user){
 
 export function homeUi(user)  { 
   return layout('學習歷程檔案首頁', `
-  <div class="container">
-        <img class="small" style="display:block; margin:auto; " src="images/1.jpg" />
-        <img class="small" style="display:block; margin:auto;" src="images/2.jpg" />
-        <img class="small" style="display:block; margin:auto;" src="images/3.jpg" />
-        <img class="small" style="display:block; margin:auto;" src="images/4.jpg" />
-        <img class="small" style="display:block; margin:auto;" src="images/5.jpg" />
+  <div class="container" style="margin:auto;width:90%;height:90%" >
+        <img  style="display:block; margin:auto;" src="images/1.jpg" />
+        <img  style="display:block; margin:auto;" src="images/2.jpg" />
+        <img  style="display:block; margin:auto;" src="images/3.jpg" />
+        <img  style="display:block; margin:auto;" src="images/4.jpg" />
+        <img  style="display:block; margin:auto;" src="images/5.jpg" />
   </div>
     <script type="text/javascript" src="images/js/1.js"></script>
     <script type="text/javascript" src="images/js/2.js"></script>
@@ -452,15 +310,7 @@ $('.container').slick({
   autoplaySpeed: 2000,
 });
 </script>
-    <script>
-    function openNav() {
-      document.getElementById("mySidenav").style.width = "200px";
-    }
-    
-    function closeNav() {
-      document.getElementById("mySidenav").style.width = "0";
-    }
-    </script>
+   
  
   `,user)
 }
@@ -680,11 +530,8 @@ export function list(posts, user) {
     color="#b0dfda"
     else if(color_choose%2==1)
     color="#eecbe7"
-    
-
     list.push(`
-   
-    <li style="background:${color}; margin:10px">
+    <li style="background:${color}; ">
     <p>${post.title}<a style="padding: 0" href="/delpost/${post.id}">刪除貼文</a><a style="padding: 0" href="/editpost/${post.id}">編輯貼文</a></p>
     <p>作者：${post.username}</p>
     <p>入學級別與實習時間：${post.body}</p>

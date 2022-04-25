@@ -22,9 +22,7 @@ router.get('/', list)
   .post('/signup_teacher', signup_teacher)
   .get('/signup_student', signup_studentUi)
   .post('/signup_student', signup_student)
-  .get('/login', loginUi)
   .post('/login', login)
-  .get('/loginstu', loginUi)
  // .post('/loginstu', loginstu)
   .get('/logout', logout)
   .get('/editaccount',editaccount)
@@ -46,7 +44,6 @@ router.get('/', list)
   .get('/list_custom_stu', list_custom_stu)
   .post('/list_custom', list_custom)
   .get('/list_custom', list_custom)
-  
   .post('/list_gratuate', list_gratuate)
   .get('/list_gratuate', list_gratuate)
   .get('/post/new', add)
@@ -100,14 +97,6 @@ function userQuery(sql) {
   return list
 }
 
-/*function userQuery(sql) {
-  let list = []
-  for (const [id, username, password, email] of sqlcmd(sql)) {
-    list.push({id, username, password, email})
-  }
-  return list
-}*/
-
 async function parseFormBody(body) {
   const pairs = await body.value
   const obj = {}
@@ -118,15 +107,7 @@ async function parseFormBody(body) {
 }
 
 
-
-
-/*從這裡開始*/
-/*1223check*/ 
-async function loginUi(ctx) {
-  var user = await ctx.state.session.get('user')
-  ctx.response.body = await render.loginUi(user);
-}
-
+//還差下面的4張圖
 async function homeUi(ctx) {
   var usercheck = await ctx.state.session.get('user')
   if(usercheck==undefined)
@@ -470,10 +451,11 @@ async function list(ctx) {
   }
   else if(usercheck!=null)
   {
+    console.log("usercheck是啥",usercheck)
 
-    var root = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE account='${usercheck.username}'`) // userMap[user.username]
+    var root = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE account='${usercheck.account}'`) // userMap[user.username]
     var roots = root[0]
-    var user = userQuery(`SELECT id, account, password, username FROM users_student WHERE account='${usercheck.username}'`)
+    var user = userQuery(`SELECT id, account, password, username FROM users_student WHERE account='${usercheck.account}'`)
     var users = user[0]
 
     let orderby = ctx.request.url.searchParams.get('orderby')
@@ -482,10 +464,19 @@ async function list(ctx) {
     op = op || 'ASC'
       
     var posts = postQuery(`SELECT id,username, title, body ,file,content FROM posts ORDER BY ${orderby} ${op}`)
+    console.log("哭阿怎麼會這樣",roots,users)
     if(roots!=null)
-    ctx.response.body = await render.list(posts,usercheck.username);
-    else
-    ctx.response.body = await render.liststu(posts,usercheck.username);
+    {
+      console.log("這裡?")
+      ctx.response.body = await render.list(posts,usercheck.username);
+    }
+    
+    else if(users!=null)
+    {
+      console.log("還是這裡?")
+      ctx.response.body = await render.liststu(posts,usercheck.username);
+    }
+    
     }
 
   }

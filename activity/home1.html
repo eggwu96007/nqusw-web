@@ -21,8 +21,10 @@ body {
 
 /* Header/Blog Title */
 .header {
+  margin: auto;
+  height: 50%;
+  width: 50%;
   display: block;
-  padding: 10px;
   text-align: center;
   background: #f1f1f1;
 }
@@ -129,16 +131,21 @@ body {
     <img  style="display:block; margin:auto;  " src="images/照片5.jpeg" />
     
 </div>
+
+
 <script  src="images/js/1.js"></script>
 <script  src="images/js/2.js"></script>
 <script  src="images/js/slick.min.js"></script>
 <script  src="images/js/slick.js"></script>
 <script >
 $('.container').slick({
+  infinite: true,
+  dots: true,
 slidesToShow: 1,
 slidesToScroll: 1,
 autoplay: true,
 autoplaySpeed: 2000,
+adaptiveHeight: true
 });
 </script>
 
