@@ -13,9 +13,11 @@ db.query("CREATE TABLE IF NOT EXISTS users_teacher (id INTEGER PRIMARY KEY AUTOI
 const router = new Router();
 
 router.get('/', list) 
+.get('/mechanism',mechanism)
+
 .get('/home', homeUi)//V
 .get('/about', aboutUi)
-  .get('/stu', liststu)
+ // .get('/stu', liststu)
   .get('/signup_teacher', signup_teacherUi)
   .post('/signup_teacher', signup_teacher)
   .get('/signup_student', signup_studentUi)
@@ -136,24 +138,31 @@ async function homeUi(ctx) {
 
 
 async function list_gratuate(ctx) {
-  
-  var usercheck = await ctx.state.session.get('user')
+var usercheck = await ctx.state.session.get('user')
   if(usercheck==null)
   {
     ctx.response.body = render.middle({status:'請先登入'})
     return;
   }
   else{
-    /*var root = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE username='${usercheck.username}'`)
+    var root = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE username='${usercheck.username}'`)
     var roots = root[0]
     var user = userQuery(`SELECT id, account, password, username FROM users_student WHERE username='${usercheck.username}'`)
     var users = user[0]
-    if(roots!=null)
-    usercheck=roots
-    if(users!=null)
-    usercheck = users*/
     var posts = postQuery(`SELECT id,username, title, body ,file,content FROM posts WHERE body LIKE '%畢業專題%';`) 
-    ctx.response.body = await render.list_gratuate(posts,usercheck.username);
+    if(roots!=null)
+    {
+      usercheck=roots
+      ctx.response.body = await render.list_gratuate_teacher(posts,usercheck.username);
+    }
+    
+    if(users!=null)
+    {
+      usercheck = users
+      ctx.response.body = await render.list_gratuate_student(posts,usercheck.username);
+    }
+    
+    
   }
 
 }
@@ -204,7 +213,6 @@ async function login(ctx) {
 
       //管理者
       if (roots != null &&roots.password === input.password) {
-        console.log("你好1")
         ctx.state.session.set('user', roots)
        
         //ctx.response.redirect('/list_gratuate');
@@ -215,7 +223,7 @@ async function login(ctx) {
       else if(users != null && users.password === input.password)
       {
         ctx.state.session.set('user', users)
-       ctx.response.redirect('/stu'); 
+       ctx.response.redirect('/'); 
        return;
       } 
 //密碼錯誤
@@ -406,6 +414,45 @@ async function signup_student(ctx) {
   }
 }
  
+//
+async function mechanism(ctx) {
+  var usercheck = await ctx.state.session.get('user')
+  if(usercheck==null)
+  {
+    //ctx.response.body = render.loginUi({status:'請先登入'})
+    ctx.response.body = render.middle({status:'請先登入'},usercheck);
+  }
+  else if(usercheck!=null)
+  {
+
+    var root = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE account='${usercheck.username}'`) // userMap[user.username]
+    var roots = root[0]
+    var user = userQuery(`SELECT id, account, password, username FROM users_student WHERE account='${usercheck.username}'`)
+    var users = user[0]
+
+    let orderby = ctx.request.url.searchParams.get('orderby')
+    orderby = orderby || 'id'
+    let op = ctx.request.url.searchParams.get('op')
+    op = op || 'ASC'
+      
+    var posts = postQuery(`select id, username, title, body,file,content from posts WHERE title LIKE '%金門縣%' group by title  `)
+    if(roots!=null)
+    {
+      ctx.response.body = await render.mechanism(posts,usercheck.username);
+      console.log("無論如何都機構一下123",posts)
+      
+    }
+    else
+    {
+      ctx.response.body = await render.mechanism(posts,usercheck.username);
+      console.log("無論如何都機構一下",posts)  
+    
+    }
+    }
+
+  }
+
+
 
 
 /*0422check*/
@@ -416,7 +463,6 @@ async function logout(ctx) {
 /*1223check */
 async function list(ctx) {
   var usercheck = await ctx.state.session.get('user')
-  console.log("usercheck是啥",usercheck)
   if(usercheck==null)
   {
     //ctx.response.body = render.loginUi({status:'請先登入'})
@@ -424,13 +470,22 @@ async function list(ctx) {
   }
   else if(usercheck!=null)
   {
+
+    var root = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE account='${usercheck.username}'`) // userMap[user.username]
+    var roots = root[0]
+    var user = userQuery(`SELECT id, account, password, username FROM users_student WHERE account='${usercheck.username}'`)
+    var users = user[0]
+
     let orderby = ctx.request.url.searchParams.get('orderby')
     orderby = orderby || 'id'
     let op = ctx.request.url.searchParams.get('op')
     op = op || 'ASC'
       
     var posts = postQuery(`SELECT id,username, title, body ,file,content FROM posts ORDER BY ${orderby} ${op}`)
+    if(roots!=null)
     ctx.response.body = await render.list(posts,usercheck.username);
+    else
+    ctx.response.body = await render.liststu(posts,usercheck.username);
     }
 
   }
@@ -474,7 +529,7 @@ async function list(ctx) {
   }
   
 }*/
-async function liststu(ctx) {
+/*async function liststu(ctx) {
  var usercheck = await ctx.state.session.get('user')
   if(usercheck==null)
   {
@@ -482,19 +537,18 @@ async function liststu(ctx) {
   }
   else if(usercheck!=null)
   {
-    var safe = userQuery(`SELECT id, account, password, username FROM users_student WHERE username='${usercheck.username}'`)
+   /* var safe = userQuery(`SELECT id, account, password, username FROM users_student WHERE username='${usercheck.username}'`)
     var safes = safe[0]
       let orderby = ctx.request.url.searchParams.get('orderby')
       orderby = orderby || 'id'
       let op = ctx.request.url.searchParams.get('op')
       op = op || 'ASC'
       var posts = postQuery(`SELECT id,username, title, body ,file,content FROM posts ORDER BY ${orderby} ${op}`)
-      console.log("1226",posts,safes)
-      ctx.response.body = await render.liststu(posts,safes.username);
+      ctx.response.body = await render.liststu(posts,usercheck.username);
      return;
   }
   
-}
+}*/
 
 
 

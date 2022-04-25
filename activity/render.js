@@ -20,6 +20,8 @@ export function layout(title, content,user) {
   {
 loginstatus= `<li style="float:right">歡迎${user} <a href="/editpassword_user/${user.id}">變更密碼</a><a href="/logout">登出</a></li>`
 
+
+
 } 
   else if (user==undefined)
   {
@@ -362,7 +364,7 @@ loginstatus= `<li style="float:right">歡迎${user} <a href="/editpassword_user/
   
 }
 /*1223check*/
-export function loginUi(args={},user)  {
+/*export function loginUi(args={},user)  {
   var alertScript
   var alertScriptshow
   var alertScriptstu
@@ -420,7 +422,7 @@ ${alertScriptstu}
 </div>
   </body>
   `,user)
-}
+}*/
 
 export function middle(args={},user){
   return layout(
@@ -431,13 +433,12 @@ export function middle(args={},user){
 
 export function homeUi(user)  { 
   return layout('學習歷程檔案首頁', `
-    <div class="container">
+  <div class="container">
         <img class="small" style="display:block; margin:auto; " src="images/1.jpg" />
         <img class="small" style="display:block; margin:auto;" src="images/2.jpg" />
         <img class="small" style="display:block; margin:auto;" src="images/3.jpg" />
         <img class="small" style="display:block; margin:auto;" src="images/4.jpg" />
         <img class="small" style="display:block; margin:auto;" src="images/5.jpg" />
-        
   </div>
     <script type="text/javascript" src="images/js/1.js"></script>
     <script type="text/javascript" src="images/js/2.js"></script>
@@ -486,7 +487,7 @@ export function aboutUi(user)  {
       <area shape="poly" coords="321,161,405,86,387,171" href="place/宜蘭縣.html">
       <area shape="poly" coords="311,208,272,326,213,290,218,241" href="place/南投縣.html">
       <area shape="poly" coords="7,259,53,257,53,326,3,332" href="place/澎湖縣.html">
-      <area shape="poly" coords="10,11,114,11,118,80,12,81" href="place/金門縣.html">
+      <area shape="poly" coords="10,11,114,11,118,80,12,81" href="/mechanism">
       <area shape="poly" coords="8,93,115,92,115,164,12,165" href="place/連江縣.html">
     </map>
     <img style="display:block; margin:auto;" src="/images/taiwan.png" usemap="#taiwan">
@@ -724,21 +725,28 @@ export function list(posts, user) {
 }
 
 
-export function list_gratuate(posts, user) {
+export function list_gratuate_teacher(posts, user) {
    
-   let list = []
-   for (let post of posts) {
-     
-     list.push(`
-    
-     <li style="border-color: blue">
-     <h2>專題名稱：${ post.title}<a href="/delpost/${post.id}">刪除貼文</a><a href="/editpost/${post.id}">編輯貼文</a></h2>
+  let list = []
+  var color_choose = 1;
+  var color
+  for (let post of posts) {
+    if(color_choose%2==0)
+    color="#b0dfda"
+    else if(color_choose%2==1)
+    color="#eecbe7"
+
+    list.push(`
+   
+    <li style="background:${color}; margin:10px">
+     <p>${ post.title}<a href="/delpost/${post.id}">刪除貼文</a><a href="/editpost/${post.id}">編輯貼文</a></p>
      <p>類別：${post.content}</p>
      <p>作者：${post.username}</p>
      <p>入學級別與實習時間：${post.body}</p>
-     <p><a href="/images/${post.file}">查看資料</a></p>
+     <p><a style="padding: 0" href="/images/${post.file}">查看資料</a></p>
      </li>
      `)
+     color_choose=color_choose+1;
    }
  
    let content = `
@@ -770,6 +778,59 @@ export function list_gratuate(posts, user) {
    return layout('金大社工系學習歷程專區', content,user)
  }
  
+ export function list_gratuate_student(posts, user) {
+   
+  let list = []
+  var color_choose = 1;
+  var color
+  for (let post of posts) {
+    if(color_choose%2==0)
+    color="#b0dfda"
+    else if(color_choose%2==1)
+    color="#eecbe7"
+
+    list.push(`
+   
+    <li style="background:${color}; margin:10px">
+     <p>${ post.title}</p>
+     <p>類別：${post.content}</p>
+     <p>作者：${post.username}</p>
+     <p>入學級別與實習時間：${post.body}</p>
+     <p><a style="padding: 0" href="/images/${post.file}">查看資料</a></p>
+     </li>
+     `)
+     color_choose=color_choose+1;
+   }
+ 
+   let content = `
+   <body>
+   <article>
+   <p style="border: crimson;font-size: 30px; border-top: 100px; ">${(user==null)?'':'歡迎 '+user}<a href="/post/new">上傳檔案</a><a href="/editaccount">帳號管理</a><a href="/logout">登出</a> 
+   <form action="/list_custom" method="post">
+   
+   <input type="text" placeholder="關鍵字搜尋"  name="search" style="width:auto;">
+   <input type="submit" value="搜尋">
+  
+   <div class="tooltip">游標移過來
+   <span class="tooltiptext">搜尋說明：如果要搜尋"松柏園"。關鍵字打"松"或"柏""園"都可以出來歐</span>
+ </div>
+ <p>進階搜尋</p>
+ <input type="checkbox" id="vehicle1" name="title" value="title">
+ <label for="vehicle1">機構名稱</label>
+ <input type="checkbox" id="vehicle2" name="class" value="class">
+ <label for="vehicle1">級別</label>
+ <input type="checkbox" id="vehicle3" name="content" value="content">
+ <label for="vehicle1">文章類別</label>
+ </form></p>
+   <ul id="posts">
+     ${list.join('\n')}
+   </ul>
+   </article>
+   </body>
+   `
+   return layout('金大社工系學習歷程專區', content,user)
+ }
+
 
 export function liststu(posts, user) {
   let list = []
@@ -789,7 +850,7 @@ export function liststu(posts, user) {
     <p>作者：${post.username}</p>
     <p>入學級別與實習時間：${post.body}</p>
     <p>類別：${post.content}</p>
-    <p><a padding: 0 href="/images/${post.file}">查看資料</a></p>
+    <p><a style="padding: 0" href="/images/${post.file}">查看資料</a></p>
     </li>
     `)
     color_choose=color_choose+1;
@@ -814,6 +875,35 @@ export function liststu(posts, user) {
 <label for="vehicle1">級別</label>
 <input type="checkbox" id="vehicle3" name="content" value="content">
 <label for="vehicle1">文章類別</label>
+<p>分類列表</p>
+<p>領域</p>
+<input type="checkbox" id="vehicle1" name="title" value="title">
+<label for="vehicle1">兒童</label>
+<input type="checkbox" id="vehicle1" name="title" value="title">
+<label for="vehicle1">少年</label>
+<input type="checkbox" id="vehicle1" name="title" value="title">
+<label for="vehicle1">家庭</label>
+<input type="checkbox" id="vehicle1" name="title" value="title">
+<label for="vehicle1">身障</label>
+<input type="checkbox" id="vehicle1" name="title" value="title">
+<label for="vehicle1">老人</label>
+<input type="checkbox" id="vehicle1" name="title" value="title">
+<label for="vehicle1">醫務</label>
+<input type="checkbox" id="vehicle1" name="title" value="title">
+<label for="vehicle1">法律與政策</label>
+<input type="checkbox" id="vehicle1" name="title" value="title">
+<label for="vehicle1">其他</label>
+<p>年度</p> 
+<input type="checkbox" id="vehicle1" name="title" value="title">
+<label for="vehicle1">104年度</label>
+<input type="checkbox" id="vehicle1" name="title" value="title">
+<label for="vehicle1">105年度</label>
+<input type="checkbox" id="vehicle1" name="title" value="title">
+<label for="vehicle1">106年度</label>
+<input type="checkbox" id="vehicle1" name="title" value="title">
+<label for="vehicle1">107年度</label>
+
+
 </form></p>
   <ul id="posts" >
     ${list.join('\n')}
@@ -1029,4 +1119,57 @@ export function show(post) {
   </head>
   </html>
   `)
+}
+
+export function mechanism(posts, user) {
+  let list = []
+  var color_choose = 1;
+  var color
+  for (let post of posts) {
+    if(color_choose%2==0)
+    color="#b0dfda"
+    else if(color_choose%2==1)
+    color="#eecbe7"
+    
+
+    list.push(`
+   
+    <li style="background:${color}; margin:10px">
+    <p>${post.title}<a style="padding: 0" href="/delpost/${post.id}">刪除貼文</a><a style="padding: 0" href="/editpost/${post.id}">編輯貼文</a></p>
+    <p>作者：${post.username}</p>
+    <p>入學級別與實習時間：${post.body}</p>
+    <p>類別：${post.content}</p>
+    <p><a padding: 0 href="/images/${post.file}">查看資料</a></p>
+    </li>
+    `)
+    color_choose=color_choose+1;
+  }
+
+  let content = `
+  <body>
+  <article>
+  <p style="border: crimson;font-size: 30px; border-top: 100px; ">${(user==null)?'':'歡迎 '+user}<a href="/post/new">上傳檔案</a><a href="/editaccount">帳號管理</a><a href="/logout">登出</a> 
+  <form action="/list_custom" method="post">
+  
+  <input type="text" placeholder="關鍵字搜尋"  name="search" style="width:auto;">
+  <input type="submit" value="搜尋">
+ 
+  <div class="tooltip">游標移過來
+  <span class="tooltiptext">搜尋說明：如果要搜尋"松柏園"。關鍵字打"松"或"柏""園"都可以出來歐</span>
+</div>
+<p>進階搜尋</p>
+<input type="checkbox" id="vehicle1" name="title" value="title">
+<label for="vehicle1">機構名稱</label>
+<input type="checkbox" id="vehicle2" name="class" value="class">
+<label for="vehicle1">級別</label>
+<input type="checkbox" id="vehicle3" name="content" value="content">
+<label for="vehicle1">文章類別</label>
+</form></p>
+  <ul id="posts" >
+    ${list.join('\n')}
+  </ul>
+  </article>
+  </body>
+  `
+  return layout('金大社工系學習歷程專區', content,user)
 }
