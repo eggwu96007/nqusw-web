@@ -124,7 +124,8 @@ loginstatus= `<li style="float:right">歡迎${user} <a href="/editpassword_user/
       background-color: #111;
       overflow-x: hidden;
       transition: 0.5s;
-      padding-top: 25%;
+      padding-top: 10%;
+      padding-buttom: 10%;
       
     }
     
@@ -132,7 +133,7 @@ loginstatus= `<li style="float:right">歡迎${user} <a href="/editpassword_user/
       text-align: center;
       padding:30px;
       text-decoration: none;
-      font-size: 7vw;
+      font-size: 5vw;
       color: #818181;
       display: block;
       transition: 0.3s;
@@ -150,6 +151,7 @@ loginstatus= `<li style="float:right">歡迎${user} <a href="/editpassword_user/
       right: 25px;
     }
     /*上面是sidebar*/
+    
     /*navbar*/
     
     li {
@@ -157,7 +159,7 @@ loginstatus= `<li style="float:right">歡迎${user} <a href="/editpassword_user/
     }
     
     li a, .dropbtn {
-      display: inline-block;
+      display: block;
       color: white;
       text-align: center;
       padding: 14px 16px;
@@ -171,29 +173,32 @@ loginstatus= `<li style="float:right">歡迎${user} <a href="/editpassword_user/
     li.dropdown {
       display: inline-block;
     }
-    
+    /*游標移到上面掉下來的內容*/
+    /*陰影*/
     .dropdown-content {
       display: none;
       position: absolute;
       background-color: #f9f9f9;
-      min-width: 160px;
-      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      min-width: 3%;
+      box-shadow: 0px 20px 16px 0px rgba(0,0,0,0.5);
       z-index: 1;
     }
     
     .dropdown-content a {
       color: black;
-      padding: 12px 16px;
+      padding:12px 16px;
       text-decoration: none;
       display: block;
-      text-align: left;
+
     }
+    
     
     .dropdown-content a:hover {background-color: #f1f1f1;}
     
     .dropdown:hover .dropdown-content {
       display: block;
     }
+    /*上面都是游標移到上面掉下來的內容*/
     /*上面是navbar*/
     
 /*大小設定*/
@@ -242,13 +247,13 @@ loginstatus= `<li style="float:right">歡迎${user} <a href="/editpassword_user/
 
 </ul>
    
-<div class="formlogin" style="z-index:2;opacity:0.0;" id ="div2" >   
+<div class="formlogin" style="z-index:2;" id ="div2" >   
     <form action="/login" method="post" >
-    <p>登入窗口</p>
-    <p><a>帳號：</a><input type="text" placeholder="帳號"  name="account" style="width:auto;"></p>
+    <p style="margin-left:95%;cursor:hand;font-size:30px" onclick="recover()">&#9747</p>
+    <h1>登入窗口</h1>
+    <p style="padding:50px"><a>帳號：</a><input type="text" placeholder="帳號"  name="account" style="width:auto;"></p>
     <p><a>密碼：</a><input type="password" placeholder="密碼" name="password" style = "width:auto;"></p>
     <p><input type="submit" value="登入"></p>
-    <p onclick="recover()">等等再登入</p>
   </form>
   </div>
   <div id ="div1" style="display:block;opacity:1.0;" >
@@ -267,13 +272,10 @@ loginstatus= `<li style="float:right">歡迎${user} <a href="/editpassword_user/
     </script>
   <script>
   function isHidden(){    
-      div1.style.opacity='0.05'; 
-      div2.style.opacity='2.0';
+      div1.style.opacity='0.5'; 
       div2.style.display='block';
   }
   function recover(){
-   
-    div2.style.opacity='0.0'; 
     div1.style.opacity='1.0';
     div2.style.display='none';
 }
