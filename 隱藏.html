@@ -6,7 +6,9 @@
 		<div id ="div1" style="display:none">隱藏內容</div>
         <script>
             function isHidden(oDiv){
+                
               var vDiv = document.getElementById(oDiv);
+              alert(vDiv.style.display)
               vDiv.style.display = (vDiv.style.display == 'none')?'block':'none';
             }
         </script>

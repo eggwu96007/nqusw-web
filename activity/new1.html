@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html>
+  
+<head>
+  <title>國立金門大學社會工作學系</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" />
+    
+  <link rel="stylesheet" href="images/css/slick.css">
+  <link rel="stylesheet" href="images/css/slick-theme.css">
+<style>
+* {
+  box-sizing: border-box;
+}
+/*http://fetchrss.com/rss/626369bc99e9901d684d159362636a3992832e7624430192.xml*/
+body {
+  font-family: Arial;
+  margin: 0;
+  padding: 0;
+  background: #f1f1f1;
+}
+
+/* Header/Blog Title */
+.header {
+  margin: auto;
+  display: block;
+  text-align: center;
+  background: #f1f1f1;
+}
+
+.header h1 {
+  font-size: 50px;
+}
+
+/* Style the top navigation bar */
+.topnav {
+  overflow: hidden;
+  background-color: #333;
+}
+
+/* Style the topnav links */
+.topnav a {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  text-decoration: none;
+}
+
+/* Change color on hover */
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+/* Create two unequal columns that floats next to each other */
+/* Left column */
+.leftcolumn {   
+  background-color: #ddd;
+  float: left;
+}
+
+.card div  {   
+  border-radius: 2em;
+  background-color: rgb(118, 135, 122);
+  float: left;
+}
+
+
+/* Right column */
+.rightcolumn {
+  float: left;
+  background-color: #ddd;
+}
+
+
+/* Add a card effect for articles */
+.card {
+  background-color: #ddd;
+  padding: 10px;
+  
+}
+.card a
+{
+  color: #f1f1f1;
+  font-size: 30px;
+ 
+}
+
+.card div
+{
+  margin: 10px;
+ 
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.sidenav a:hover {
+      color: #f1f1f1;
+    }
+    
+    .closebtn {
+      position: absolute;
+      top: 0;
+      right: 25px;
+    }
+    /*上面是sidebar*/
+    
+    /*navbar*/
+    
+    li {
+      float: right;
+    }
+    
+    li a, .dropbtn {
+      display:inline-block;
+      text-align: center;
+      color: rgb(23, 239, 84);
+      padding: 14px 16px;
+      text-decoration: none;
+    }
+    
+    li a:hover, .dropdown:hover .dropbtn {
+      background-color: red;
+    }
+    
+    li.dropdown {
+      display: inline-block;
+    }
+
+    .sidenav {
+      height: 100%;
+      width: 0;
+      position: fixed;
+      z-index: 3;
+      background-color: #666;
+      overflow-x: hidden;
+      transition: 0.5s;
+      padding-top: 10%;
+  
+      
+    }
+    
+    .sidenav a {
+      text-align: center;
+      padding:30px;
+      text-decoration: none;
+      font-size: 5vw;
+      color: #818181;
+      display: block;
+      transition: 0.3s;
+    }
+    /*游標移到上面掉下來的內容*/
+    /*陰影*/
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #f9f9f9;
+      min-width: 3%;
+      box-shadow: 0px 20px 16px 0px rgba(0,0,0,0.5);
+      z-index: 1;
+    }
+    
+    .dropdown-content a {
+      color: black;
+      padding:12px 16px;
+      text-decoration: none;
+      display: block;
+
+    }
+    
+    
+    .dropdown-content a:hover {background-color: #f1f1f1;}
+    
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+    /*上面都是游標移到上面掉下來的內容*/
+    /*上面是navbar*/
+
+/* Footer */
+.footer {
+  padding: 20px;
+  text-align: center;
+  background: #ddd;
+  margin-top: 20px;
+}
+
+
+
+/* Responsive layout - when the screen is less than 400px wide, make the navigation links stack on top of each other instead of next to each other */
+@media  (min-width: 0px) {
+  .leftcolumn  
+ {
+  width: 100%;
+ }
+ .rightcolumn
+ {
+  width: 100%;
+ }
+  .see{display:inline;float: right;}
+  .nosee{display: none}
+  .dropbtn1{display:none}
+
+
+}
+
+/* Responsive layout - when the screen is less than 800px wide, make the two columns stack on top of each other instead of next to each other */
+@media (min-width: 1000px) {
+  .leftcolumn  
+ {
+  width: 60%;
+ }
+ .rightcolumn
+ {
+  width: 40%;
+ }
+  .see{display:none}
+  .nosee{display:inline}
+  .dropbtn1{display:inline-block}
+}
+
+
+</style>
+</head>
+<body>
+
+  <script>
+    function openNav() {
+      document.getElementById("mySidenav").style.width = "100%";
+    }
+    
+    function closeNav() {
+      document.getElementById("mySidenav").style.width = "0";
+    }
+    </script>
+
+  
+  <!-- <a href="https://www.nqu.edu.tw/cht/index.php?"><img  style="display:block; border: green;border-style: dashed;" src="images/nquhomepage.png" /></a>-->
+  
+  <!--<img  style="display:block; margin-left: 30px;width: 50%;height: 50%; " src="images/socialwork.JPG" />-->
+
+  <ul style="list-style-type: none;padding: 0;overflow: hidden;">
+    <div id="mySidenav" class="sidenav" style="float: right ;z-index: 4;">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="/about">活動花絮</a>
+        <a href="/list_graduate">實習專區</a>
+        <a href="/">新生專區</a>
+        <a href="#news">關於本系</a>
+    </div>
+    
+      <!--側欄點擊按鈕-->
+      <span class="see" style="font-size:30px;cursor:pointer;" onclick="openNav()">&#9776; </span>
+      <li class="see" style="float: left;"><a href="/list_graduate">這邊要放一張有關係上的字體+圖標  </a></li>
+    
+      <!--上面那欄-->
+    <div>
+    <li class="nosee" style="float: left;"><a href="/list_graduate">這邊要放一張有關係上的字體+圖標  </a></li>
+    <li class="nosee" style="margin-right:  5%;"><a href="/home">活動花絮</a></li> 
+    <li class="nosee"><a href="/list_graduate">實習專區</a></li>
+    <li class="nosee"><a href="/">新生專區</a></li>
+    <li class="dropdown">
+      <a href="javascript:void(0)" class="dropbtn1">關於本系</a>
+      <div class="dropdown-content">
+        <a href="#">師資陣容</a>
+        <a href="#">課程資訊</a>
+      </div>
+    </li>
+    <li class="nosee"><a href="#news">最新消息</a></li>
+    </div>
+  </li>
+    <!--<li class="dropdown">
+      <a href="javascript:void(0)" class="dropbtn1">最新消息</a>
+      <div class="dropdown-content">
+        <a href="#">如何註冊</a>
+        <a href="#">忘記密碼</a>
+        <a href="#">回報錯誤</a>
+      </div>
+    </li>-->
+  
+  </ul>
+
+  <div class="header" > 
+    <div  style="background-color: yellow;border-color: green;border-style: dotted;position: absolute;margin: 10%;z-index: 3;">
+<a style="font-size: 5vw;">這邊放圖標</a>
+    </div>   
+  <div class="container" style=" margin: auto;padding-left: 20px; padding-right: 20px;">
+    <img  style="display:block; margin:auto;background-size: cover;object-fit: cover;max-height: 700px;border-radius:2em;" src="images/照片1.jpeg" />
+    <img  style="display:block; margin:auto;background-size: cover;object-fit: cover;max-height: 700px;border-radius:2em; " src="images/照片2.jpeg" />
+    <img  style="display:block; margin:auto;background-size: cover;object-fit: cover;max-height: 700px;border-radius:2em;  " src="images/照片3.jpeg" />
+    <img  style="display:block; margin:auto;background-size: cover;object-fit: cover;max-height: 700px;border-radius:2em; " src="images/照片4.jpeg" />
+    <img  style="display:block; margin:auto;background-size: cover;object-fit: cover;max-height: 700px;border-radius:2em;  " src="images/照片5.jpeg" />
+</div>
+</div>
+
+<script  src="images/js/1.js"></script>
+<script  src="images/js/2.js"></script>
+<script  src="images/js/slick.min.js"></script>
+<script  src="images/js/slick.js"></script>
+<script >
+$('.container').slick({
+  infinite: true,
+slidesToShow: 1,
+slidesToScroll: 1,
+autoplay: true,
+autoplaySpeed: 2000,
+});
+</script>
+
+  <div class="leftcolumn">
+    <div class="card" >
+      <h1>相關連結</h1>
+      <div style="display:inline-block;width: 45%;height: 50px;">
+        <a>&#9744最新消息</a>
+         </div>
+         <div style="display:inline-block;width: 45%;height: 50px;">
+          <a>&#9744關於本系</a>
+           </div>
+             <div style="display:inline-block;width: 45%;height: 50px;">
+              <a>&#9744系所成員</a>
+               </div>
+               <div style="display:inline-block;width: 45%;height: 50px;">
+                <a>&#9744課程資訊</a>
+                 </div>
+                 <div style="display:inline-block;width: 45%;height: 50px;">
+                  <a>&#9744實習專區</a>
+                   </div>
+                   <div style="display:inline-block;width: 45%;height: 50px;">
+                    <a>&#9744招生資訊</a>
+                     </div>
+       </div>
+       
+   
+  </div>
+  <div class="rightcolumn">
+    <div class="card" style="">
+      <h1>聯絡我們(放相關資訊)</h1>
+
+      <div style="display:block;background-color: rgb(237, 132, 57);border-color:purple;">
+        <h1>電話：12345678</h1>
+         </div>
+         <div style="display:inline-block;background-color: rgb(237, 132, 57);border-color:purple;">
+          <h1>地址：金門</h1>
+           </div>
+         
+           
+             
+       </div>
+</div>
+
+<div class="footer">
+  <h2>版權所有翻印必究</h2>
+</div>
+
+</body>
+</html>
+
+

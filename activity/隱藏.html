@@ -1,0 +1,29 @@
+<html>
+<head>
+
+    <style>
+@font-face {
+          font-family:"華文雲彩";
+          src:url('jf-openhuninn-1.1/jf-openhuninn-1.1.ttf');
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id ="div1" style="font-family:華文雲彩;">微風迎客</div>
+         
+<div style="cursor:hand" onclick="isHidden('div1')"><b>其他一條評論</b></div>
+		<div id ="div1" style="font-family:華文雲彩;">微風迎客</div>
+        <script>
+            function isHidden(oDiv){
+                
+              var vDiv = document.getElementById(oDiv);
+              vDiv.style.display = (vDiv.style.display == 'none')?'block':'none';
+            }
+        </script>
+
+    </body>
+
+
+</html>

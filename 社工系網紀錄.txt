@@ -82,5 +82,24 @@ fix database
 1.loginUI redesign
 2.listUl redesign
 
-04/25()
-1.
+04/25(2hr)
+1.homepage sliderpicture fixed
+2.database topbar/sliderbar fixed
+
+04/26(5hr)
+1.database topbar/sliderbar check
+2.list_graduate database
+
+04/27(5hr)
+1. database mechanism check
+04/28(5hr)
+1.database UI design
+04/29(3hr)
+1.homepageUI design
+04/30(6hr)
+1.homepageUI check
+2.database list UI design
+3.database algorithm fixed
+4.sql bug fix
+05/01()
+1.search engine optimization

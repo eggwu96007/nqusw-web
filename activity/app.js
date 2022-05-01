@@ -6,7 +6,7 @@ import { multiParser} from 'https://deno.land/x/multiparser@v2.1.0/mod.ts'
 import { oakCors } from "https://deno.land/x/cors/mod.ts";
 
 const db = new DB("blog.db");
-db.query("CREATE TABLE IF NOT EXISTS posts (id INTEGER PRIMARY KEY AUTOINCREMENT,title TEXT, username TEXT, body TEXT, file TEXT , content TEXT)");
+db.query("CREATE TABLE IF NOT EXISTS posts (id INTEGER PRIMARY KEY AUTOINCREMENT,title TEXT, username TEXT, date TEXT, file TEXT , content TEXT)");
 db.query("CREATE TABLE IF NOT EXISTS users_student (id INTEGER PRIMARY KEY AUTOINCREMENT, account TEXT, password TEXT, username TEXT)");
 db.query("CREATE TABLE IF NOT EXISTS users_teacher (id INTEGER PRIMARY KEY AUTOINCREMENT, account TEXT, password TEXT, username TEXT)");
 
@@ -22,7 +22,9 @@ router.get('/', list)
   .post('/signup_teacher', signup_teacher)
   .get('/signup_student', signup_studentUi)
   .post('/signup_student', signup_student)
+  .get('/login', middle)
   .post('/login', login)
+  .get('/loginstu', middle)
  // .post('/loginstu', loginstu)
   .get('/logout', logout)
   .get('/editaccount',editaccount)
@@ -40,14 +42,42 @@ router.get('/', list)
   .get('/post/new', add)
   .post('/list_custom', list_custom)
   .get('/list_custom', list_custom)
+
   .post('/list_custom_stu', list_custom_stu)
   .get('/list_custom_stu', list_custom_stu)
   .post('/list_custom', list_custom)
   .get('/list_custom', list_custom)
-  .post('/list_gratuate', list_gratuate)
-  .get('/list_gratuate', list_gratuate)
+  
+  .post('/list_graduate', list_graduate)
+  .get('/list_graduate', list_graduate)
+  .post('/list_graduate_custom', list_graduate_custom)
+  .get('/list_graduate_custom', list_graduate_custom)
+  .post('/list_graduate_custom_root', list_graduate_custom_root)
+  .get('/list_graduate_custom_root', list_graduate_custom_root)
   .get('/post/new', add)
   .get('/post/:id', show)
+  //根本就不知道在找什麼==
+  .get('/mechanism_kl',mechanism_kl)
+  .get('/mechanism_t',mechanism_t)
+  .get('/mechanism_nt',mechanism_nt)
+  .get('/mechanism_tu',mechanism_tu)
+  .get('/mechanism_s',mechanism_s)
+  .get('/mechanism_ss',mechanism_ss)
+  .get('/mechanism_m',mechanism_m)
+  .get('/mechanism_tc',mechanism_tc)
+  .get('/mechanism_ch',mechanism_ch)
+  .get('/mechanism_u',mechanism_u)
+  .get('/mechanism_c',mechanism_c)
+  .get('/mechanism_tn',mechanism_tn)
+  .get('/mechanism_kh',mechanism_kh)
+  .get('/mechanism_pt',mechanism_pt)
+  .get('/mechanism_tt',mechanism_tt)
+  .get('/mechanism_h',mechanism_h)
+  .get('/mechanism_y',mechanism_y)
+  .get('/mechanism_n',mechanism_n)
+  .get('/mechanism_p',mechanism_p)
+  .get('/mechanism_k',mechanism_k)
+  .get('/mechanism_l',mechanism_l)
 /*===上面示好的=== */
  
 const app = new Application();
@@ -80,8 +110,8 @@ function sqlcmd(sql, arg1) {
 
 function postQuery(sql) {
   let list = []
-  for (const [id, username, title, body,file,content] of sqlcmd(sql)) {
-    list.push({id, username, title, body,file,content})
+  for (const [id, username, title, date,file,content] of sqlcmd(sql)) {
+    list.push({id, username, title, date,file,content})
     
   }
   return list
@@ -97,6 +127,14 @@ function userQuery(sql) {
   return list
 }
 
+/*function userQuery(sql) {
+  let list = []
+  for (const [id, username, password, email] of sqlcmd(sql)) {
+    list.push({id, username, password, email})
+  }
+  return list
+}*/
+
 async function parseFormBody(body) {
   const pairs = await body.value
   const obj = {}
@@ -107,46 +145,26 @@ async function parseFormBody(body) {
 }
 
 
-//還差下面的4張圖
+
+
+/*從這裡開始*/
+/*1223check*/ 
+async function middle(ctx) {
+  var user = await ctx.state.session.get('user')
+  ctx.response.body = await render.middle(user);
+}
+
 async function homeUi(ctx) {
   var usercheck = await ctx.state.session.get('user')
   if(usercheck==undefined)
     ctx.response.body = await render.homeUi()
   else if (usercheck!=undefined)
-    ctx.response.body = await render.homeUi(usercheck.username);  
+    ctx.response.body = await render.homeUi(usercheck);  
     return;
 }
 
 
-async function list_gratuate(ctx) {
-var usercheck = await ctx.state.session.get('user')
-  if(usercheck==null)
-  {
-    ctx.response.body = render.middle({status:'請先登入'})
-    return;
-  }
-  else{
-    var root = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE username='${usercheck.username}'`)
-    var roots = root[0]
-    var user = userQuery(`SELECT id, account, password, username FROM users_student WHERE username='${usercheck.username}'`)
-    var users = user[0]
-    var posts = postQuery(`SELECT id,username, title, body ,file,content FROM posts WHERE body LIKE '%畢業專題%';`) 
-    if(roots!=null)
-    {
-      usercheck=roots
-      ctx.response.body = await render.list_gratuate_teacher(posts,usercheck.username);
-    }
-    
-    if(users!=null)
-    {
-      usercheck = users
-      ctx.response.body = await render.list_gratuate_student(posts,usercheck.username);
-    }
-    
-    
-  }
 
-}
 
 
 async function aboutUi(ctx) {
@@ -157,7 +175,7 @@ async function aboutUi(ctx) {
   }
   else
   {
-    ctx.response.body = await render.aboutUi(usercheck.username);
+    ctx.response.body = await render.aboutUi(usercheck);
    /* var safe = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE username='${user.username}'`)
     var safes = safe[0]
     var user = userQuery(`SELECT id, account, password, username FROM users_student WHERE username='${user.username}'`)
@@ -195,8 +213,7 @@ async function login(ctx) {
       //管理者
       if (roots != null &&roots.password === input.password) {
         ctx.state.session.set('user', roots)
-       
-        //ctx.response.redirect('/list_gratuate');
+        //ctx.response.redirect('/list_graduate');
         ctx.response.redirect('/');
         return;
       }
@@ -226,7 +243,7 @@ async function login(ctx) {
     var pattern=/[`~!@#$%^&*()_+<>?:"{},.\/;'[\]]/im;
     if(pattern.test(user.password)||pattern.test(user.username))
     {
-      ctx.response.body = render.loginUi({status:'不可輸入特殊符號'})
+      ctx.response.body = render.middle({status:'不可輸入特殊符號'})
       return;
     }
     else{
@@ -239,7 +256,7 @@ async function login(ctx) {
   
       else 
       {
-        ctx.response.body = render.loginUi({status:'這是傳給學生的'})
+        ctx.response.body = render.middle({status:'這是傳給學生的'})
         return;
       } 
 
@@ -255,7 +272,7 @@ async function signup_teacherUi(ctx) {
   var usercheck = await ctx.state.session.get('user')
   if(usercheck==null)
   {
-    ctx.response.body = render.loginUi({status:'請先登入'})
+    ctx.response.body = render.middle({status:'請先登入'})
   }
 
   else if(usercheck!=null)
@@ -269,7 +286,7 @@ async function signup_teacherUi(ctx) {
     }
     else
     {
-      ctx.response.body = render.loginUi({status:'請先登入'})
+      ctx.response.body = render.middle({status:'請先登入'})
     }
   }
   
@@ -283,7 +300,7 @@ async function signup_teacher(ctx) {
   var usercheck = await ctx.state.session.get('user')
   if(usercheck == null)
   {
-    ctx.response.body = render.loginUi({status:'請先登入'})
+    ctx.response.body = render.middle({status:'請先登入'})
    return;
   }
     
@@ -305,7 +322,7 @@ async function signup_teacher(ctx) {
       if (dbUsers.length === 0) 
       {
         sqlcmd("INSERT INTO users_teacher (account, password, username) VALUES (?, ?, ?)", [user.account, user.password, user.username]);
-        ctx.response.body = render.loginUi({status:'帳號創立成功，請重新登入'})
+        ctx.response.body = render.middle({status:'帳號創立成功，請重新登入'})
       } 
       else
       {
@@ -316,7 +333,7 @@ async function signup_teacher(ctx) {
     }
     else
     {
-      ctx.response.body = render.loginUi({status:'請先登入'})
+      ctx.response.body = render.middle({status:'請先登入'})
     }
 
   }
@@ -328,7 +345,7 @@ async function signup_studentUi(ctx) {
   var usercheck = await ctx.state.session.get('user')
   if(usercheck == null)
   {
-    ctx.response.body = render.loginUi({status:'請先登入'})
+    ctx.response.body = render.middle({status:'請先登入'})
   }
   else if(usercheck!=null)
   {
@@ -341,7 +358,7 @@ async function signup_studentUi(ctx) {
     
     else
     {
-      ctx.response.body = render.loginUi({status:'請先登入'})
+      ctx.response.body = render.middle({status:'請先登入'})
     }
 
   }
@@ -356,7 +373,7 @@ async function signup_student(ctx) {
   var usercheck = await ctx.state.session.get('user')
   if(usercheck == null)
   {
-    ctx.response.body = render.loginUi({status:'請先登入'})
+    ctx.response.body = render.middle({status:'請先登入'})
    return;
   }
     
@@ -378,7 +395,7 @@ async function signup_student(ctx) {
       if (dbUsers.length === 0) 
       {
         sqlcmd("INSERT INTO users_student (account, password, username) VALUES (?, ?, ?)", [user.username, user.password, user.email]);
-        ctx.response.body = render.loginUi({status:'帳號創立成功，請重新登入'})
+        ctx.response.body = render.middle({status:'帳號創立成功，請重新登入'})
       } 
       else
       {
@@ -389,7 +406,7 @@ async function signup_student(ctx) {
     }
     else
     {
-      ctx.response.body = render.loginUi({status:'請先登入'})
+      ctx.response.body = render.middle({status:'請先登入'})
     }
 
   }
@@ -400,15 +417,13 @@ async function mechanism(ctx) {
   var usercheck = await ctx.state.session.get('user')
   if(usercheck==null)
   {
-    //ctx.response.body = render.loginUi({status:'請先登入'})
     ctx.response.body = render.middle({status:'請先登入'},usercheck);
   }
   else if(usercheck!=null)
   {
-
-    var root = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE account='${usercheck.username}'`) // userMap[user.username]
+    var root = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE username='${usercheck.username}'`) // userMap[user.username]
     var roots = root[0]
-    var user = userQuery(`SELECT id, account, password, username FROM users_student WHERE account='${usercheck.username}'`)
+    var user = userQuery(`SELECT id, account, password, username FROM users_student WHERE username='${usercheck.username}'`)
     var users = user[0]
 
     let orderby = ctx.request.url.searchParams.get('orderby')
@@ -416,19 +431,8 @@ async function mechanism(ctx) {
     let op = ctx.request.url.searchParams.get('op')
     op = op || 'ASC'
       
-    var posts = postQuery(`select id, username, title, body,file,content from posts WHERE title LIKE '%金門縣%' group by title  `)
-    if(roots!=null)
-    {
-      ctx.response.body = await render.mechanism(posts,usercheck.username);
-      console.log("無論如何都機構一下123",posts)
-      
-    }
-    else
-    {
-      ctx.response.body = await render.mechanism(posts,usercheck.username);
-      console.log("無論如何都機構一下",posts)  
-    
-    }
+    var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%金門縣%') AND (date LIKE '%實習%') group by title `)
+    ctx.response.body = await render.mechanism(posts,usercheck.username);
     }
 
   }
@@ -445,42 +449,287 @@ async function logout(ctx) {
 async function list(ctx) {
   var usercheck = await ctx.state.session.get('user')
   if(usercheck==null)
-  {
-    //ctx.response.body = render.loginUi({status:'請先登入'})
     ctx.response.body = render.middle({status:'請先登入'},usercheck);
-  }
   else if(usercheck!=null)
   {
-    console.log("usercheck是啥",usercheck)
-
-    var root = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE account='${usercheck.account}'`) // userMap[user.username]
+    var root = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE username='${usercheck.username}'`) // userMap[user.username]
     var roots = root[0]
-    var user = userQuery(`SELECT id, account, password, username FROM users_student WHERE account='${usercheck.account}'`)
+    var user = userQuery(`SELECT id, account, password, username FROM users_student WHERE username='${usercheck.username}'`)
     var users = user[0]
-
     let orderby = ctx.request.url.searchParams.get('orderby')
     orderby = orderby || 'id'
     let op = ctx.request.url.searchParams.get('op')
     op = op || 'ASC'
-      
-    var posts = postQuery(`SELECT id,username, title, body ,file,content FROM posts ORDER BY ${orderby} ${op}`)
-    console.log("哭阿怎麼會這樣",roots,users)
+    var posts = postQuery(`SELECT id,username, title, date ,file,content FROM posts WHERE date LIKE '%實習%';`) 
     if(roots!=null)
-    {
-      console.log("這裡?")
-      ctx.response.body = await render.list(posts,usercheck.username);
-    }
-    
+    ctx.response.body = await render.list(posts,usercheck);
     else if(users!=null)
-    {
-      console.log("還是這裡?")
-      ctx.response.body = await render.liststu(posts,usercheck.username);
-    }
-    
+    ctx.response.body = await render.liststu(posts,usercheck);
     }
 
   }
-   
+
+async function list_custom(ctx) {
+    var usercheck = await ctx.state.session.get('user')
+    const body = ctx.request.body()
+    if(usercheck==null)
+    {
+      ctx.response.body = render.middle({status:'請先登入'},user)
+      return;
+    }
+    else
+    {
+      var root = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE username='${usercheck.username}'`)
+      var roots = root[0]
+      if(roots==null)
+      {
+        ctx.response.body = render.middle({status:'請先登入'},user)
+      return;
+      }
+      else
+      {
+        if (body.type === "form") { 
+          var search = await parseFormBody(body)
+          console.log("看search點了哪些",search)
+          var user = await ctx.state.session.get('user')
+          var see=search.search.split(" ")
+          var contents=search.contents
+          var date= search.date
+          var str = ''
+          var str_condition = ''
+          var i=0
+          var patten=[] 
+         if(contents!="dis")
+        {
+          str_condition=str_condition+"AND content LIKE '%" + contents+ "%' " 
+        }
+         if(date!="dis")
+         {
+          str_condition=str_condition+"AND date LIKE '%" + date+ "%' "
+         } 
+         
+        if(search.title!=null)
+         {
+          while(see[i]!=null)
+          { 
+            str=str+"OR title LIKE '%" + see[i]+ "%' " 
+           i++;
+          }  
+          
+          }
+
+        if(search.username!=null)
+          {
+            i=0
+            while(see[i]!=null)
+            { 
+             str=str+"OR username LIKE '%" + see[i]+ "%' " 
+             i++;
+            }  
+          }
+
+        if(search.content!=null)
+        {
+          i=0
+          while(see[i]!=null)
+          { 
+           str=str+"OR content LIKE '%" + see[i]+ "%' " 
+           i++;
+          }  
+           
+           
+        }
+
+        if((search.search!="")&&(search.title==undefined)&&(search.username==undefined)&&(search.content==undefined)&&(contents=="dis")&&(date=="dis")) {
+         console.log("進來這裡代表隨便找")
+          i=0
+          while(see[i]!=null)
+          { 
+           str=str+"OR title LIKE '%" + see[i]+ "%' OR content LIKE '%"+see[i]+ "%' OR username LIKE '%"+see[i]+  "%' OR date LIKE '%" +see[i]+"%'" 
+           i++;
+          }        
+          }
+
+          if((search.search!="")&&((contents!="dis")||(date!="dis"))) {
+            console.log("有做條件選取，但是沒有精準，而且有搜尋")
+            i=0
+            while(see[i]!=null)
+            { 
+             str=str+"OR title LIKE '%" + see[i]+ "%' OR content LIKE '%"+see[i]+ "%' OR username LIKE '%"+see[i]+  "%' OR date LIKE '%" +see[i]+"%'" 
+             i++;
+            } 
+            var posts = postQuery(`SELECT id,username, title, date ,file,content FROM posts WHERE (date LIKE '%實習%') ${str_condition}  AND (username LIKE '%eggwu好帥%'${str}) ORDER BY id DESC ;`) 
+          }
+  
+          
+         if(str_condition=="")
+         {
+          var posts = postQuery(`SELECT id,username, title, date ,file,content FROM posts WHERE (date LIKE '%實習%') AND (username LIKE '%eggwu好帥%'${str}) ORDER BY id DESC ;`) 
+          console.log("跑1") 
+        }
+          if(str_condition!=""&&str=="")
+         {
+          var posts = postQuery(`SELECT id,username, title, date ,file,content FROM posts WHERE (date LIKE '%實習%') ${str_condition}  ORDER BY id DESC ;`) 
+          console.log("跑2",str)
+         }
+          
+         if(str_condition!=""&&str!="")
+          {
+            var posts = postQuery(`SELECT id,username, title, date ,file,content FROM posts WHERE (date LIKE '%實習%') ${str_condition}  AND (username LIKE '%eggwu好帥%'${str}) ORDER BY id DESC ;`) 
+            console.log("跑3")
+          }
+          ctx.response.body = await render.list(posts,usercheck);
+          return;
+          
+        }
+      }
+    }
+      
+    }
+  
+  
+
+async function list_custom_stu(ctx) {
+      var usercheck = await ctx.state.session.get('user')
+      const body = ctx.request.body()
+      if(usercheck==null)
+      {
+        ctx.response.body = render.middle({status:'請先登入'},user)
+        return;
+      }
+      else
+      {
+        var root = userQuery(`SELECT id, account, password, username FROM users_student WHERE username='${usercheck.username}'`)
+        var roots = root[0]
+        if(roots==null)
+        {
+          ctx.response.body = render.middle({status:'請先登入'},user)
+        return;
+        }
+        else
+        {
+          if (body.type === "form") { 
+            var search = await parseFormBody(body)
+            console.log("看search點了哪些",search)
+            var user = await ctx.state.session.get('user')
+            var see=search.search.split(" ")
+            var contents=search.contents
+            var date= search.date
+            var str = ''
+            var str_condition = ''
+            var i=0
+            var patten=[] 
+           if(contents!="dis")
+          {
+            str_condition=str_condition+"AND content LIKE '%" + contents+ "%' " 
+          }
+           if(date!="dis")
+           {
+            str_condition=str_condition+"AND date LIKE '%" + date+ "%' "
+           } 
+           
+          if(search.title!=null)
+           {
+            while(see[i]!=null)
+            { 
+              str=str+"OR title LIKE '%" + see[i]+ "%' " 
+             i++;
+            }  
+            
+            }
+  
+          if(search.username!=null)
+            {
+              i=0
+              while(see[i]!=null)
+              { 
+               str=str+"OR username LIKE '%" + see[i]+ "%' " 
+               i++;
+              }  
+            }
+  
+          if(search.content!=null)
+          {
+            i=0
+            while(see[i]!=null)
+            { 
+             str=str+"OR content LIKE '%" + see[i]+ "%' " 
+             i++;
+            }  
+             
+             
+          }
+  
+          if((search.search!="")&&(search.title==undefined)&&(search.username==undefined)&&(search.content==undefined)&&(contents=="dis")&&(date=="dis")) {
+           console.log("進來這裡代表隨便找")
+            i=0
+            while(see[i]!=null)
+            { 
+             str=str+"OR title LIKE '%" + see[i]+ "%' OR content LIKE '%"+see[i]+ "%' OR username LIKE '%"+see[i]+  "%' OR date LIKE '%" +see[i]+"%'" 
+             i++;
+            }        
+            }
+  
+            if((search.search!="")&&((contents!="dis")||(date!="dis"))) {
+              console.log("有做條件選取，但是沒有精準，而且有搜尋")
+              i=0
+              while(see[i]!=null)
+              { 
+               str=str+"OR title LIKE '%" + see[i]+ "%' OR content LIKE '%"+see[i]+ "%' OR username LIKE '%"+see[i]+  "%' OR date LIKE '%" +see[i]+"%'" 
+               i++;
+              } 
+              var posts = postQuery(`SELECT id,username, title, date ,file,content FROM posts WHERE (date LIKE '%實習%') ${str_condition}  AND (username LIKE '%eggwu好帥%'${str}) ORDER BY id DESC ;`) 
+            }
+    
+            
+           if(str_condition=="")
+           {
+            var posts = postQuery(`SELECT id,username, title, date ,file,content FROM posts WHERE (date LIKE '%實習%') AND (username LIKE '%eggwu好帥%'${str}) ORDER BY id DESC ;`) 
+            console.log("跑1") 
+          }
+            if(str_condition!=""&&str=="")
+           {
+            var posts = postQuery(`SELECT id,username, title, date ,file,content FROM posts WHERE (date LIKE '%實習%') ${str_condition}  ORDER BY id DESC ;`) 
+            console.log("跑2",str)
+           }
+            
+           if(str_condition!=""&&str!="")
+            {
+              var posts = postQuery(`SELECT id,username, title, date ,file,content FROM posts WHERE (date LIKE '%實習%') ${str_condition}  AND (username LIKE '%eggwu好帥%'${str}) ORDER BY id DESC ;`) 
+              console.log("跑3")
+            }
+            ctx.response.body = await render.liststu(posts,usercheck);
+            return;
+            
+          }
+        }
+      }
+        
+      }   
+
+
+async function list_graduate(ctx) {
+    var usercheck = await ctx.state.session.get('user')
+      if(usercheck==undefined)
+      {
+        ctx.response.body = render.middle({status:'請先登入'})
+        return;
+      }
+      else{
+        var root = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE username='${usercheck.username}'`)
+        var roots = root[0]
+        var user = userQuery(`SELECT id, account, password, username FROM users_student WHERE username='${usercheck.username}'`)
+        var users = user[0]
+        var posts = postQuery(`SELECT id,username, title, date ,file,content FROM posts WHERE date LIKE '%畢業專題%';`) 
+        if(roots!=null)
+          ctx.response.body = await render.list_graduate_teacher(posts,roots);
+        else if(users!=null)
+          ctx.response.body = await render.list_graduate_student(posts,users);
+        else
+        ctx.response.body = render.middle({status:'發生未知錯誤'})
+      }
+    }  
+
     /*var safe = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE username='${usercheck.username}'`)
     var safes = safe[0]
     var user = userQuery(`SELECT id, account, password, username FROM users_student WHERE username='${usercheck.username}'`)
@@ -515,7 +764,7 @@ async function list(ctx) {
     }
     else
     {
-      ctx.response.body = render.loginUi({status:'請先登入'})
+      ctx.response.body = render.middle({status:'請先登入'})
     }
   }
   
@@ -524,7 +773,7 @@ async function list(ctx) {
  var usercheck = await ctx.state.session.get('user')
   if(usercheck==null)
   {
-    ctx.response.body = render.loginUi({status:'請先登入'})
+    ctx.response.body = render.middle({status:'請先登入'})
   }
   else if(usercheck!=null)
   {
@@ -542,159 +791,249 @@ async function list(ctx) {
 }*/
 
 
-
-
-
-/*1223check */
-async function list_custom(ctx) {
-  var usercheck = await ctx.state.session.get('user')
-  const body = ctx.request.body()
-  if(usercheck==null)
-  {
-    ctx.response.body = render.loginUi({status:'請先登入'})
-    return;
-  }
-  else
-  {
-    var safe = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE username='${usercheck.username}'`)
-    var safes = safe[0]
-    if(safes==null)
-    {
-      ctx.response.body = render.loginUi({status:'請先登入'})
-    return;
-    }
-    else
-    {
-      if (body.type === "form") {
-        var search = await parseFormBody(body)
-        var user = await ctx.state.session.get('user')
-      if(usercheck != null)
-      {
-        /*let orderby = ctx.request.url.searchParams.get('orderby')
-        orderby = orderby || 'id'
-        let op = ctx.request.url.searchParams.get('op')
-        op = op || 'ASC'*/
-        
-        var see=search.search.split(" ")
-       
-        //var see=search.search.split(/\s+/)
-       var str = ''
-       console.log("1228",see);
-        var i=0
-       var patten=[] 
-       
-       while(see[i]!=null)
-       { 
-        str=str+" OR title LIKE '%" + see[i]+ "%' OR content LIKE '%"+see[i]+ "%' OR username LIKE '%"+see[i]+  "%' OR body LIKE '%" +see[i]+"%'" 
-        i++;
-       }
-       var posts = postQuery(`SELECT id,username, title, body ,file,content FROM posts WHERE title LIKE '%${search.search}%' OR content LIKE '%${search.search}%' OR username LIKE '%${search.search}%' OR body LIKE '%${search.search}%'${str};`) 
-      ctx.response.body = await render.list(posts,safes.email);
-        return;
-        }
-        
-      else
-      {
-        ctx.response.body = render.loginUi({status:'請先登入'})
-        return;
-      }
-        
-      }
-    }
-    }
-    
-  
-}
-
-/*1223check */
-async function list_custom_stu(ctx) {
+async function list_graduate_custom_root(ctx) {
   var usercheck = await ctx.state.session.get('user')
   const body = ctx.request.body()
   if(usercheck==null)
   {
     ctx.response.body = render.middle({status:'請先登入'},user)
-        return;
+    return;
   }
   else
   {
-    var safe = userQuery(`SELECT id, account, password, username FROM users_student WHERE username='${usercheck.username}'`)
-    var safes = safe[0]
-    if(safes==null)
+    var root = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE username='${usercheck.username}'`)
+    var roots = root[0]
+    if(roots==null)
     {
-      ctx.response.body = render.loginUi({status:'請先登入'})
-      return;
+      ctx.response.body = render.middle({status:'請先登入'},user)
+    return;
     }
     else
     {
-      if (body.type === "form") {
+      if (body.type === "form") { 
         var search = await parseFormBody(body)
-      if(usercheck != null)
+        console.log("看search點了哪些",search)
+        var user = await ctx.state.session.get('user')
+        var see=search.search.split(" ")
+        var contents=search.contents
+        var date= search.date
+        var str = ''
+        var str_condition = ''
+        var i=0
+        var patten=[] 
+       if(contents!="dis")
       {
-      var see=search.search.split(" ")
-      var str = ''
-      var i=0
-      
-       
-       while(see[i]!=null)
+        str_condition=str_condition+"AND content LIKE '%" + contents+ "%' " 
+      }
+       if(date!="dis")
        {
-        if(search.title!=null)
-        {
-          console.log("跑1")
-          str=str+" OR title LIKE '%" + see[i]+ "%' " 
-        }
-          
-        if(search.body!=null)
-        {
-          console.log("跑2")
-          str=str+" OR body LIKE '%" + see[i]+ "%' " 
-        }
+        str_condition=str_condition+"AND date LIKE '%" + date+ "%' "
+       } 
+       
+      if(search.title!=null)
+       {
+        while(see[i]!=null)
+        { 
+          str=str+"OR title LIKE '%" + see[i]+ "%' " 
+         i++;
+        }  
         
-        if(search.username!=null)
+        }
+
+      if(search.username!=null)
         {
-          console.log("跑3")
-          str=str+" OR username LIKE '%" + see[i]+ "%' " 
+          i=0
+          while(see[i]!=null)
+          { 
+           str=str+"OR username LIKE '%" + see[i]+ "%' " 
+           i++;
+          }  
         }
-        
-        if(search.content!=null)
-        {
-          console.log("跑4")
-          str=str+" OR content LIKE '%" + see[i]+ "%' " 
-        }
-        
-        if(search.title==null&&search.body==null&&search.username==null&&search.content==null)
-        {
-          str=str+" OR title LIKE '%" + see[i]+ "%' OR content LIKE '%"+see[i]+ "%' OR username LIKE '%"+see[i]+  "%' OR body LIKE '%" +see[i]+"%'" 
-          console.log("跑5")
-        }
-        i++;
-       }
-       console.log("GG啦",str)
-       var posts = postQuery(`SELECT id,username, title, body ,file,content FROM posts WHERE title LIKE '%真他媽聰明阿%' ${str};`)
-       ctx.response.body = await render.liststu(posts,safes);
-       str=''
-        return;
-        }
-        
-      else
+
+      if(search.content!=null)
       {
-        ctx.response.body = render.loginUi({status:'請先登入'})
-        return;
+        i=0
+        while(see[i]!=null)
+        { 
+         str=str+"OR content LIKE '%" + see[i]+ "%' " 
+         i++;
+        }  
+         
+         
+      }
+
+      if((search.search!="")&&(search.title==undefined)&&(search.username==undefined)&&(search.content==undefined)&&(contents=="dis")&&(date=="dis")) {
+       console.log("進來這裡代表隨便找")
+        i=0
+        while(see[i]!=null)
+        { 
+         str=str+"OR title LIKE '%" + see[i]+ "%' OR content LIKE '%"+see[i]+ "%' OR username LIKE '%"+see[i]+  "%' OR date LIKE '%" +see[i]+"%'" 
+         i++;
+        }        
+        }
+
+        if((search.search!="")&&((contents!="dis")||(date!="dis"))) {
+          console.log("有做條件選取，但是沒有精準，而且有搜尋")
+          i=0
+          while(see[i]!=null)
+          { 
+           str=str+"OR title LIKE '%" + see[i]+ "%' OR content LIKE '%"+see[i]+ "%' OR username LIKE '%"+see[i]+  "%' OR date LIKE '%" +see[i]+"%'" 
+           i++;
+          } 
+          var posts = postQuery(`SELECT id,username, title, date ,file,content FROM posts WHERE (date LIKE '%專題%') ${str_condition}  AND (username LIKE '%eggwu好帥%'${str}) ORDER BY id DESC ;`) 
+        }
+
+        
+       if(str_condition=="")
+       {
+        var posts = postQuery(`SELECT id,username, title, date ,file,content FROM posts WHERE (date LIKE '%專題%') AND (username LIKE '%eggwu好帥%'${str}) ORDER BY id DESC ;`) 
+        console.log("跑1") 
+      }
+        if(str_condition!=""&&str=="")
+       {
+        var posts = postQuery(`SELECT id,username, title, date ,file,content FROM posts WHERE (date LIKE '%專題%') ${str_condition}  ORDER BY id DESC ;`) 
+        console.log("跑2",str)
+       }
+        
+       if(str_condition!=""&&str!="")
+        {
+          var posts = postQuery(`SELECT id,username, title, date ,file,content FROM posts WHERE (date LIKE '%專題%') ${str_condition}  AND (username LIKE '%eggwu好帥%'${str}) ORDER BY id DESC ;`) 
+          console.log("跑3")
+        }
+        ctx.response.body = await render.list(posts,usercheck);
+       return;
+        
       }
     }
-    
-      
-    }
   }
+    
+  }
+
+
+async function list_graduate_custom(ctx) {
+      var usercheck = await ctx.state.session.get('user')
+      const body = ctx.request.body()
+      if(usercheck==null)
+      {
+        ctx.response.body = render.middle({status:'請先登入'},user)
+        return;
+      }
+      else
+      {
+        var root = userQuery(`SELECT id, account, password, username FROM users_student WHERE username='${usercheck.username}'`)
+        var roots = root[0]
+        if(roots==null)
+        {
+          ctx.response.body = render.middle({status:'請先登入'},user)
+        return;
+        }
+        else
+        {
+          if (body.type === "form") { 
+            var search = await parseFormBody(body)
+            console.log("看search點了哪些",search)
+            var user = await ctx.state.session.get('user')
+            var see=search.search.split(" ")
+            var contents=search.contents
+            var date= search.date
+            var str = ''
+            var str_condition = ''
+            var i=0
+            var patten=[] 
+           if(contents!="dis")
+          {
+            str_condition=str_condition+"AND content LIKE '%" + contents+ "%' " 
+          }
+           if(date!="dis")
+           {
+            str_condition=str_condition+"AND date LIKE '%" + date+ "%' "
+           } 
+           
+          if(search.title!=null)
+           {
+            while(see[i]!=null)
+            { 
+              str=str+"OR title LIKE '%" + see[i]+ "%' " 
+             i++;
+            }  
+            
+            }
   
-}
-
-
+          if(search.username!=null)
+            {
+              i=0
+              while(see[i]!=null)
+              { 
+               str=str+"OR username LIKE '%" + see[i]+ "%' " 
+               i++;
+              }  
+            }
+  
+          if(search.content!=null)
+          {
+            i=0
+            while(see[i]!=null)
+            { 
+             str=str+"OR content LIKE '%" + see[i]+ "%' " 
+             i++;
+            }  
+             
+             
+          }
+  
+          if((search.search!="")&&(search.title==undefined)&&(search.username==undefined)&&(search.content==undefined)&&(contents=="dis")&&(date=="dis")) {
+           console.log("進來這裡代表隨便找")
+            i=0
+            while(see[i]!=null)
+            { 
+             str=str+"OR title LIKE '%" + see[i]+ "%' OR content LIKE '%"+see[i]+ "%' OR username LIKE '%"+see[i]+  "%' OR date LIKE '%" +see[i]+"%'" 
+             i++;
+            }        
+            }
+  
+            if((search.search!="")&&((contents!="dis")||(date!="dis"))) {
+              console.log("有做條件選取，但是沒有精準，而且有搜尋")
+              i=0
+              while(see[i]!=null)
+              { 
+               str=str+"OR title LIKE '%" + see[i]+ "%' OR content LIKE '%"+see[i]+ "%' OR username LIKE '%"+see[i]+  "%' OR date LIKE '%" +see[i]+"%'" 
+               i++;
+              } 
+              var posts = postQuery(`SELECT id,username, title, date ,file,content FROM posts WHERE (date LIKE '%專題%') ${str_condition}  AND (username LIKE '%eggwu好帥%'${str}) ORDER BY id DESC ;`) 
+            }
+    
+            
+           if(str_condition=="")
+           {
+            var posts = postQuery(`SELECT id,username, title, date ,file,content FROM posts WHERE (date LIKE '%專題%') AND (username LIKE '%eggwu好帥%'${str}) ORDER BY id DESC ;`) 
+            console.log("跑1") 
+          }
+            if(str_condition!=""&&str=="")
+           {
+            var posts = postQuery(`SELECT id,username, title, date ,file,content FROM posts WHERE (date LIKE '%專題%') ${str_condition}  ORDER BY id DESC ;`) 
+            console.log("跑2",str)
+           }
+            
+           if(str_condition!=""&&str!="")
+            {
+              var posts = postQuery(`SELECT id,username, title, date ,file,content FROM posts WHERE (date LIKE '%專題%') ${str_condition}  AND (username LIKE '%eggwu好帥%'${str}) ORDER BY id DESC ;`) 
+              console.log("跑3")
+            }
+            ctx.response.body = await render.liststu(posts,usercheck);
+          return;
+            
+          }
+        }
+      }
+        
+      }  
+    
 /*1223check*/ 
 async function editaccount(ctx) {
   var usercheck = await ctx.state.session.get('user')
   if(usercheck==null)
   {
-    ctx.response.body = render.loginUi({status:'請先登入'})
+    ctx.response.body = render.middle({status:'請先登入'})
     return;
 
   }
@@ -712,7 +1051,7 @@ async function editaccount(ctx) {
 
     else 
     {
-      ctx.response.body = render.loginUi({status:'請先登入'})
+      ctx.response.body = render.middle({status:'請先登入'})
       return;
     }
 
@@ -732,7 +1071,7 @@ async function add(ctx) {
     var safes = safe[0]
     if(safes==null)
     {
-      ctx.response.body = render.loginUi({status:'請先登入'})
+      ctx.response.body = render.middle({status:'請先登入'})
     return;
     }
     else
@@ -743,7 +1082,7 @@ async function add(ctx) {
     
   } 
   else {
-    ctx.response.body = render.loginUi({status:'請先登入'})
+    ctx.response.body = render.middle({status:'請先登入'})
     return;
   }
   
@@ -754,7 +1093,7 @@ async function add(ctx) {
   if (user != null) {
     ctx.response.body = await render.newPoststu();
   } else {
-    ctx.response.body = render.loginUi({status:'請先登入'})
+    ctx.response.body = render.middle({status:'請先登入'})
   }
 }*/
 
@@ -768,14 +1107,15 @@ async function delpost(ctx) {
     var safes = safe[0]
     if(safes!=null)
     {
-    const pid = ctx.params.id;
-    postQuery(`DELETE FROM posts WHERE id='${pid}'`)
-    ctx.response.redirect('/');
-    return;
+      
+      const pid = ctx.params.id;
+      postQuery(`DELETE FROM posts WHERE id='${pid}'`)
+      ctx.response.redirect('/');
+      return;
     }
     else
     {
-      ctx.response.body = render.loginUi({status:'請先登入'})
+      ctx.response.body = render.middle({status:'請先登入'})
       return;
     }
     
@@ -783,7 +1123,7 @@ async function delpost(ctx) {
     
   else
   {
-    ctx.response.body = render.loginUi({status:'請先登入'})
+    ctx.response.body = render.middle({status:'請先登入'})
     return;
   }
 
@@ -807,7 +1147,7 @@ async function delaccount_user(ctx) {
     
     else
     {
-    ctx.response.body = render.loginUi({status:'請先登入'})
+    ctx.response.body = render.middle({status:'請先登入'})
     return;
     }
 
@@ -815,7 +1155,7 @@ async function delaccount_user(ctx) {
     
   else
   {
-    ctx.response.body = render.loginUi({status:'請先登入'})
+    ctx.response.body = render.middle({status:'請先登入'})
     return;
   }
 
@@ -836,7 +1176,7 @@ async function delaccount_user(ctx) {
     
   else
   {
-    ctx.response.body = render.loginUi({status:'請先登入'})
+    ctx.response.body = render.middle({status:'請先登入'})
     //ctx.response.redirect('/login');
   }
 
@@ -850,7 +1190,7 @@ async function editpostui(ctx) {
   var usercheck = await ctx.state.session.get('user')
   if(usercheck==null)
   {
-    ctx.response.body = render.loginUi({status:'請先登入'})
+    ctx.response.body = render.middle({status:'請先登入'})
     return;
 
   }
@@ -860,7 +1200,7 @@ async function editpostui(ctx) {
     if(safes!=null)
     {
     const pid = ctx.params.id;
-    let posts = postQuery(`SELECT id, username, title, body,file,content FROM posts WHERE id=${pid}`)
+    let posts = postQuery(`SELECT id, username, title, date,file,content FROM posts WHERE id=${pid}`)
     let post = posts[0]
     if (!post) ctx.throw(404, 'invalid post id');
     ctx.response.body = await render.editpostui(post);
@@ -869,7 +1209,7 @@ async function editpostui(ctx) {
 
     else 
     {
-      ctx.response.body = render.loginUi({status:'請先登入'})
+      ctx.response.body = render.middle({status:'請先登入'})
       return;
     }
   }
@@ -882,7 +1222,7 @@ async function editpost(ctx)
   var usercheck = await ctx.state.session.get('user')
   if(usercheck==null)
   {
-    ctx.response.body = render.loginUi({status:'請先登入'})
+    ctx.response.body = render.middle({status:'請先登入'})
     return; 
   }
   else
@@ -896,7 +1236,7 @@ async function editpost(ctx)
       var user = await ctx.state.session.get('user')
       var pattern=/[`~!@#$%^&*()_+<>?:"{},.\/;'[\]]/im;
       var pattern_only=/[`@#$%^&*_+<>{}\/[\]]/im;
-      let posts = postQuery(`SELECT id, username, title, body,file,content FROM posts WHERE id=${pid}`)
+      let posts = postQuery(`SELECT id, username, title, date,file,content FROM posts WHERE id=${pid}`)
       let post = posts[0]
         if (form ) {
           var filename = form.files.file.filename
@@ -908,13 +1248,13 @@ async function editpost(ctx)
           await Deno.writeFile(`./images/${filename}`, content);
         }
       
-        if( form.fields.title==''|| form.fields.body==''||form.fields.content=='')
+        if( form.fields.title==''|| form.fields.date==''||form.fields.content=='')
         {
           ctx.response.body = await render.editpostui(post,{status:'不可空白'});
           return;
         }
     
-        if(pattern.test(form.fields.title)||pattern_only.test(form.fields.body)||pattern.test(form.fields.content))
+        if(pattern.test(form.fields.title)||pattern_only.test(form.fields.date)||pattern.test(form.fields.content))
         {
           ctx.response.body = render.editpostui(post,{status:'不可輸入特殊符號'})
           return;
@@ -939,13 +1279,13 @@ async function editpost(ctx)
         if(form.fields.content7==null)form.fields.content7=''
         if(form.fields.content8==null)form.fields.content8=''
         var content=form.fields.content1+form.fields.content2+form.fields.content3+form.fields.content4+form.fields.content5+form.fields.content6+form.fields.content7+form.fields.content8
-        sqlcmd(`UPDATE posts SET "username"='${form.fields.author}',"title"='${form.fields.title}',"body"='${year}',"file"='${filename}',"content"='${content}'WHERE id='${pid}';`)
+        sqlcmd(`UPDATE posts SET "username"='${form.fields.author}',"title"='${form.fields.title}',"date"='${year}',"file"='${filename}',"content"='${content}'WHERE id='${pid}';`)
         ctx.response.redirect('/');
       return;
     }
     else
     {
-      ctx.response.body = render.loginUi({status:'請先登入'})
+      ctx.response.body = render.middle({status:'請先登入'})
       return; 
     }
   }
@@ -958,7 +1298,7 @@ async function editpassword_userui(ctx) {
   const pid = ctx.params.id;
   if(usercheck == undefined)
   {
-    ctx.response.body = render.loginUi({status:'請先登入'})
+    ctx.response.body = render.middle({status:'請先登入'})
     return;
   }
   else
@@ -995,7 +1335,7 @@ async function editpassword_user(ctx) {
 
   if(usercheck == null)
   {
-    ctx.response.body = render.loginUi({status:'請先登入'})
+    ctx.response.body = render.middle({status:'請先登入'})
     return;
   }
   else
@@ -1018,7 +1358,7 @@ async function editpassword_user(ctx) {
     if (body.type === "form"&&safes.password==account.password_check&&account.password_new==account.password_new_check) 
     {
       sqlcmd(`UPDATE users_teacher SET "password"='${account.password_new}'WHERE id='${pid}';`)
-      ctx.response.body = render.loginUi({status:'修改成功'})
+      ctx.response.body = render.middle({status:'修改成功'})
       return;
     }
     else if(body.type === "form"&&safes.password==account.password_check&&account.password_new!=account.password_new_check) 
@@ -1039,7 +1379,7 @@ async function editpassword_user(ctx) {
     if (body.type === "form"&&users.password==account.password_check&&account.password_new==account.password_new_check) 
     {
       sqlcmd(`UPDATE users_student SET "password"='${account.password_new}'WHERE id='${pid}';`)
-      ctx.response.body = render.loginUi({status:'修改成功'})
+      ctx.response.body = render.middle({status:'修改成功'})
       return;
     }
     else if(body.type === "form"&&users.password==account.password_check&&account.password_new!=account.password_new_check) 
@@ -1067,7 +1407,7 @@ async function editpassword_user(ctx) {
   }*/
   else
   {
-    ctx.response.body = render.loginUi({status:'請先登入'})
+    ctx.response.body = render.middle({status:'請先登入'})
     return;
   }
   }
@@ -1080,7 +1420,7 @@ async function editpassword_rootui(ctx) {
   var usercheck = await ctx.state.session.get('user')
   if(usercheck == null)
   {
-    ctx.response.body = render.loginUi({status:'請先登入'})
+    ctx.response.body = render.middle({status:'請先登入'})
     return;
   }
   else
@@ -1096,7 +1436,7 @@ async function editpassword_rootui(ctx) {
   }
   else
   {
-    ctx.response.body = render.loginUi({status:'請先登入'})
+    ctx.response.body = render.middle({status:'請先登入'})
     return;
   }
   }
@@ -1114,7 +1454,7 @@ async function editpassword_root(ctx) {
   
   if(usercheck == null)
   {
-    ctx.response.body = render.loginUi({status:'請先登入'})
+    ctx.response.body = render.middle({status:'請先登入'})
     return;
   }
   else
@@ -1139,7 +1479,7 @@ async function editpassword_root(ctx) {
 
   else
   {
-    ctx.response.body = render.loginUi({status:'請先登入'})
+    ctx.response.body = render.middle({status:'請先登入'})
     return;
   }
    
@@ -1156,7 +1496,7 @@ async function editpassword_user_for_root(ctx) {
   var pattern=/[`~!@#$%^&*()_+<>?:"{},.\/;'[\]]/im;
   if(usercheck == null)
   {
-    ctx.response.body = render.loginUi({status:'請先登入'})
+    ctx.response.body = render.middle({status:'請先登入'})
     return;
   }
   else
@@ -1180,7 +1520,7 @@ async function editpassword_user_for_root(ctx) {
 
   else
   {
-    ctx.response.body = render.loginUi({status:'請先登入'})
+    ctx.response.body = render.middle({status:'請先登入'})
     return;
   }
    
@@ -1206,13 +1546,13 @@ async function create(ctx) {
       await Deno.writeFile(`./images/${filename}`, content);
     }
   
-    if( form.fields.title==''|| form.fields.body==''||form.fields.content=='')
+    if( form.fields.title==''|| form.fields.date==''||form.fields.content=='')
     {
       ctx.response.body = await render.newPost({status:'不可空白'});
       return;
     }
 
-    if(pattern.test(form.fields.title)||pattern_only.test(form.fields.body)||pattern.test(form.fields.content))
+    if(pattern.test(form.fields.title)||pattern_only.test(form.fields.date)||pattern.test(form.fields.content))
     {
       ctx.response.body = render.newPost({status:'不可輸入特殊符號'})
       return;
@@ -1253,7 +1593,7 @@ async function create(ctx) {
         //var content=str.replace(re, ' ');
         //console.log("######",str)
 //console.log(user.username, form.fields.title, form.fields.body,filename,form.fields.content)
-      sqlcmd("INSERT INTO posts (username, title, body,file,content) VALUES (?, ?, ?,?,?)", [form.fields.author, form.fields.title, year,filename,content]);
+      sqlcmd("INSERT INTO posts (username, title, date,file,content) VALUES (?, ?, ?,?,?)", [form.fields.author, form.fields.title, year,filename,content]);
     } 
     else {
       ctx.throw(404, 'not login yet!');
@@ -1263,44 +1603,499 @@ async function create(ctx) {
 
 
 }
-/*
-async function createstu(ctx) {
-  const body = ctx.request.body()
-  const form = await multiParser(ctx.request.serverRequest)
-    if (form ) {
-      var filename = form.files.file.filename
-      let content = form.files.file.content
-      if(filename==''){
-        ctx.response.body = await render.newPost({status:'請上傳檔案'});
-       return;
-      }
-      await Deno.writeFile(`./images/${filename}`, content);
-    }
-  
-    var user = await ctx.state.session.get('user')
-    if (user != null) {
-      console.log('user=', user)
-      sqlcmd("INSERT INTO posts (username, title, body,file,content) VALUES (?, ?, ?,?,?)", [user.username, form.fields.title, form.fields.body,filename,form.fields.content]);
-    } 
-    else {
-      ctx.throw(404, 'not login yet!');
-    }
-    ctx.response.redirect('/stu');
-
-
-
-}*/
-
 
 /*1223check */
 async function show(ctx) {
   const pid = ctx.params.id;
-  let posts = postQuery(`SELECT id, username, title, body,file,content FROM posts WHERE id=${pid}`)
+  let posts = postQuery(`SELECT id, username, title, date,file,content FROM posts WHERE id=${pid}`)
   let post = posts[0]
   if (!post) ctx.throw(404, 'invalid post id');
   ctx.response.body = await render.show(post);
 }
+async function mechanism_kl(ctx) {
+  var usercheck = await ctx.state.session.get('user')
+  if(usercheck==null)
+  {
+    ctx.response.body = render.middle({status:'請先登入'},usercheck);
+  }
+  else if(usercheck!=null)
+  {
+    var root = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE username='${usercheck.username}'`) // userMap[user.username]
+    var roots = root[0]
+    var user = userQuery(`SELECT id, account, password, username FROM users_student WHERE username='${usercheck.username}'`)
+    var users = user[0]
 
+    let orderby = ctx.request.url.searchParams.get('orderby')
+    orderby = orderby || 'id'
+    let op = ctx.request.url.searchParams.get('op')
+    op = op || 'ASC'
+      
+    var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%基隆%') AND (date LIKE '%實習%') group by title `)
+    ctx.response.body = await render.mechanism(posts,usercheck.username);
+    }
+
+  }
+async function mechanism_t(ctx) {
+    var usercheck = await ctx.state.session.get('user')
+    if(usercheck==null)
+    {
+      ctx.response.body = render.middle({status:'請先登入'},usercheck);
+    }
+    else if(usercheck!=null)
+    {
+      var root = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE username='${usercheck.username}'`) // userMap[user.username]
+      var roots = root[0]
+      var user = userQuery(`SELECT id, account, password, username FROM users_student WHERE username='${usercheck.username}'`)
+      var users = user[0]
+  
+      let orderby = ctx.request.url.searchParams.get('orderby')
+      orderby = orderby || 'id'
+      let op = ctx.request.url.searchParams.get('op')
+      op = op || 'ASC'
+        
+      var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%台北%') AND (date LIKE '%實習%') group by title `)
+      ctx.response.body = await render.mechanism(posts,usercheck.username);
+      }
+  
+    }
+async function mechanism_nt(ctx) {
+      var usercheck = await ctx.state.session.get('user')
+      if(usercheck==null)
+      {
+        ctx.response.body = render.middle({status:'請先登入'},usercheck);
+      }
+      else if(usercheck!=null)
+      {
+        var root = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE username='${usercheck.username}'`) // userMap[user.username]
+        var roots = root[0]
+        var user = userQuery(`SELECT id, account, password, username FROM users_student WHERE username='${usercheck.username}'`)
+        var users = user[0]
+    
+        let orderby = ctx.request.url.searchParams.get('orderby')
+        orderby = orderby || 'id'
+        let op = ctx.request.url.searchParams.get('op')
+        op = op || 'ASC'
+          
+        var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%新北%') AND (date LIKE '%實習%') group by title `)
+        ctx.response.body = await render.mechanism(posts,usercheck.username);
+        }
+    
+      }
+async function mechanism_tu(ctx) {
+        var usercheck = await ctx.state.session.get('user')
+        if(usercheck==null)
+        {
+          ctx.response.body = render.middle({status:'請先登入'},usercheck);
+        }
+        else if(usercheck!=null)
+        {
+          var root = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE username='${usercheck.username}'`) // userMap[user.username]
+          var roots = root[0]
+          var user = userQuery(`SELECT id, account, password, username FROM users_student WHERE username='${usercheck.username}'`)
+          var users = user[0]
+      
+          let orderby = ctx.request.url.searchParams.get('orderby')
+          orderby = orderby || 'id'
+          let op = ctx.request.url.searchParams.get('op')
+          op = op || 'ASC'
+            
+          var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%桃園%') AND (date LIKE '%實習%') group by title `)
+          ctx.response.body = await render.mechanism(posts,usercheck.username);
+          }
+      
+        }
+async function mechanism_s(ctx) {
+          var usercheck = await ctx.state.session.get('user')
+          if(usercheck==null)
+          {
+            ctx.response.body = render.middle({status:'請先登入'},usercheck);
+          }
+          else if(usercheck!=null)
+          {
+            var root = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE username='${usercheck.username}'`) // userMap[user.username]
+            var roots = root[0]
+            var user = userQuery(`SELECT id, account, password, username FROM users_student WHERE username='${usercheck.username}'`)
+            var users = user[0]
+        
+            let orderby = ctx.request.url.searchParams.get('orderby')
+            orderby = orderby || 'id'
+            let op = ctx.request.url.searchParams.get('op')
+            op = op || 'ASC'
+              
+            var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%新竹縣%') AND (date LIKE '%實習%') group by title `)
+            ctx.response.body = await render.mechanism(posts,usercheck.username);
+            }
+        
+          }
+async function mechanism_ss(ctx) {
+            var usercheck = await ctx.state.session.get('user')
+            if(usercheck==null)
+            {
+              ctx.response.body = render.middle({status:'請先登入'},usercheck);
+            }
+            else if(usercheck!=null)
+            {
+              var root = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE username='${usercheck.username}'`) // userMap[user.username]
+              var roots = root[0]
+              var user = userQuery(`SELECT id, account, password, username FROM users_student WHERE username='${usercheck.username}'`)
+              var users = user[0]
+          
+              let orderby = ctx.request.url.searchParams.get('orderby')
+              orderby = orderby || 'id'
+              let op = ctx.request.url.searchParams.get('op')
+              op = op || 'ASC'
+                
+              var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%新竹縣%') AND (date LIKE '%實習%') group by title `)
+              ctx.response.body = await render.mechanism(posts,usercheck.username);
+              }
+          
+            }
+async function mechanism_m(ctx) {
+              var usercheck = await ctx.state.session.get('user')
+              if(usercheck==null)
+              {
+                ctx.response.body = render.middle({status:'請先登入'},usercheck);
+              }
+              else if(usercheck!=null)
+              {
+                var root = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE username='${usercheck.username}'`) // userMap[user.username]
+                var roots = root[0]
+                var user = userQuery(`SELECT id, account, password, username FROM users_student WHERE username='${usercheck.username}'`)
+                var users = user[0]
+            
+                let orderby = ctx.request.url.searchParams.get('orderby')
+                orderby = orderby || 'id'
+                let op = ctx.request.url.searchParams.get('op')
+                op = op || 'ASC'
+                  
+                var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%苗栗%') AND (date LIKE '%實習%') group by title `)
+                ctx.response.body = await render.mechanism(posts,usercheck.username);
+                }
+            
+              }
+async function mechanism_tc(ctx) {
+                var usercheck = await ctx.state.session.get('user')
+                if(usercheck==null)
+                {
+                  ctx.response.body = render.middle({status:'請先登入'},usercheck);
+                }
+                else if(usercheck!=null)
+                {
+                  var root = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE username='${usercheck.username}'`) // userMap[user.username]
+                  var roots = root[0]
+                  var user = userQuery(`SELECT id, account, password, username FROM users_student WHERE username='${usercheck.username}'`)
+                  var users = user[0]
+              
+                  let orderby = ctx.request.url.searchParams.get('orderby')
+                  orderby = orderby || 'id'
+                  let op = ctx.request.url.searchParams.get('op')
+                  op = op || 'ASC'
+                    
+                  var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%台中%') AND (date LIKE '%實習%') group by title `)
+                  ctx.response.body = await render.mechanism(posts,usercheck.username);
+                  }
+              
+                }
+async function mechanism_ch(ctx) {
+                  var usercheck = await ctx.state.session.get('user')
+                  if(usercheck==null)
+                  {
+                    ctx.response.body = render.middle({status:'請先登入'},usercheck);
+                  }
+                  else if(usercheck!=null)
+                  {
+                    var root = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE username='${usercheck.username}'`) // userMap[user.username]
+                    var roots = root[0]
+                    var user = userQuery(`SELECT id, account, password, username FROM users_student WHERE username='${usercheck.username}'`)
+                    var users = user[0]
+                
+                    let orderby = ctx.request.url.searchParams.get('orderby')
+                    orderby = orderby || 'id'
+                    let op = ctx.request.url.searchParams.get('op')
+                    op = op || 'ASC'
+                      
+                    var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%彰化%') AND (date LIKE '%實習%') group by title `)
+                    ctx.response.body = await render.mechanism(posts,usercheck.username);
+                    }
+                
+                  }
+async function mechanism_u(ctx) {
+                    var usercheck = await ctx.state.session.get('user')
+                    if(usercheck==null)
+                    {
+                      ctx.response.body = render.middle({status:'請先登入'},usercheck);
+                    }
+                    else if(usercheck!=null)
+                    {
+                      var root = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE username='${usercheck.username}'`) // userMap[user.username]
+                      var roots = root[0]
+                      var user = userQuery(`SELECT id, account, password, username FROM users_student WHERE username='${usercheck.username}'`)
+                      var users = user[0]
+                  
+                      let orderby = ctx.request.url.searchParams.get('orderby')
+                      orderby = orderby || 'id'
+                      let op = ctx.request.url.searchParams.get('op')
+                      op = op || 'ASC'
+                        
+                      var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%雲林%') AND (date LIKE '%實習%') group by title `)
+                      ctx.response.body = await render.mechanism(posts,usercheck.username);
+                      }
+                  
+                    }
+async function mechanism_c(ctx) {
+                      var usercheck = await ctx.state.session.get('user')
+                      if(usercheck==null)
+                      {
+                        ctx.response.body = render.middle({status:'請先登入'},usercheck);
+                      }
+                      else if(usercheck!=null)
+                      {
+                        var root = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE username='${usercheck.username}'`) // userMap[user.username]
+                        var roots = root[0]
+                        var user = userQuery(`SELECT id, account, password, username FROM users_student WHERE username='${usercheck.username}'`)
+                        var users = user[0]
+                    
+                        let orderby = ctx.request.url.searchParams.get('orderby')
+                        orderby = orderby || 'id'
+                        let op = ctx.request.url.searchParams.get('op')
+                        op = op || 'ASC'
+                          
+                        var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%嘉義%') AND (date LIKE '%實習%') group by title `)
+                        ctx.response.body = await render.mechanism(posts,usercheck.username);
+                        }
+                    
+                      }
+async function mechanism_tn(ctx) {
+                        var usercheck = await ctx.state.session.get('user')
+                        if(usercheck==null)
+                        {
+                          ctx.response.body = render.middle({status:'請先登入'},usercheck);
+                        }
+                        else if(usercheck!=null)
+                        {
+                          var root = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE username='${usercheck.username}'`) // userMap[user.username]
+                          var roots = root[0]
+                          var user = userQuery(`SELECT id, account, password, username FROM users_student WHERE username='${usercheck.username}'`)
+                          var users = user[0]
+                      
+                          let orderby = ctx.request.url.searchParams.get('orderby')
+                          orderby = orderby || 'id'
+                          let op = ctx.request.url.searchParams.get('op')
+                          op = op || 'ASC'
+                            
+                          var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%台南%') AND (date LIKE '%實習%') group by title `)
+                          ctx.response.body = await render.mechanism(posts,usercheck.username);
+                          }
+                      
+                        }
+async function mechanism_kh(ctx) {
+                          var usercheck = await ctx.state.session.get('user')
+                          if(usercheck==null)
+                          {
+                            ctx.response.body = render.middle({status:'請先登入'},usercheck);
+                          }
+                          else if(usercheck!=null)
+                          {
+                            var root = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE username='${usercheck.username}'`) // userMap[user.username]
+                            var roots = root[0]
+                            var user = userQuery(`SELECT id, account, password, username FROM users_student WHERE username='${usercheck.username}'`)
+                            var users = user[0]
+                        
+                            let orderby = ctx.request.url.searchParams.get('orderby')
+                            orderby = orderby || 'id'
+                            let op = ctx.request.url.searchParams.get('op')
+                            op = op || 'ASC'
+                              
+                            var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%高雄%') AND (date LIKE '%實習%') group by title `)
+                            ctx.response.body = await render.mechanism(posts,usercheck.username);
+                            }
+                        
+                          }
+async function mechanism_pt(ctx) {
+                            var usercheck = await ctx.state.session.get('user')
+                            if(usercheck==null)
+                            {
+                              ctx.response.body = render.middle({status:'請先登入'},usercheck);
+                            }
+                            else if(usercheck!=null)
+                            {
+                              var root = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE username='${usercheck.username}'`) // userMap[user.username]
+                              var roots = root[0]
+                              var user = userQuery(`SELECT id, account, password, username FROM users_student WHERE username='${usercheck.username}'`)
+                              var users = user[0]
+                          
+                              let orderby = ctx.request.url.searchParams.get('orderby')
+                              orderby = orderby || 'id'
+                              let op = ctx.request.url.searchParams.get('op')
+                              op = op || 'ASC'
+                                
+                              var posts = postQuery(`select id, username, title,date,file,content from posts WHERE(title LIKE '%屏東%') AND (date LIKE '%實習%') group by title `)
+                              ctx.response.body = await render.mechanism(posts,usercheck.username);
+                              }
+                          
+                            }
+async function mechanism_tt(ctx) {
+                              var usercheck = await ctx.state.session.get('user')
+                              if(usercheck==null)
+                              {
+                                ctx.response.body = render.middle({status:'請先登入'},usercheck);
+                              }
+                              else if(usercheck!=null)
+                              {
+                                var root = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE username='${usercheck.username}'`) // userMap[user.username]
+                                var roots = root[0]
+                                var user = userQuery(`SELECT id, account, password, username FROM users_student WHERE username='${usercheck.username}'`)
+                                var users = user[0]
+                            
+                                let orderby = ctx.request.url.searchParams.get('orderby')
+                                orderby = orderby || 'id'
+                                let op = ctx.request.url.searchParams.get('op')
+                                op = op || 'ASC'
+                                  
+                                var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%台東%') AND (date LIKE '%實習%') group by title `)
+                                ctx.response.body = await render.mechanism(posts,usercheck.username);
+                                }
+                            
+                              }
+async function mechanism_h(ctx) {
+                                var usercheck = await ctx.state.session.get('user')
+                                if(usercheck==null)
+                                {
+                                  ctx.response.body = render.middle({status:'請先登入'},usercheck);
+                                }
+                                else if(usercheck!=null)
+                                {
+                                  var root = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE username='${usercheck.username}'`) // userMap[user.username]
+                                  var roots = root[0]
+                                  var user = userQuery(`SELECT id, account, password, username FROM users_student WHERE username='${usercheck.username}'`)
+                                  var users = user[0]
+                              
+                                  let orderby = ctx.request.url.searchParams.get('orderby')
+                                  orderby = orderby || 'id'
+                                  let op = ctx.request.url.searchParams.get('op')
+                                  op = op || 'ASC'
+                                    
+                                  var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%花蓮%') AND (date LIKE '%實習%') group by title `)
+                                  ctx.response.body = await render.mechanism(posts,usercheck.username);
+                                  }
+                              
+                                }
+async function mechanism_y(ctx) {
+                                  var usercheck = await ctx.state.session.get('user')
+                                  if(usercheck==null)
+                                  {
+                                    ctx.response.body = render.middle({status:'請先登入'},usercheck);
+                                  }
+                                  else if(usercheck!=null)
+                                  {
+                                    var root = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE username='${usercheck.username}'`) // userMap[user.username]
+                                    var roots = root[0]
+                                    var user = userQuery(`SELECT id, account, password, username FROM users_student WHERE username='${usercheck.username}'`)
+                                    var users = user[0]
+                                
+                                    let orderby = ctx.request.url.searchParams.get('orderby')
+                                    orderby = orderby || 'id'
+                                    let op = ctx.request.url.searchParams.get('op')
+                                    op = op || 'ASC'
+                                      
+                                    var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%宜蘭%') AND (date LIKE '%實習%') group by title `)
+                                    ctx.response.body = await render.mechanism(posts,usercheck.username);
+                                    }
+                                
+                                  }
+async function mechanism_n(ctx) {
+                                    var usercheck = await ctx.state.session.get('user')
+                                    if(usercheck==null)
+                                    {
+                                      ctx.response.body = render.middle({status:'請先登入'},usercheck);
+                                    }
+                                    else if(usercheck!=null)
+                                    {
+                                      var root = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE username='${usercheck.username}'`) // userMap[user.username]
+                                      var roots = root[0]
+                                      var user = userQuery(`SELECT id, account, password, username FROM users_student WHERE username='${usercheck.username}'`)
+                                      var users = user[0]
+                                  
+                                      let orderby = ctx.request.url.searchParams.get('orderby')
+                                      orderby = orderby || 'id'
+                                      let op = ctx.request.url.searchParams.get('op')
+                                      op = op || 'ASC'
+                                        
+                                      var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%南投%') AND (date LIKE '%實習%') group by title `)
+                                      ctx.response.body = await render.mechanism(posts,usercheck.username);
+                                      }
+                                  
+                                    }
+async function mechanism_p(ctx) {
+                                      var usercheck = await ctx.state.session.get('user')
+                                      if(usercheck==null)
+                                      {
+                                        ctx.response.body = render.middle({status:'請先登入'},usercheck);
+                                      }
+                                      else if(usercheck!=null)
+                                      {
+                                        var root = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE username='${usercheck.username}'`) // userMap[user.username]
+                                        var roots = root[0]
+                                        var user = userQuery(`SELECT id, account, password, username FROM users_student WHERE username='${usercheck.username}'`)
+                                        var users = user[0]
+                                    
+                                        let orderby = ctx.request.url.searchParams.get('orderby')
+                                        orderby = orderby || 'id'
+                                        let op = ctx.request.url.searchParams.get('op')
+                                        op = op || 'ASC'
+                                          
+                                        var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%澎湖%') AND (date LIKE '%實習%') group by title `)
+                                        ctx.response.body = await render.mechanism(posts,usercheck.username);
+                                        }
+                                    
+                                      }
+async function mechanism_k(ctx) {
+                                        var usercheck = await ctx.state.session.get('user')
+                                        if(usercheck==null)
+                                        {
+                                          ctx.response.body = render.middle({status:'請先登入'},usercheck);
+                                        }
+                                        else if(usercheck!=null)
+                                        {
+                                          var root = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE username='${usercheck.username}'`) // userMap[user.username]
+                                          var roots = root[0]
+                                          var user = userQuery(`SELECT id, account, password, username FROM users_student WHERE username='${usercheck.username}'`)
+                                          var users = user[0]
+                                      
+                                          let orderby = ctx.request.url.searchParams.get('orderby')
+                                          orderby = orderby || 'id'
+                                          let op = ctx.request.url.searchParams.get('op')
+                                          op = op || 'ASC'
+                                            
+                                          var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%金門縣%') AND (date LIKE '%實習%') group by title `)
+                                          ctx.response.body = await render.mechanism(posts,usercheck.username);
+                                          }
+                                      
+                                        }                        
+async function mechanism_l(ctx) {
+                                          var usercheck = await ctx.state.session.get('user')
+                                          if(usercheck==null)
+                                          {
+                                            ctx.response.body = render.middle({status:'請先登入'},usercheck);
+                                          }
+                                          else if(usercheck!=null)
+                                          {
+                                            var root = userQuery(`SELECT id, account, password, username FROM users_teacher WHERE username='${usercheck.username}'`) // userMap[user.username]
+                                            var roots = root[0]
+                                            var user = userQuery(`SELECT id, account, password, username FROM users_student WHERE username='${usercheck.username}'`)
+                                            var users = user[0]
+                                        
+                                            let orderby = ctx.request.url.searchParams.get('orderby')
+                                            orderby = orderby || 'id'
+                                            let op = ctx.request.url.searchParams.get('op')
+                                            op = op || 'ASC'
+                                              
+                                            var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%連江%') AND (date LIKE '%實習%') group by title `)
+                                            ctx.response.body = await render.mechanism(posts,usercheck.username);
+                                            }
+                                        
+                                          }
+                                          
 
 
 

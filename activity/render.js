@@ -2,6 +2,7 @@ var mem
 var mem_title 
 export function layout(title, content,user) {
   var view 
+  //title判斷是不是點到了login
   if(title!='')
   {
      mem = content
@@ -16,13 +17,17 @@ export function layout(title, content,user) {
   }
   
   var loginstatus
-  if(user!=undefined)
+  
+  if(user!=undefined&&user.username=="test")
   {
-loginstatus= `<li style="float:right">歡迎${user} <a href="/editpassword_user/${user.id}">變更密碼</a><a href="/logout">登出</a></li>`
+  loginstatus= `<li style="Float:right">歡迎${user.username} <a href="/editpassword_user/${user.id}">變更密碼</a><a href="/post/new">上傳檔案</a><a href="/editaccount">帳號管理</a><a href="/logout">登出</a></li>`
+  }
+  else if(user!=undefined)
+  {
+  loginstatus= `<li style="Float:right">歡迎${user.username} <a href="/editpassword_user/${user.id}">變更密碼</a><a href="/logout">登出</a></li>`
+  } 
 
 
-
-} 
   else if (user==undefined)
   {
     loginstatus=`<li style="float:right"><div style="cursor:hand" onclick="isHidden()"><a class="active" >登入</a></div></li>
@@ -37,13 +42,40 @@ loginstatus= `<li style="float:right">歡迎${user} <a href="/editpassword_user/
     <link rel="stylesheet" href="images/css/slick.css">
     <link rel="stylesheet" href="images/css/slick-theme.css">
     <style>
-   
+
+    /*字體設定*/
+    @font-face {
+      font-family:"粉圓";
+      src:url('images/words/jf-openhuninn-1.1.ttf');
+    }
+li p
+{
+  font-family:粉圓;
+}
+/*下面是漂亮的checkbox標籤*/
+    input[type=checkbox] {
+      display: none;
+  }
+  input[type=checkbox]+span {
+      display: inline-block;
+      background-color: #aaa;
+      padding: 3px 6px;
+      border: 1px solid gray;
+      color: #444;
+      user-select: none; /* 防止文字被滑鼠選取反白 */
+  }
+
+  input[type=checkbox]:checked+span {
+      color: yellow;
+      background-color: #444;
+  }
+  /*上面是漂亮的checkbox標籤*/ 
     body {
       margin: 0;
       padding: 0;
     background-color:  #D1E9E9;
-      font-family: Arial, Helvetica, sans-serif;
-      font: 2vh Helvetica, Arial;
+      font-family:Microsoft JhengHei;
+      font-size: 2vh ;
     }
 
 
@@ -64,6 +96,7 @@ loginstatus= `<li style="float:right">歡迎${user} <a href="/editpassword_user/
       border-bottom: 10px dotted red;
   }
   
+
   .tooltiptext {
       visibility: hidden;
       width: 120px;
@@ -96,6 +129,7 @@ loginstatus= `<li style="float:right">歡迎${user} <a href="/editpassword_user/
       border: 1px solid #eee;
       padding: 15px;
       font-size: .8em;
+      border-radius:4em;
     }
    
     /*slider輪播動畫*/
@@ -159,9 +193,9 @@ loginstatus= `<li style="float:right">歡迎${user} <a href="/editpassword_user/
     }
     
     li a, .dropbtn {
-      display: block;
-      color: white;
+      display:inline-block;
       text-align: center;
+      color: white;
       padding: 14px 16px;
       text-decoration: none;
     }
@@ -214,6 +248,8 @@ loginstatus= `<li style="float:right">歡迎${user} <a href="/editpassword_user/
           .nosee{display:inline}
           .dropbtn1{display:inline-block}
         }
+
+       
     </style>
   </head>
   <body id="bodylogin">
@@ -221,16 +257,18 @@ loginstatus= `<li style="float:right">歡迎${user} <a href="/editpassword_user/
   <ul style="list-style-type: none;padding: 0;overflow: hidden;background-color: #38444d;">
   <div id="mySidenav" class="sidenav">
       <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-      <a href="#">關於機構</a>
-      <a href="#">畢業專題</a>
-      <a href="#">實習報告書</a>
-      <a href="#">聯絡我們</a>
+      
+      <a href="/about">關於機構</a>
+      <a href="/list_graduate">畢業專題</a>
+      <a href="/">實習報告書</a>
+      <a href="#news">聯絡我們</a>
   </div>
+  
     <!--側欄點擊按鈕-->
-    <span class="see" style="font-size:30px;float:left;cursor:pointer" onclick="openNav()">&#9776; </span>
+    <span class="see" style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; </span>
     <!--上面那欄-->
-  <li class="nosee"><a href="/home">回首頁</a></li>
-  <li class="nosee"><a href="/list_gratuate">畢業專題</a></li>
+  <li class="nosee"><a href="/home">回首頁</a></li> 
+  <li class="nosee"><a href="/list_graduate">畢業專題</a></li>
   <li class="nosee"><a href="/">實習報告書</a></li>
   <li class="nosee"><a href="/about">關於機構</a></li>
   <li class="nosee"><a href="#news">聯絡我們</a></li>
@@ -238,10 +276,10 @@ loginstatus= `<li style="float:right">歡迎${user} <a href="/editpassword_user/
   <li class="dropdown">
     <a href="javascript:void(0)" class="dropbtn1">常見問題</a>
     <div class="dropdown-content">
+      <a href="#">如何註冊</a>
       <a href="#">忘記密碼</a>
-      <a href="#">Q2</a>
-      <a href="#">Q3</a>
-    </div>
+      <a href="#">回報錯誤</a>
+    </div> 
   </li>
   ${loginstatus}
 
@@ -251,7 +289,7 @@ loginstatus= `<li style="float:right">歡迎${user} <a href="/editpassword_user/
     <form action="/login" method="post" >
     <p style="margin-left:95%;cursor:hand;font-size:30px" onclick="recover()">&#9747</p>
     <h1>登入窗口</h1>
-    <p style="padding:50px"><a>帳號：</a><input type="text" placeholder="帳號"  name="account" style="width:auto;"></p>
+    <p style="padding:10px"><a>帳號：</a><input type="text" placeholder="帳號"  name="account" style="width:auto;"></p>
     <p><a>密碼：</a><input type="password" placeholder="密碼" name="password" style = "width:auto;"></p>
     <p><input type="submit" value="登入"></p>
   </form>
@@ -283,6 +321,208 @@ loginstatus= `<li style="float:right">歡迎${user} <a href="/editpassword_user/
   </html>
   `
 }
+export function list_graduate_teacher(posts, user) {
+  let list = []
+  var color_choose = 1;
+  var color
+  for (let post of posts) {
+    if(color_choose%2==0)
+    color="#b0dfda"
+    else if(color_choose%2==1)
+    color="#eecbe7"
+    list.push(`
+    <li style="background:${color};border-radius:2em;min-width: 3%;box-shadow: 10px 16px 16px 0px rgba(0,0,0,0.5);">
+    <p>${post.title}<a style="padding: 0" href="/delpost/${post.id}">刪除貼文</a><a style="padding: 0" href="/editpost/${post.id}">編輯貼文</a></p>
+    <p>類別：${post.content}</p>
+    <p>作者：${post.username}</p>
+    <p>入學級別與實習時間：${post.date}</p>
+    <p><a  href="/images/${post.file}">查看資料</a></p>
+    </li>
+    `)
+    color_choose=color_choose+1;
+  }
+
+  let content = `
+  <body>
+  <article>
+  <form action="/list_graduate_custom_root" method="post">
+  <div style="margin-left:25%;margin-right:25%;">
+  <a>精準搜尋</a>  
+  <label>
+  <input type="checkbox"  name="title" value="title">
+  <span>找機構名稱</span>
+</label>
+<label>
+<input type="checkbox"  name="username" value="username">
+<span>找作者</span>
+</label>
+<label>
+<input type="checkbox"  name="content" value="content">
+  <span>找文章類別</span>
+</label>
+<div style="cursor:pointer;float:right" onclick="opensearch('mySide')"><b>&#9874 進階搜尋</b> </div>  
+</div>
+<div style="text-align:center ;">
+  <div id="mySide" style="display:none;">
+      
+    <select name="date">
+    <option value="dis">依年份部別</option>
+    <option>107日間部</option>
+    <option>106日間部</option>
+    <option>105日間部</option>
+    <option>104日間部</option>
+    <option>107進修部</option>
+    <option>106進修部</option>
+    <option>105進修部</option>
+    <option>104進修部</option>
+</select>
+<select name="contents">
+    <option value="dis">依類別</option>
+    <option>兒童</option>
+    <option>少年</option>
+    <option>家庭</option>
+    <option>身障</option>
+    <option>老人</option>
+    <option>醫務</option>
+    <option>法律與政策</option>
+    <option>其他</option>
+</select>
+<select>
+<option>排序方式</option>
+<option>依機構照筆畫多到少</option>
+<option>依機構照筆畫少到多</option>
+<option>依照年份由新到舊</option>
+<option>依照年份由舊到新</option>
+<option>Parrot</option>
+<option>Spider</option>
+<option>Goldfish</option>
+</select>     
+  </div>
+
+  
+<div style="display:block;text-align:center;margin-top:2%"><input type="text" placeholder="關鍵字搜尋"  name="search" style="width:50%;"><input type="submit" value="搜尋">
+</div>
+</div>  
+  
+  <script>
+  function opensearch(oDiv) {
+    var vDiv = document.getElementById(oDiv);
+              vDiv.style.display = (vDiv.style.display == 'none')?'block':'none';
+             }
+  
+  </script>
+</form></p>
+  <ul id="posts" >
+    ${list.join('\n')}
+  </ul>
+  </article>
+  </body>
+  `
+  return layout('金大社工系學習歷程專區', content,user)
+}
+
+export function list_graduate_student(posts, user) {
+  let list = []
+  var color_choose = 1;
+  var color
+  for (let post of posts) {
+    if(color_choose%2==0)
+    color="#b0dfda"
+    else if(color_choose%2==1)
+    color="#eecbe7"
+    list.push(`
+    <li style="background:${color};border-radius:2em;min-width: 3%;box-shadow: 10px 16px 16px 0px rgba(0,0,0,0.5);">
+    <p>${post.title}<a style="padding: 0" href="/delpost/${post.id}">刪除貼文</a><a style="padding: 0" href="/editpost/${post.id}">編輯貼文</a></p>
+    <p>類別：${post.content}</p>
+    <p>作者：${post.username}</p>
+    <p>入學級別與實習時間：${post.date}</p>
+    <p><a  href="/images/${post.file}">查看資料</a></p>
+    </li>
+    `)
+    color_choose=color_choose+1;
+  }
+
+  let content = `
+  <body>
+  <article>
+  <form action="/list_graduate_custom" method="post">
+  <div style="margin-left:25%;margin-right:25%;">
+  <a>精準搜尋</a>  
+  <label>
+  <input type="checkbox"  name="title" value="title">
+  <span>找機構名稱</span>
+</label>
+<label>
+<input type="checkbox"  name="username" value="username">
+<span>找作者</span>
+</label>
+<label>
+<input type="checkbox"  name="content" value="content">
+  <span>找文章類別</span>
+</label>
+<div style="cursor:pointer;float:right" onclick="opensearch('mySide')"><b>&#9874 進階搜尋</b> </div>  
+</div>
+<div style="text-align:center ;">
+  <div id="mySide" style="display:none;">
+      
+    <select name="date">
+    <option value="dis">依年份部別</option>
+    <option>107日間部</option>
+    <option>106日間部</option>
+    <option>105日間部</option>
+    <option>104日間部</option>
+    <option>107進修部</option>
+    <option>106進修部</option>
+    <option>105進修部</option>
+    <option>104進修部</option>
+</select>
+<select name="contents">
+    <option value="dis">依類別</option>
+    <option>兒童</option>
+    <option>少年</option>
+    <option>家庭</option>
+    <option>身障</option>
+    <option>老人</option>
+    <option>醫務</option>
+    <option>法律與政策</option>
+    <option>其他</option>
+</select>
+<select>
+<option>排序方式</option>
+<option>依機構照筆畫多到少</option>
+<option>依機構照筆畫少到多</option>
+<option>依照年份由新到舊</option>
+<option>依照年份由舊到新</option>
+<option>Parrot</option>
+<option>Spider</option>
+<option>Goldfish</option>
+</select>     
+  </div>
+
+  
+<div style="display:block;text-align:center;margin-top:2%"><input type="text" placeholder="關鍵字搜尋"  name="search" style="width:50%;"><input type="submit" value="搜尋">
+</div>
+</div>  
+  
+  <script>
+  function opensearch(oDiv) {
+    var vDiv = document.getElementById(oDiv);
+              vDiv.style.display = (vDiv.style.display == 'none')?'block':'none';
+             }
+  
+  </script>
+</form></p>
+  <ul id="posts" >
+    ${list.join('\n')}
+  </ul>
+  </article>
+  </body>
+  `
+  return layout('金大社工系學習歷程專區', content,user)
+}
+
+
+
 
 export function middle(args={},user){
   return layout(
@@ -292,14 +532,15 @@ export function middle(args={},user){
 }
 
 export function homeUi(user)  { 
-  return layout('學習歷程檔案首頁', `
-  <div class="container" style="margin:auto;width:90%;height:90%" >
-        <img  style="display:block; margin:auto;" src="images/1.jpg" />
-        <img  style="display:block; margin:auto;" src="images/2.jpg" />
-        <img  style="display:block; margin:auto;" src="images/3.jpg" />
-        <img  style="display:block; margin:auto;" src="images/4.jpg" />
-        <img  style="display:block; margin:auto;" src="images/5.jpg" />
-  </div>
+  return layout('學習歷程檔案首頁', `     
+  <div class="container" style=" margin: auto;width:90%;height:90%;">
+  <img  style="display:block; margin:auto;background-size: cover;object-fit: cover;max-height: 700px;border-radius:2em;" src="images/照片1.jpeg" />
+    <img  style="display:block; margin:auto;background-size: cover;object-fit: cover;max-height: 700px;border-radius:2em; " src="images/照片2.jpeg" />
+    <img  style="display:block; margin:auto;background-size: cover;object-fit: cover;max-height: 700px;border-radius:2em;  " src="images/照片3.jpeg" />
+    <img  style="display:block; margin:auto;background-size: cover;object-fit: cover;max-height: 700px;border-radius:2em; " src="images/照片4.jpeg" />
+    <img  style="display:block; margin:auto;background-size: cover;object-fit: cover;max-height: 700px;border-radius:2em;  " src="images/照片5.jpeg" />
+</div>
+  
     <script type="text/javascript" src="images/js/1.js"></script>
     <script type="text/javascript" src="images/js/2.js"></script>
     <script type="text/javascript" src="images/js/slick.min.js"></script>
@@ -312,35 +553,35 @@ $('.container').slick({
   autoplaySpeed: 2000,
 });
 </script>
-   
- 
   `,user)
 }
+
+
 
 export function aboutUi(user)  { 
   return layout('關於機構', `
   <map name="taiwan">
-	<area shape="poly" coords="364,36,390,35,382,54" href="place/基隆市.html">
-      <area shape="poly" coords="338,38,354,24,366,63,347,60" href="place/台北市.html">
-      <area shape="poly" coords="316,40,356,12,421,61,341,116" href="place/新北市.html">
-      <area shape="poly" coords="316,41,342,116,327,133,267,70" href="place/桃園市.html">
-      <area shape="poly" coords="264,75,323,140,316,158,268,113,281,102,260,80" href="place/新竹縣.html">
-      <area shape="poly" coords="257,90,268,101,252,105" href="place/新竹市.html">
-      <area shape="poly" coords="248,110,310,161,257,182,206,161" href="place/苗栗縣.html">
-      <area shape="poly" coords="203,165,253,189,274,188,312,169,332,179,315,199,219,236,185,199" href="place/台中市.html">
-      <area shape="poly" coords="180,203,213,231,208,265,147,262" href="place/彰化縣.html">
-      <area shape="poly" coords="147,265,207,273,219,309,172,303,131,323" href="place/雲林縣.html">
-      <area shape="poly" coords="123,326,174,303,229,313,247,331,204,366,174,341,121,348" href="place/嘉義縣.html">
-      <area shape="poly" coords="123,363,160,350,179,349,196,384,152,426,127,422" href="place/台南市.html">
-      <area shape="poly" coords="131,450,163,491,170,445,205,432,236,437,229,403,261,340" href="place/高雄市.html">
-      <area shape="poly" coords="174,505,185,457,234,450,213,478,238,562,229,597" href="place/屏東縣.html">
-      <area shape="poly" coords="237,535,226,485,247,462,265,367,429,457,362,624" href="place/台東縣.html">
-      <area shape="poly" coords="308,386,277,352,306,305,344,186,382,188,343,334" href="place/花蓮縣.html">
-      <area shape="poly" coords="321,161,405,86,387,171" href="place/宜蘭縣.html">
-      <area shape="poly" coords="311,208,272,326,213,290,218,241" href="place/南投縣.html">
-      <area shape="poly" coords="7,259,53,257,53,326,3,332" href="place/澎湖縣.html">
-      <area shape="poly" coords="10,11,114,11,118,80,12,81" href="/mechanism">
-      <area shape="poly" coords="8,93,115,92,115,164,12,165" href="place/連江縣.html">
+	    <area shape="poly" coords="364,36,390,35,382,54" href="/mechanism_kl">
+      <area shape="poly" coords="338,38,354,24,366,63,347,60" href="/mechanism_t">
+      <area shape="poly" coords="316,40,356,12,421,61,341,116" href="/mechanism_nt">
+      <area shape="poly" coords="316,41,342,116,327,133,267,70" href="/mechanism_tu">
+      <area shape="poly" coords="264,75,323,140,316,158,268,113,281,102,260,80" href="/mechanism_s">
+      <area shape="poly" coords="257,90,268,101,252,105" href="/mechanism_ss">
+      <area shape="poly" coords="248,110,310,161,257,182,206,161" href="/mechanism_m">
+      <area shape="poly" coords="203,165,253,189,274,188,312,169,332,179,315,199,219,236,185,199" href="/mechanism_tc">
+      <area shape="poly" coords="180,203,213,231,208,265,147,262" href="/mechanism_ch">
+      <area shape="poly" coords="147,265,207,273,219,309,172,303,131,323" href="/mechanism_u">
+      <area shape="poly" coords="123,326,174,303,229,313,247,331,204,366,174,341,121,348" href="/mechanism_c">
+      <area shape="poly" coords="123,363,160,350,179,349,196,384,152,426,127,422" href="/mechanism_tn">
+      <area shape="poly" coords="131,450,163,491,170,445,205,432,236,437,229,403,261,340" href="/mechanism_kh">
+      <area shape="poly" coords="174,505,185,457,234,450,213,478,238,562,229,597" href="/mechanism_pt">
+      <area shape="poly" coords="237,535,226,485,247,462,265,367,429,457,362,624" href="/mechanism_tt">
+      <area shape="poly" coords="308,386,277,352,306,305,344,186,382,188,343,334" href="/mechanism_h">
+      <area shape="poly" coords="321,161,405,86,387,171" href="/mechanism_y">
+      <area shape="poly" coords="311,208,272,326,213,290,218,241" href="/mechanism_n">
+      <area shape="poly" coords="7,259,53,257,53,326,3,332" href="/mechanism_p">
+      <area shape="poly" coords="10,11,114,11,118,80,12,81" href="/mechanism_k">
+      <area shape="poly" coords="8,93,115,92,115,164,12,165" href="/mechanism_l">
     </map>
     <img style="display:block; margin:auto;" src="/images/taiwan.png" usemap="#taiwan">
   
@@ -533,12 +774,12 @@ export function list(posts, user) {
     else if(color_choose%2==1)
     color="#eecbe7"
     list.push(`
-    <li style="background:${color}; ">
+    <li style="background:${color};border-radius:2em;min-width: 3%;box-shadow: 10px 16px 16px 0px rgba(0,0,0,0.5);">
     <p>${post.title}<a style="padding: 0" href="/delpost/${post.id}">刪除貼文</a><a style="padding: 0" href="/editpost/${post.id}">編輯貼文</a></p>
-    <p>作者：${post.username}</p>
-    <p>入學級別與實習時間：${post.body}</p>
     <p>類別：${post.content}</p>
-    <p><a padding: 0 href="/images/${post.file}">查看資料</a></p>
+    <p>作者：${post.username}</p>
+    <p>入學級別與實習時間：${post.date}</p>
+    <p><a  href="/images/${post.file}">查看資料</a></p>
     </li>
     `)
     color_choose=color_choose+1;
@@ -547,22 +788,72 @@ export function list(posts, user) {
   let content = `
   <body>
   <article>
-  <p style="border: crimson;font-size: 30px; border-top: 100px; ">${(user==null)?'':'歡迎 '+user}<a href="/post/new">上傳檔案</a><a href="/editaccount">帳號管理</a><a href="/logout">登出</a> 
   <form action="/list_custom" method="post">
-  
-  <input type="text" placeholder="關鍵字搜尋"  name="search" style="width:auto;">
-  <input type="submit" value="搜尋">
- 
-  <div class="tooltip">游標移過來
-  <span class="tooltiptext">搜尋說明：如果要搜尋"松柏園"。關鍵字打"松"或"柏""園"都可以出來歐</span>
+  <div style="margin-left:25%;margin-right:25%;">
+  <a>精準搜尋</a>  
+  <label>
+  <input type="checkbox"  name="title" value="title">
+  <span>找機構名稱</span>
+</label>
+<label>
+<input type="checkbox"  name="username" value="username">
+<span>找作者</span>
+</label>
+<label>
+<input type="checkbox"  name="content" value="content">
+  <span>找文章類別</span>
+</label>
+<div style="cursor:pointer;float:right" onclick="opensearch('mySide')"><b>&#9874 進階搜尋</b> </div>  
 </div>
-<p>進階搜尋</p>
-<input type="checkbox" id="vehicle1" name="title" value="title">
-<label for="vehicle1">機構名稱</label>
-<input type="checkbox" id="vehicle2" name="class" value="class">
-<label for="vehicle1">級別</label>
-<input type="checkbox" id="vehicle3" name="content" value="content">
-<label for="vehicle1">文章類別</label>
+<div style="text-align:center ;">
+  <div id="mySide" style="display:none;">
+      
+    <select name="date">
+    <option value="dis">依年份部別</option>
+    <option>107日間部</option>
+    <option>106日間部</option>
+    <option>105日間部</option>
+    <option>104日間部</option>
+    <option>107進修部</option>
+    <option>106進修部</option>
+    <option>105進修部</option>
+    <option>104進修部</option>
+</select>
+<select name="contents">
+    <option value="dis">依類別</option>
+    <option>兒童</option>
+    <option>少年</option>
+    <option>家庭</option>
+    <option>身障</option>
+    <option>老人</option>
+    <option>醫務</option>
+    <option>法律與政策</option>
+    <option>其他</option>
+</select>
+<select>
+<option>排序方式</option>
+<option>依機構照筆畫多到少</option>
+<option>依機構照筆畫少到多</option>
+<option>依照年份由新到舊</option>
+<option>依照年份由舊到新</option>
+<option>Parrot</option>
+<option>Spider</option>
+<option>Goldfish</option>
+</select>     
+  </div>
+
+  
+<div style="display:block;text-align:center;margin-top:2%"><input type="text" placeholder="關鍵字搜尋"  name="search" style="width:50%;"><input type="submit" value="搜尋">
+</div>
+</div>  
+  
+  <script>
+  function opensearch(oDiv) {
+    var vDiv = document.getElementById(oDiv);
+              vDiv.style.display = (vDiv.style.display == 'none')?'block':'none';
+             }
+  
+  </script>
 </form></p>
   <ul id="posts" >
     ${list.join('\n')}
@@ -572,113 +863,6 @@ export function list(posts, user) {
   `
   return layout('金大社工系學習歷程專區', content,user)
 }
-
-
-export function list_gratuate_teacher(posts, user) {
-   
-  let list = []
-  var color_choose = 1;
-  var color
-  for (let post of posts) {
-    if(color_choose%2==0)
-    color="#b0dfda"
-    else if(color_choose%2==1)
-    color="#eecbe7"
-
-    list.push(`
-   
-    <li style="background:${color}; margin:10px">
-     <p>${ post.title}<a href="/delpost/${post.id}">刪除貼文</a><a href="/editpost/${post.id}">編輯貼文</a></p>
-     <p>類別：${post.content}</p>
-     <p>作者：${post.username}</p>
-     <p>入學級別與實習時間：${post.body}</p>
-     <p><a style="padding: 0" href="/images/${post.file}">查看資料</a></p>
-     </li>
-     `)
-     color_choose=color_choose+1;
-   }
- 
-   let content = `
-   <body>
-   <article>
-   <p style="border: crimson;font-size: 30px; border-top: 100px; ">${(user==null)?'':'歡迎 '+user}<a href="/post/new">上傳檔案</a><a href="/editaccount">帳號管理</a><a href="/logout">登出</a> 
-   <form action="/list_custom" method="post">
-   
-   <input type="text" placeholder="關鍵字搜尋"  name="search" style="width:auto;">
-   <input type="submit" value="搜尋">
-  
-   <div class="tooltip">游標移過來
-   <span class="tooltiptext">搜尋說明：如果要搜尋"松柏園"。關鍵字打"松"或"柏""園"都可以出來歐</span>
- </div>
- <p>進階搜尋</p>
- <input type="checkbox" id="vehicle1" name="title" value="title">
- <label for="vehicle1">機構名稱</label>
- <input type="checkbox" id="vehicle2" name="class" value="class">
- <label for="vehicle1">級別</label>
- <input type="checkbox" id="vehicle3" name="content" value="content">
- <label for="vehicle1">文章類別</label>
- </form></p>
-   <ul id="posts">
-     ${list.join('\n')}
-   </ul>
-   </article>
-   </body>
-   `
-   return layout('金大社工系學習歷程專區', content,user)
- }
- 
- export function list_gratuate_student(posts, user) {
-   
-  let list = []
-  var color_choose = 1;
-  var color
-  for (let post of posts) {
-    if(color_choose%2==0)
-    color="#b0dfda"
-    else if(color_choose%2==1)
-    color="#eecbe7"
-
-    list.push(`
-   
-    <li style="background:${color}; margin:10px">
-     <p>${ post.title}</p>
-     <p>類別：${post.content}</p>
-     <p>作者：${post.username}</p>
-     <p>入學級別與實習時間：${post.body}</p>
-     <p><a style="padding: 0" href="/images/${post.file}">查看資料</a></p>
-     </li>
-     `)
-     color_choose=color_choose+1;
-   }
- 
-   let content = `
-   <body>
-   <article>
-   <p style="border: crimson;font-size: 30px; border-top: 100px; ">${(user==null)?'':'歡迎 '+user}<a href="/post/new">上傳檔案</a><a href="/editaccount">帳號管理</a><a href="/logout">登出</a> 
-   <form action="/list_custom" method="post">
-   
-   <input type="text" placeholder="關鍵字搜尋"  name="search" style="width:auto;">
-   <input type="submit" value="搜尋">
-  
-   <div class="tooltip">游標移過來
-   <span class="tooltiptext">搜尋說明：如果要搜尋"松柏園"。關鍵字打"松"或"柏""園"都可以出來歐</span>
- </div>
- <p>進階搜尋</p>
- <input type="checkbox" id="vehicle1" name="title" value="title">
- <label for="vehicle1">機構名稱</label>
- <input type="checkbox" id="vehicle2" name="class" value="class">
- <label for="vehicle1">級別</label>
- <input type="checkbox" id="vehicle3" name="content" value="content">
- <label for="vehicle1">文章類別</label>
- </form></p>
-   <ul id="posts">
-     ${list.join('\n')}
-   </ul>
-   </article>
-   </body>
-   `
-   return layout('金大社工系學習歷程專區', content,user)
- }
 
 
 export function liststu(posts, user) {
@@ -690,16 +874,13 @@ export function liststu(posts, user) {
     color="#b0dfda"
     else if(color_choose%2==1)
     color="#eecbe7"
-    
-
     list.push(`
-   
-    <li style="background:${color}; margin:10px">
+    <li style="background:${color};border-radius:2em;min-width: 3%;box-shadow: 10px 16px 16px 0px rgba(0,0,0,0.5);">
     <p>${post.title}</p>
-    <p>作者：${post.username}</p>
-    <p>入學級別與實習時間：${post.body}</p>
     <p>類別：${post.content}</p>
-    <p><a style="padding: 0" href="/images/${post.file}">查看資料</a></p>
+    <p>作者：${post.username}</p>
+    <p>入學級別與實習時間：${post.date}</p>
+    <p><a  href="/images/${post.file}">查看資料</a></p>
     </li>
     `)
     color_choose=color_choose+1;
@@ -708,51 +889,72 @@ export function liststu(posts, user) {
   let content = `
   <body>
   <article>
-  <p style="border: crimson;font-size: 30px; border-top: 100px; ">${(user==null)?'':'歡迎 '+user}<a href="/post/new">上傳檔案</a><a href="/editaccount">帳號管理</a><a href="/logout">登出</a> 
-  <form action="/list_custom" method="post">
-  
-  <input type="text" placeholder="關鍵字搜尋"  name="search" style="width:auto;">
-  <input type="submit" value="搜尋">
- 
-  <div class="tooltip">游標移過來
-  <span class="tooltiptext">搜尋說明：如果要搜尋"松柏園"。關鍵字打"松"或"柏""園"都可以出來歐</span>
+  <form action="/list_custom_stu" method="post">
+  <div style="margin-left:25%;margin-right:25%;">
+  <a>精準搜尋</a>  
+  <label>
+  <input type="checkbox"  name="title" value="title">
+  <span>找機構名稱</span>
+</label>
+<label>
+<input type="checkbox"  name="username" value="username">
+<span>找作者</span>
+</label>
+<label>
+<input type="checkbox"  name="content" value="content">
+  <span>找文章類別</span>
+</label>
+<div style="cursor:pointer;float:right" onclick="opensearch('mySide')"><b>&#9874 進階搜尋</b> </div>  
 </div>
-<p>進階搜尋</p>
-<input type="checkbox" id="vehicle1" name="title" value="title">
-<label for="vehicle1">機構名稱</label>
-<input type="checkbox" id="vehicle2" name="class" value="class">
-<label for="vehicle1">級別</label>
-<input type="checkbox" id="vehicle3" name="content" value="content">
-<label for="vehicle1">文章類別</label>
-<p>分類列表</p>
-<p>領域</p>
-<input type="checkbox" id="vehicle1" name="title" value="title">
-<label for="vehicle1">兒童</label>
-<input type="checkbox" id="vehicle1" name="title" value="title">
-<label for="vehicle1">少年</label>
-<input type="checkbox" id="vehicle1" name="title" value="title">
-<label for="vehicle1">家庭</label>
-<input type="checkbox" id="vehicle1" name="title" value="title">
-<label for="vehicle1">身障</label>
-<input type="checkbox" id="vehicle1" name="title" value="title">
-<label for="vehicle1">老人</label>
-<input type="checkbox" id="vehicle1" name="title" value="title">
-<label for="vehicle1">醫務</label>
-<input type="checkbox" id="vehicle1" name="title" value="title">
-<label for="vehicle1">法律與政策</label>
-<input type="checkbox" id="vehicle1" name="title" value="title">
-<label for="vehicle1">其他</label>
-<p>年度</p> 
-<input type="checkbox" id="vehicle1" name="title" value="title">
-<label for="vehicle1">104年度</label>
-<input type="checkbox" id="vehicle1" name="title" value="title">
-<label for="vehicle1">105年度</label>
-<input type="checkbox" id="vehicle1" name="title" value="title">
-<label for="vehicle1">106年度</label>
-<input type="checkbox" id="vehicle1" name="title" value="title">
-<label for="vehicle1">107年度</label>
+<div style="text-align:center ;">
+  <div id="mySide" style="display:none;">
+      
+    <select name="date">
+    <option value="dis">依年份部別</option>
+    <option>107日間部</option>
+    <option>106日間部</option>
+    <option>105日間部</option>
+    <option>104日間部</option>
+    <option>107進修部</option>
+    <option>106進修部</option>
+    <option>105進修部</option>
+    <option>104進修部</option>
+</select>
+<select name="contents">
+    <option value="dis">依類別</option>
+    <option>兒童</option>
+    <option>少年</option>
+    <option>家庭</option>
+    <option>身障</option>
+    <option>老人</option>
+    <option>醫務</option>
+    <option>法律與政策</option>
+    <option>其他</option>
+</select>
+<select>
+<option>排序方式</option>
+<option>依機構照筆畫多到少</option>
+<option>依機構照筆畫少到多</option>
+<option>依照年份由新到舊</option>
+<option>依照年份由舊到新</option>
+<option>Parrot</option>
+<option>Spider</option>
+<option>Goldfish</option>
+</select>     
+  </div>
 
-
+  
+<div style="display:block;text-align:center;margin-top:2%"><input type="text" placeholder="關鍵字搜尋"  name="search" style="width:50%;"><input type="submit" value="搜尋">
+</div>
+</div>  
+  
+  <script>
+  function opensearch(oDiv) {
+    var vDiv = document.getElementById(oDiv);
+              vDiv.style.display = (vDiv.style.display == 'none')?'block':'none';
+             }
+  
+  </script>
 </form></p>
   <ul id="posts" >
     ${list.join('\n')}
@@ -762,6 +964,7 @@ export function liststu(posts, user) {
   `
   return layout('金大社工系學習歷程專區', content,user)
 }
+
 
 
 export function newPost(args={}) {
@@ -836,50 +1039,6 @@ export function newPost(args={}) {
   `
   )
 }
-
-
-/*export function newPoststu(args={}) {
-  var alertScript
-  if(args.status=='請上傳檔案')
-  {
- alertScript=`<script>
-  alert('${args.status}')
-  </script>`
-  }
-  else
-  alertScript=''
-  return layout('New Post',
- 
-  `    
-  <body>
-    <h1>新貼文</h1>
-    <form action="/poststu" enctype="multipart/form-data" method="post" >
-      <p><input type="text" placeholder="機構名稱(全名)" name="title"></p>
-      
-      <p><select name="content">
-      <option value="">文章類別</option>
-      <option value="兒少">兒少</option>
-      <option value="家庭" >家庭</option>
-      <option value="身心障礙">身心障礙</option>
-      <option value="老人與長照">老人與長照</option>
-      <option value="婦女">婦女</option>
-      <option value="law">法律與政策</option>
-      <option value="Medical">醫務</option>
-      <option value="other" >其他</option>
-    </select></p>
-      <p><textarea placeholder="心得或給學弟妹的建議" name="body"></textarea></p>
-      <p>檔案上傳: <input type="file" name="file"/></p>
-      <p><input type="submit" value="新增"></p>
-    </form>
-  </body>
-  ${alertScript}
-  
-  
-  `
-  )
-}*/
-
-
 
 
 export function editpostui(post,args={}) {
@@ -984,11 +1143,11 @@ export function mechanism(posts, user) {
     list.push(`
    
     <li style="background:${color}; margin:10px">
-    <p>${post.title}<a style="padding: 0" href="/delpost/${post.id}">刪除貼文</a><a style="padding: 0" href="/editpost/${post.id}">編輯貼文</a></p>
-    <p>作者：${post.username}</p>
-    <p>入學級別與實習時間：${post.body}</p>
-    <p>類別：${post.content}</p>
-    <p><a padding: 0 href="/images/${post.file}">查看資料</a></p>
+    <p>${post.title}</p>
+    <p>地址：</p>
+    <p>電話：</p>
+    <p>機構網站：</p>
+    <p>哪些學長姐：</p>
     </li>
     `)
     color_choose=color_choose+1;
@@ -997,7 +1156,6 @@ export function mechanism(posts, user) {
   let content = `
   <body>
   <article>
-  <p style="border: crimson;font-size: 30px; border-top: 100px; ">${(user==null)?'':'歡迎 '+user}<a href="/post/new">上傳檔案</a><a href="/editaccount">帳號管理</a><a href="/logout">登出</a> 
   <form action="/list_custom" method="post">
   
   <input type="text" placeholder="關鍵字搜尋"  name="search" style="width:auto;">
@@ -1006,7 +1164,7 @@ export function mechanism(posts, user) {
   <div class="tooltip">游標移過來
   <span class="tooltiptext">搜尋說明：如果要搜尋"松柏園"。關鍵字打"松"或"柏""園"都可以出來歐</span>
 </div>
-<p>進階搜尋</p>
+<p>精準搜尋</p>
 <input type="checkbox" id="vehicle1" name="title" value="title">
 <label for="vehicle1">機構名稱</label>
 <input type="checkbox" id="vehicle2" name="class" value="class">
@@ -1020,5 +1178,8 @@ export function mechanism(posts, user) {
   </article>
   </body>
   `
-  return layout('金大社工系學習歷程專區', content,user)
+  return layout('關於機構', content,user)
 }
+/*<div class="tooltip">游標移過來
+  <span class="tooltiptext">搜尋說明：如果要搜尋"松柏園"。關鍵字打"松"或"柏""園"都可以出來歐</span>
+</div>*/
