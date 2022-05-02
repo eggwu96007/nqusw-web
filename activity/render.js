@@ -236,7 +236,7 @@ li p
     /*上面是navbar*/
     
 /*大小設定*/
-        @media (min-width:400px){ 
+        @media (min-width:0px){ 
           .see{display:inline}
           .nosee{display: none}
           .dropbtn1{display:none}
@@ -432,7 +432,7 @@ export function list_graduate_student(posts, user) {
     color="#eecbe7"
     list.push(`
     <li style="background:${color};border-radius:2em;min-width: 3%;box-shadow: 10px 16px 16px 0px rgba(0,0,0,0.5);">
-    <p>${post.title}<a style="padding: 0" href="/delpost/${post.id}">刪除貼文</a><a style="padding: 0" href="/editpost/${post.id}">編輯貼文</a></p>
+    <p>${post.title}</p>
     <p>類別：${post.content}</p>
     <p>作者：${post.username}</p>
     <p>入學級別與實習時間：${post.date}</p>
@@ -1130,6 +1130,7 @@ export function show(post) {
 }
 
 export function mechanism(posts, user) {
+  console.log("這個是啥",user)
   let list = []
   var color_choose = 1;
   var color
@@ -1138,11 +1139,8 @@ export function mechanism(posts, user) {
     color="#b0dfda"
     else if(color_choose%2==1)
     color="#eecbe7"
-    
-
     list.push(`
-   
-    <li style="background:${color}; margin:10px">
+    <li style="background:${color};border-radius:2em;min-width: 3%;box-shadow: 10px 16px 16px 0px rgba(0,0,0,0.5);">
     <p>${post.title}</p>
     <p>地址：</p>
     <p>電話：</p>
@@ -1156,21 +1154,72 @@ export function mechanism(posts, user) {
   let content = `
   <body>
   <article>
-  <form action="/list_custom" method="post">
-  
-  <input type="text" placeholder="關鍵字搜尋"  name="search" style="width:auto;">
-  <input type="submit" value="搜尋">
- 
-  <div class="tooltip">游標移過來
-  <span class="tooltiptext">搜尋說明：如果要搜尋"松柏園"。關鍵字打"松"或"柏""園"都可以出來歐</span>
+  <form action="/list_graduate_custom" method="post">
+  <div style="margin-left:25%;margin-right:25%;">
+  <a>精準搜尋</a>  
+  <label>
+  <input type="checkbox"  name="title" value="title">
+  <span>找機構名稱</span>
+</label>
+<label>
+<input type="checkbox"  name="username" value="username">
+<span>找作者</span>
+</label>
+<label>
+<input type="checkbox"  name="content" value="content">
+  <span>找文章類別</span>
+</label>
+<div style="cursor:pointer;float:right" onclick="opensearch('mySide')"><b>&#9874 進階搜尋</b> </div>  
 </div>
-<p>精準搜尋</p>
-<input type="checkbox" id="vehicle1" name="title" value="title">
-<label for="vehicle1">機構名稱</label>
-<input type="checkbox" id="vehicle2" name="class" value="class">
-<label for="vehicle1">級別</label>
-<input type="checkbox" id="vehicle3" name="content" value="content">
-<label for="vehicle1">文章類別</label>
+<div style="text-align:center ;">
+  <div id="mySide" style="display:none;">
+      
+    <select name="date">
+    <option value="dis">依年份部別</option>
+    <option>107日間部</option>
+    <option>106日間部</option>
+    <option>105日間部</option>
+    <option>104日間部</option>
+    <option>107進修部</option>
+    <option>106進修部</option>
+    <option>105進修部</option>
+    <option>104進修部</option>
+</select>
+<select name="contents">
+    <option value="dis">依類別</option>
+    <option>兒童</option>
+    <option>少年</option>
+    <option>家庭</option>
+    <option>身障</option>
+    <option>老人</option>
+    <option>醫務</option>
+    <option>法律與政策</option>
+    <option>其他</option>
+</select>
+<select>
+<option>排序方式</option>
+<option>依機構照筆畫多到少</option>
+<option>依機構照筆畫少到多</option>
+<option>依照年份由新到舊</option>
+<option>依照年份由舊到新</option>
+<option>Parrot</option>
+<option>Spider</option>
+<option>Goldfish</option>
+</select>     
+  </div>
+
+  
+<div style="display:block;text-align:center;margin-top:2%"><input type="text" placeholder="關鍵字搜尋"  name="search" style="width:50%;"><input type="submit" value="搜尋">
+</div>
+</div>  
+  
+  <script>
+  function opensearch(oDiv) {
+    var vDiv = document.getElementById(oDiv);
+              vDiv.style.display = (vDiv.style.display == 'none')?'block':'none';
+             }
+  
+  </script>
 </form></p>
   <ul id="posts" >
     ${list.join('\n')}

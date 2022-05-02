@@ -432,7 +432,7 @@ async function mechanism(ctx) {
     op = op || 'ASC'
       
     var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%金門縣%') AND (date LIKE '%實習%') group by title `)
-    ctx.response.body = await render.mechanism(posts,usercheck.username);
+    ctx.response.body = await render.mechanism(posts,usercheck);
     }
 
   }
@@ -1631,7 +1631,7 @@ async function mechanism_kl(ctx) {
     op = op || 'ASC'
       
     var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%基隆%') AND (date LIKE '%實習%') group by title `)
-    ctx.response.body = await render.mechanism(posts,usercheck.username);
+    ctx.response.body = await render.mechanism(posts,usercheck);
     }
 
   }
@@ -1654,7 +1654,7 @@ async function mechanism_t(ctx) {
       op = op || 'ASC'
         
       var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%台北%') AND (date LIKE '%實習%') group by title `)
-      ctx.response.body = await render.mechanism(posts,usercheck.username);
+      ctx.response.body = await render.mechanism(posts,usercheck);
       }
   
     }
@@ -1677,7 +1677,7 @@ async function mechanism_nt(ctx) {
         op = op || 'ASC'
           
         var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%新北%') AND (date LIKE '%實習%') group by title `)
-        ctx.response.body = await render.mechanism(posts,usercheck.username);
+        ctx.response.body = await render.mechanism(posts,usercheck);
         }
     
       }
@@ -1700,7 +1700,7 @@ async function mechanism_tu(ctx) {
           op = op || 'ASC'
             
           var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%桃園%') AND (date LIKE '%實習%') group by title `)
-          ctx.response.body = await render.mechanism(posts,usercheck.username);
+          ctx.response.body = await render.mechanism(posts,usercheck);
           }
       
         }
@@ -1723,7 +1723,7 @@ async function mechanism_s(ctx) {
             op = op || 'ASC'
               
             var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%新竹縣%') AND (date LIKE '%實習%') group by title `)
-            ctx.response.body = await render.mechanism(posts,usercheck.username);
+            ctx.response.body = await render.mechanism(posts,usercheck);
             }
         
           }
@@ -1746,7 +1746,7 @@ async function mechanism_ss(ctx) {
               op = op || 'ASC'
                 
               var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%新竹縣%') AND (date LIKE '%實習%') group by title `)
-              ctx.response.body = await render.mechanism(posts,usercheck.username);
+              ctx.response.body = await render.mechanism(posts,usercheck);
               }
           
             }
@@ -1769,7 +1769,7 @@ async function mechanism_m(ctx) {
                 op = op || 'ASC'
                   
                 var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%苗栗%') AND (date LIKE '%實習%') group by title `)
-                ctx.response.body = await render.mechanism(posts,usercheck.username);
+                ctx.response.body = await render.mechanism(posts,usercheck);
                 }
             
               }
@@ -1792,7 +1792,7 @@ async function mechanism_tc(ctx) {
                   op = op || 'ASC'
                     
                   var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%台中%') AND (date LIKE '%實習%') group by title `)
-                  ctx.response.body = await render.mechanism(posts,usercheck.username);
+                  ctx.response.body = await render.mechanism(posts,usercheck);
                   }
               
                 }
@@ -1815,7 +1815,7 @@ async function mechanism_ch(ctx) {
                     op = op || 'ASC'
                       
                     var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%彰化%') AND (date LIKE '%實習%') group by title `)
-                    ctx.response.body = await render.mechanism(posts,usercheck.username);
+                    ctx.response.body = await render.mechanism(posts,usercheck);
                     }
                 
                   }
@@ -1838,7 +1838,7 @@ async function mechanism_u(ctx) {
                       op = op || 'ASC'
                         
                       var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%雲林%') AND (date LIKE '%實習%') group by title `)
-                      ctx.response.body = await render.mechanism(posts,usercheck.username);
+                      ctx.response.body = await render.mechanism(posts,usercheck);
                       }
                   
                     }
@@ -1861,7 +1861,7 @@ async function mechanism_c(ctx) {
                         op = op || 'ASC'
                           
                         var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%嘉義%') AND (date LIKE '%實習%') group by title `)
-                        ctx.response.body = await render.mechanism(posts,usercheck.username);
+                        ctx.response.body = await render.mechanism(posts,usercheck);
                         }
                     
                       }
@@ -1884,7 +1884,7 @@ async function mechanism_tn(ctx) {
                           op = op || 'ASC'
                             
                           var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%台南%') AND (date LIKE '%實習%') group by title `)
-                          ctx.response.body = await render.mechanism(posts,usercheck.username);
+                          ctx.response.body = await render.mechanism(posts,usercheck);
                           }
                       
                         }
@@ -1907,7 +1907,7 @@ async function mechanism_kh(ctx) {
                             op = op || 'ASC'
                               
                             var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%高雄%') AND (date LIKE '%實習%') group by title `)
-                            ctx.response.body = await render.mechanism(posts,usercheck.username);
+                            ctx.response.body = await render.mechanism(posts,usercheck);
                             }
                         
                           }
@@ -1930,7 +1930,7 @@ async function mechanism_pt(ctx) {
                               op = op || 'ASC'
                                 
                               var posts = postQuery(`select id, username, title,date,file,content from posts WHERE(title LIKE '%屏東%') AND (date LIKE '%實習%') group by title `)
-                              ctx.response.body = await render.mechanism(posts,usercheck.username);
+                              ctx.response.body = await render.mechanism(posts,usercheck);
                               }
                           
                             }
@@ -1953,7 +1953,7 @@ async function mechanism_tt(ctx) {
                                 op = op || 'ASC'
                                   
                                 var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%台東%') AND (date LIKE '%實習%') group by title `)
-                                ctx.response.body = await render.mechanism(posts,usercheck.username);
+                                ctx.response.body = await render.mechanism(posts,usercheck);
                                 }
                             
                               }
@@ -1976,7 +1976,7 @@ async function mechanism_h(ctx) {
                                   op = op || 'ASC'
                                     
                                   var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%花蓮%') AND (date LIKE '%實習%') group by title `)
-                                  ctx.response.body = await render.mechanism(posts,usercheck.username);
+                                  ctx.response.body = await render.mechanism(posts,usercheck);
                                   }
                               
                                 }
@@ -1999,7 +1999,7 @@ async function mechanism_y(ctx) {
                                     op = op || 'ASC'
                                       
                                     var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%宜蘭%') AND (date LIKE '%實習%') group by title `)
-                                    ctx.response.body = await render.mechanism(posts,usercheck.username);
+                                    ctx.response.body = await render.mechanism(posts,usercheck);
                                     }
                                 
                                   }
@@ -2022,7 +2022,7 @@ async function mechanism_n(ctx) {
                                       op = op || 'ASC'
                                         
                                       var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%南投%') AND (date LIKE '%實習%') group by title `)
-                                      ctx.response.body = await render.mechanism(posts,usercheck.username);
+                                      ctx.response.body = await render.mechanism(posts,usercheck);
                                       }
                                   
                                     }
@@ -2045,7 +2045,7 @@ async function mechanism_p(ctx) {
                                         op = op || 'ASC'
                                           
                                         var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%澎湖%') AND (date LIKE '%實習%') group by title `)
-                                        ctx.response.body = await render.mechanism(posts,usercheck.username);
+                                        ctx.response.body = await render.mechanism(posts,usercheck);
                                         }
                                     
                                       }
@@ -2068,7 +2068,7 @@ async function mechanism_k(ctx) {
                                           op = op || 'ASC'
                                             
                                           var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%金門縣%') AND (date LIKE '%實習%') group by title `)
-                                          ctx.response.body = await render.mechanism(posts,usercheck.username);
+                                          ctx.response.body = await render.mechanism(posts,usercheck);
                                           }
                                       
                                         }                        
@@ -2091,14 +2091,11 @@ async function mechanism_l(ctx) {
                                             op = op || 'ASC'
                                               
                                             var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%連江%') AND (date LIKE '%實習%') group by title `)
-                                            ctx.response.body = await render.mechanism(posts,usercheck.username);
+                                            ctx.response.body = await render.mechanism(posts,usercheck);
                                             }
                                         
                                           }
                                           
-
-
-
 console.log('Server run at http://127.0.0.1:8025/home');
 
 await app.listen({port: 8025 });
