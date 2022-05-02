@@ -240,13 +240,14 @@ li p
           .see{display:inline}
           .nosee{display: none}
           .dropbtn1{display:none}
-          
+          .homepagebutton{display:block}
         }
 
           @media (min-width:1000px){
             .see{display:none}
           .nosee{display:inline}
           .dropbtn1{display:inline-block}
+          .homepagebutton{display:none}
         }
 
        
@@ -533,14 +534,14 @@ export function middle(args={},user){
 
 export function homeUi(user)  { 
   return layout('學習歷程檔案首頁', `     
-  <div class="container" style=" margin: auto;width:90%;height:90%;">
-  <img  style="display:block; margin:auto;background-size: cover;object-fit: cover;max-height: 700px;border-radius:2em;" src="images/照片1.jpeg" />
-    <img  style="display:block; margin:auto;background-size: cover;object-fit: cover;max-height: 700px;border-radius:2em; " src="images/照片2.jpeg" />
-    <img  style="display:block; margin:auto;background-size: cover;object-fit: cover;max-height: 700px;border-radius:2em;  " src="images/照片3.jpeg" />
-    <img  style="display:block; margin:auto;background-size: cover;object-fit: cover;max-height: 700px;border-radius:2em; " src="images/照片4.jpeg" />
-    <img  style="display:block; margin:auto;background-size: cover;object-fit: cover;max-height: 700px;border-radius:2em;  " src="images/照片5.jpeg" />
-</div>
-  
+  <img  style="display:block; margin:auto;width:90%;height:90%;background-size: cover;object-fit: cover;max-height: 700px;border-radius:2em;" src="images/照片1.jpeg" />
+   
+  <div class="see" style="margin:auto;border-style:dotted;border-color:green">
+  <img  style="width:40%;" src="images/畢業專題.PNG" />
+  <img  style="width:40%;" src="images/實習報告書.PNG" />
+  <img  style="width:40%;" src="images/關於機構.PNG" />
+  <img  style="width:40%;" src="images/聯絡我們.PNG" />
+  </div>
     <script type="text/javascript" src="images/js/1.js"></script>
     <script type="text/javascript" src="images/js/2.js"></script>
     <script type="text/javascript" src="images/js/slick.min.js"></script>
@@ -1142,10 +1143,10 @@ export function mechanism(posts, user) {
     list.push(`
     <li style="background:${color};border-radius:2em;min-width: 3%;box-shadow: 10px 16px 16px 0px rgba(0,0,0,0.5);">
     <p>${post.title}</p>
-    <p>地址：</p>
-    <p>電話：</p>
-    <p>機構網站：</p>
-    <p>哪些學長姐：</p>
+    <p><a href="https://www.google.com.tw/maps/place/${post.telent}">地址：${post.telent}</a></p>
+    <p>電話：${post.address}</p>
+    <p><a href="${post.web}">前往機構網站</a></p>
+ 
     </li>
     `)
     color_choose=color_choose+1;

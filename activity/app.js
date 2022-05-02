@@ -6,7 +6,7 @@ import { multiParser} from 'https://deno.land/x/multiparser@v2.1.0/mod.ts'
 import { oakCors } from "https://deno.land/x/cors/mod.ts";
 
 const db = new DB("blog.db");
-db.query("CREATE TABLE IF NOT EXISTS posts (id INTEGER PRIMARY KEY AUTOINCREMENT,title TEXT, username TEXT, date TEXT, file TEXT , content TEXT)");
+db.query("CREATE TABLE IF NOT EXISTS posts (id INTEGER PRIMARY KEY AUTOINCREMENT,title TEXT, username TEXT, date TEXT, file TEXT , content TEXT,web TEXT,address TEXT,telent TEXT)");
 db.query("CREATE TABLE IF NOT EXISTS users_student (id INTEGER PRIMARY KEY AUTOINCREMENT, account TEXT, password TEXT, username TEXT)");
 db.query("CREATE TABLE IF NOT EXISTS users_teacher (id INTEGER PRIMARY KEY AUTOINCREMENT, account TEXT, password TEXT, username TEXT)");
 
@@ -110,8 +110,8 @@ function sqlcmd(sql, arg1) {
 
 function postQuery(sql) {
   let list = []
-  for (const [id, username, title, date,file,content] of sqlcmd(sql)) {
-    list.push({id, username, title, date,file,content})
+  for (const [id, username, title, date,file,content,web,address,telent] of sqlcmd(sql)) {
+    list.push({id, username, title, date,file,content,web,address,telent})
     
   }
   return list
@@ -431,7 +431,7 @@ async function mechanism(ctx) {
     let op = ctx.request.url.searchParams.get('op')
     op = op || 'ASC'
       
-    var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%金門縣%') AND (date LIKE '%實習%') group by title `)
+    var posts = postQuery(`select id, username, title, date,file,content,web,telent,address from posts WHERE(title LIKE '%金門縣%') AND (date LIKE '%實習%') group by title `)
     ctx.response.body = await render.mechanism(posts,usercheck);
     }
 
@@ -460,7 +460,7 @@ async function list(ctx) {
     orderby = orderby || 'id'
     let op = ctx.request.url.searchParams.get('op')
     op = op || 'ASC'
-    var posts = postQuery(`SELECT id,username, title, date ,file,content FROM posts WHERE date LIKE '%實習%';`) 
+    var posts = postQuery(`SELECT id,username, title, date ,file,content,web,address,telent FROM posts WHERE date LIKE '%實習%';`) 
     if(roots!=null)
     ctx.response.body = await render.list(posts,usercheck);
     else if(users!=null)
@@ -558,24 +558,24 @@ async function list_custom(ctx) {
              str=str+"OR title LIKE '%" + see[i]+ "%' OR content LIKE '%"+see[i]+ "%' OR username LIKE '%"+see[i]+  "%' OR date LIKE '%" +see[i]+"%'" 
              i++;
             } 
-            var posts = postQuery(`SELECT id,username, title, date ,file,content FROM posts WHERE (date LIKE '%實習%') ${str_condition}  AND (username LIKE '%eggwu好帥%'${str}) ORDER BY id DESC ;`) 
+            var posts = postQuery(`SELECT id,username, title, date ,file,content,web,address,telent FROM posts WHERE (date LIKE '%實習%') ${str_condition}  AND (username LIKE '%eggwu好帥%'${str}) ORDER BY id DESC ;`) 
           }
   
           
          if(str_condition=="")
          {
-          var posts = postQuery(`SELECT id,username, title, date ,file,content FROM posts WHERE (date LIKE '%實習%') AND (username LIKE '%eggwu好帥%'${str}) ORDER BY id DESC ;`) 
+          var posts = postQuery(`SELECT id,username, title, date ,file,content,web,address,telent FROM posts WHERE (date LIKE '%實習%') AND (username LIKE '%eggwu好帥%'${str}) ORDER BY id DESC ;`) 
           console.log("跑1") 
         }
           if(str_condition!=""&&str=="")
          {
-          var posts = postQuery(`SELECT id,username, title, date ,file,content FROM posts WHERE (date LIKE '%實習%') ${str_condition}  ORDER BY id DESC ;`) 
+          var posts = postQuery(`SELECT id,username, title, date ,file,content,web,address,telent FROM posts WHERE (date LIKE '%實習%') ${str_condition}  ORDER BY id DESC ;`) 
           console.log("跑2",str)
          }
           
          if(str_condition!=""&&str!="")
           {
-            var posts = postQuery(`SELECT id,username, title, date ,file,content FROM posts WHERE (date LIKE '%實習%') ${str_condition}  AND (username LIKE '%eggwu好帥%'${str}) ORDER BY id DESC ;`) 
+            var posts = postQuery(`SELECT id,username, title, date ,file,content,web,address,telent FROM posts WHERE (date LIKE '%實習%') ${str_condition}  AND (username LIKE '%eggwu好帥%'${str}) ORDER BY id DESC ;`) 
             console.log("跑3")
           }
           ctx.response.body = await render.list(posts,usercheck);
@@ -678,24 +678,24 @@ async function list_custom_stu(ctx) {
                str=str+"OR title LIKE '%" + see[i]+ "%' OR content LIKE '%"+see[i]+ "%' OR username LIKE '%"+see[i]+  "%' OR date LIKE '%" +see[i]+"%'" 
                i++;
               } 
-              var posts = postQuery(`SELECT id,username, title, date ,file,content FROM posts WHERE (date LIKE '%實習%') ${str_condition}  AND (username LIKE '%eggwu好帥%'${str}) ORDER BY id DESC ;`) 
+              var posts = postQuery(`SELECT id,username, title, date ,file,content,web,address,telent FROM posts WHERE (date LIKE '%實習%') ${str_condition}  AND (username LIKE '%eggwu好帥%'${str}) ORDER BY id DESC ;`) 
             }
     
             
            if(str_condition=="")
            {
-            var posts = postQuery(`SELECT id,username, title, date ,file,content FROM posts WHERE (date LIKE '%實習%') AND (username LIKE '%eggwu好帥%'${str}) ORDER BY id DESC ;`) 
+            var posts = postQuery(`SELECT id,username, title, date ,file,content,web,address,telent FROM posts WHERE (date LIKE '%實習%') AND (username LIKE '%eggwu好帥%'${str}) ORDER BY id DESC ;`) 
             console.log("跑1") 
           }
             if(str_condition!=""&&str=="")
            {
-            var posts = postQuery(`SELECT id,username, title, date ,file,content FROM posts WHERE (date LIKE '%實習%') ${str_condition}  ORDER BY id DESC ;`) 
+            var posts = postQuery(`SELECT id,username, title, date ,file,content,web,address,telent FROM posts WHERE (date LIKE '%實習%') ${str_condition}  ORDER BY id DESC ;`) 
             console.log("跑2",str)
            }
             
            if(str_condition!=""&&str!="")
             {
-              var posts = postQuery(`SELECT id,username, title, date ,file,content FROM posts WHERE (date LIKE '%實習%') ${str_condition}  AND (username LIKE '%eggwu好帥%'${str}) ORDER BY id DESC ;`) 
+              var posts = postQuery(`SELECT id,username, title, date ,file,content,web,address,telent FROM posts WHERE (date LIKE '%實習%') ${str_condition}  AND (username LIKE '%eggwu好帥%'${str}) ORDER BY id DESC ;`) 
               console.log("跑3")
             }
             ctx.response.body = await render.liststu(posts,usercheck);
@@ -720,7 +720,7 @@ async function list_graduate(ctx) {
         var roots = root[0]
         var user = userQuery(`SELECT id, account, password, username FROM users_student WHERE username='${usercheck.username}'`)
         var users = user[0]
-        var posts = postQuery(`SELECT id,username, title, date ,file,content FROM posts WHERE date LIKE '%畢業專題%';`) 
+        var posts = postQuery(`SELECT id,username, title, date ,file,content,web,address,telent FROM posts WHERE date LIKE '%畢業專題%';`) 
         if(roots!=null)
           ctx.response.body = await render.list_graduate_teacher(posts,roots);
         else if(users!=null)
@@ -880,24 +880,24 @@ async function list_graduate_custom_root(ctx) {
            str=str+"OR title LIKE '%" + see[i]+ "%' OR content LIKE '%"+see[i]+ "%' OR username LIKE '%"+see[i]+  "%' OR date LIKE '%" +see[i]+"%'" 
            i++;
           } 
-          var posts = postQuery(`SELECT id,username, title, date ,file,content FROM posts WHERE (date LIKE '%專題%') ${str_condition}  AND (username LIKE '%eggwu好帥%'${str}) ORDER BY id DESC ;`) 
+          var posts = postQuery(`SELECT id,username, title, date ,file,content,web,address,telent FROM posts WHERE (date LIKE '%專題%') ${str_condition}  AND (username LIKE '%eggwu好帥%'${str}) ORDER BY id DESC ;`) 
         }
 
         
        if(str_condition=="")
        {
-        var posts = postQuery(`SELECT id,username, title, date ,file,content FROM posts WHERE (date LIKE '%專題%') AND (username LIKE '%eggwu好帥%'${str}) ORDER BY id DESC ;`) 
+        var posts = postQuery(`SELECT id,username, title, date ,file,content,web,address,telent FROM posts WHERE (date LIKE '%專題%') AND (username LIKE '%eggwu好帥%'${str}) ORDER BY id DESC ;`) 
         console.log("跑1") 
       }
         if(str_condition!=""&&str=="")
        {
-        var posts = postQuery(`SELECT id,username, title, date ,file,content FROM posts WHERE (date LIKE '%專題%') ${str_condition}  ORDER BY id DESC ;`) 
+        var posts = postQuery(`SELECT id,username, title, date ,file,content,web,address,telent FROM posts WHERE (date LIKE '%專題%') ${str_condition}  ORDER BY id DESC ;`) 
         console.log("跑2",str)
        }
         
        if(str_condition!=""&&str!="")
         {
-          var posts = postQuery(`SELECT id,username, title, date ,file,content FROM posts WHERE (date LIKE '%專題%') ${str_condition}  AND (username LIKE '%eggwu好帥%'${str}) ORDER BY id DESC ;`) 
+          var posts = postQuery(`SELECT id,username, title, date ,file,content,web,address,telent FROM posts WHERE (date LIKE '%專題%') ${str_condition}  AND (username LIKE '%eggwu好帥%'${str}) ORDER BY id DESC ;`) 
           console.log("跑3")
         }
         ctx.response.body = await render.list(posts,usercheck);
@@ -999,24 +999,24 @@ async function list_graduate_custom(ctx) {
                str=str+"OR title LIKE '%" + see[i]+ "%' OR content LIKE '%"+see[i]+ "%' OR username LIKE '%"+see[i]+  "%' OR date LIKE '%" +see[i]+"%'" 
                i++;
               } 
-              var posts = postQuery(`SELECT id,username, title, date ,file,content FROM posts WHERE (date LIKE '%專題%') ${str_condition}  AND (username LIKE '%eggwu好帥%'${str}) ORDER BY id DESC ;`) 
+              var posts = postQuery(`SELECT id,username, title, date ,file,content,web,address,telent FROM posts WHERE (date LIKE '%專題%') ${str_condition}  AND (username LIKE '%eggwu好帥%'${str}) ORDER BY id DESC ;`) 
             }
     
             
            if(str_condition=="")
            {
-            var posts = postQuery(`SELECT id,username, title, date ,file,content FROM posts WHERE (date LIKE '%專題%') AND (username LIKE '%eggwu好帥%'${str}) ORDER BY id DESC ;`) 
+            var posts = postQuery(`SELECT id,username, title, date ,file,content,web,address,telent FROM posts WHERE (date LIKE '%專題%') AND (username LIKE '%eggwu好帥%'${str}) ORDER BY id DESC ;`) 
             console.log("跑1") 
           }
             if(str_condition!=""&&str=="")
            {
-            var posts = postQuery(`SELECT id,username, title, date ,file,content FROM posts WHERE (date LIKE '%專題%') ${str_condition}  ORDER BY id DESC ;`) 
+            var posts = postQuery(`SELECT id,username, title, date ,file,content,web,address,telent FROM posts WHERE (date LIKE '%專題%') ${str_condition}  ORDER BY id DESC ;`) 
             console.log("跑2",str)
            }
             
            if(str_condition!=""&&str!="")
             {
-              var posts = postQuery(`SELECT id,username, title, date ,file,content FROM posts WHERE (date LIKE '%專題%') ${str_condition}  AND (username LIKE '%eggwu好帥%'${str}) ORDER BY id DESC ;`) 
+              var posts = postQuery(`SELECT id,username, title, date ,file,content,web,address,telent FROM posts WHERE (date LIKE '%專題%') ${str_condition}  AND (username LIKE '%eggwu好帥%'${str}) ORDER BY id DESC ;`) 
               console.log("跑3")
             }
             ctx.response.body = await render.liststu(posts,usercheck);
@@ -1236,7 +1236,7 @@ async function editpost(ctx)
       var user = await ctx.state.session.get('user')
       var pattern=/[`~!@#$%^&*()_+<>?:"{},.\/;'[\]]/im;
       var pattern_only=/[`@#$%^&*_+<>{}\/[\]]/im;
-      let posts = postQuery(`SELECT id, username, title, date,file,content FROM posts WHERE id=${pid}`)
+      let posts = postQuery(`SELECT id, username, title, date,file,content,web,telent,address FROM posts WHERE id=${pid}`)
       let post = posts[0]
         if (form ) {
           var filename = form.files.file.filename
@@ -1607,7 +1607,7 @@ async function create(ctx) {
 /*1223check */
 async function show(ctx) {
   const pid = ctx.params.id;
-  let posts = postQuery(`SELECT id, username, title, date,file,content FROM posts WHERE id=${pid}`)
+  let posts = postQuery(`SELECT id, username, title, date,file,content,web,telent,address FROM posts WHERE id=${pid}`)
   let post = posts[0]
   if (!post) ctx.throw(404, 'invalid post id');
   ctx.response.body = await render.show(post);
@@ -1630,7 +1630,7 @@ async function mechanism_kl(ctx) {
     let op = ctx.request.url.searchParams.get('op')
     op = op || 'ASC'
       
-    var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%基隆%') AND (date LIKE '%實習%') group by title `)
+    var posts = postQuery(`select id, username, title, date,file,content,web,telent,address from posts WHERE(title LIKE '%基隆%') AND (date LIKE '%實習%') group by title `)
     ctx.response.body = await render.mechanism(posts,usercheck);
     }
 
@@ -1653,7 +1653,7 @@ async function mechanism_t(ctx) {
       let op = ctx.request.url.searchParams.get('op')
       op = op || 'ASC'
         
-      var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%台北%') AND (date LIKE '%實習%') group by title `)
+      var posts = postQuery(`select id, username, title, date,file,content,web,telent,address from posts WHERE(title LIKE '%台北%') AND (date LIKE '%實習%') group by title `)
       ctx.response.body = await render.mechanism(posts,usercheck);
       }
   
@@ -1676,7 +1676,7 @@ async function mechanism_nt(ctx) {
         let op = ctx.request.url.searchParams.get('op')
         op = op || 'ASC'
           
-        var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%新北%') AND (date LIKE '%實習%') group by title `)
+        var posts = postQuery(`select id, username, title, date,file,content,web,telent,address from posts WHERE(title LIKE '%新北%') AND (date LIKE '%實習%') group by title `)
         ctx.response.body = await render.mechanism(posts,usercheck);
         }
     
@@ -1699,7 +1699,7 @@ async function mechanism_tu(ctx) {
           let op = ctx.request.url.searchParams.get('op')
           op = op || 'ASC'
             
-          var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%桃園%') AND (date LIKE '%實習%') group by title `)
+          var posts = postQuery(`select id, username, title, date,file,content,web,telent,address from posts WHERE(title LIKE '%桃園%') AND (date LIKE '%實習%') group by title `)
           ctx.response.body = await render.mechanism(posts,usercheck);
           }
       
@@ -1722,7 +1722,7 @@ async function mechanism_s(ctx) {
             let op = ctx.request.url.searchParams.get('op')
             op = op || 'ASC'
               
-            var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%新竹縣%') AND (date LIKE '%實習%') group by title `)
+            var posts = postQuery(`select id, username, title, date,file,content,web,telent,address from posts WHERE(title LIKE '%新竹縣%') AND (date LIKE '%實習%') group by title `)
             ctx.response.body = await render.mechanism(posts,usercheck);
             }
         
@@ -1745,7 +1745,7 @@ async function mechanism_ss(ctx) {
               let op = ctx.request.url.searchParams.get('op')
               op = op || 'ASC'
                 
-              var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%新竹縣%') AND (date LIKE '%實習%') group by title `)
+              var posts = postQuery(`select id, username, title, date,file,content,web,telent,address from posts WHERE(title LIKE '%新竹縣%') AND (date LIKE '%實習%') group by title `)
               ctx.response.body = await render.mechanism(posts,usercheck);
               }
           
@@ -1768,7 +1768,7 @@ async function mechanism_m(ctx) {
                 let op = ctx.request.url.searchParams.get('op')
                 op = op || 'ASC'
                   
-                var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%苗栗%') AND (date LIKE '%實習%') group by title `)
+                var posts = postQuery(`select id, username, title, date,file,content,web,telent,address from posts WHERE(title LIKE '%苗栗%') AND (date LIKE '%實習%') group by title `)
                 ctx.response.body = await render.mechanism(posts,usercheck);
                 }
             
@@ -1791,7 +1791,7 @@ async function mechanism_tc(ctx) {
                   let op = ctx.request.url.searchParams.get('op')
                   op = op || 'ASC'
                     
-                  var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%台中%') AND (date LIKE '%實習%') group by title `)
+                  var posts = postQuery(`select id, username, title, date,file,content,web,telent,address from posts WHERE(title LIKE '%台中%') AND (date LIKE '%實習%') group by title `)
                   ctx.response.body = await render.mechanism(posts,usercheck);
                   }
               
@@ -1814,7 +1814,7 @@ async function mechanism_ch(ctx) {
                     let op = ctx.request.url.searchParams.get('op')
                     op = op || 'ASC'
                       
-                    var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%彰化%') AND (date LIKE '%實習%') group by title `)
+                    var posts = postQuery(`select id, username, title, date,file,content,web,telent,address from posts WHERE(title LIKE '%彰化%') AND (date LIKE '%實習%') group by title `)
                     ctx.response.body = await render.mechanism(posts,usercheck);
                     }
                 
@@ -1837,7 +1837,7 @@ async function mechanism_u(ctx) {
                       let op = ctx.request.url.searchParams.get('op')
                       op = op || 'ASC'
                         
-                      var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%雲林%') AND (date LIKE '%實習%') group by title `)
+                      var posts = postQuery(`select id, username, title, date,file,content,web,telent,address from posts WHERE(title LIKE '%雲林%') AND (date LIKE '%實習%') group by title `)
                       ctx.response.body = await render.mechanism(posts,usercheck);
                       }
                   
@@ -1860,7 +1860,7 @@ async function mechanism_c(ctx) {
                         let op = ctx.request.url.searchParams.get('op')
                         op = op || 'ASC'
                           
-                        var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%嘉義%') AND (date LIKE '%實習%') group by title `)
+                        var posts = postQuery(`select id, username, title, date,file,content,web,telent,address from posts WHERE(title LIKE '%嘉義%') AND (date LIKE '%實習%') group by title `)
                         ctx.response.body = await render.mechanism(posts,usercheck);
                         }
                     
@@ -1883,7 +1883,7 @@ async function mechanism_tn(ctx) {
                           let op = ctx.request.url.searchParams.get('op')
                           op = op || 'ASC'
                             
-                          var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%台南%') AND (date LIKE '%實習%') group by title `)
+                          var posts = postQuery(`select id, username, title, date,file,content,web,telent,address from posts WHERE(title LIKE '%台南%') AND (date LIKE '%實習%') group by title `)
                           ctx.response.body = await render.mechanism(posts,usercheck);
                           }
                       
@@ -1906,7 +1906,7 @@ async function mechanism_kh(ctx) {
                             let op = ctx.request.url.searchParams.get('op')
                             op = op || 'ASC'
                               
-                            var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%高雄%') AND (date LIKE '%實習%') group by title `)
+                            var posts = postQuery(`select id, username, title, date,file,content,web,telent,address from posts WHERE(title LIKE '%高雄%') AND (date LIKE '%實習%') group by title `)
                             ctx.response.body = await render.mechanism(posts,usercheck);
                             }
                         
@@ -1952,7 +1952,7 @@ async function mechanism_tt(ctx) {
                                 let op = ctx.request.url.searchParams.get('op')
                                 op = op || 'ASC'
                                   
-                                var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%台東%') AND (date LIKE '%實習%') group by title `)
+                                var posts = postQuery(`select id, username, title, date,file,content,web,telent,address from posts WHERE(title LIKE '%台東%') AND (date LIKE '%實習%') group by title `)
                                 ctx.response.body = await render.mechanism(posts,usercheck);
                                 }
                             
@@ -1975,7 +1975,7 @@ async function mechanism_h(ctx) {
                                   let op = ctx.request.url.searchParams.get('op')
                                   op = op || 'ASC'
                                     
-                                  var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%花蓮%') AND (date LIKE '%實習%') group by title `)
+                                  var posts = postQuery(`select id, username, title, date,file,content,web,telent,address from posts WHERE(title LIKE '%花蓮%') AND (date LIKE '%實習%') group by title `)
                                   ctx.response.body = await render.mechanism(posts,usercheck);
                                   }
                               
@@ -1998,7 +1998,7 @@ async function mechanism_y(ctx) {
                                     let op = ctx.request.url.searchParams.get('op')
                                     op = op || 'ASC'
                                       
-                                    var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%宜蘭%') AND (date LIKE '%實習%') group by title `)
+                                    var posts = postQuery(`select id, username, title, date,file,content,web,telent,address from posts WHERE(title LIKE '%宜蘭%') AND (date LIKE '%實習%') group by title `)
                                     ctx.response.body = await render.mechanism(posts,usercheck);
                                     }
                                 
@@ -2021,7 +2021,7 @@ async function mechanism_n(ctx) {
                                       let op = ctx.request.url.searchParams.get('op')
                                       op = op || 'ASC'
                                         
-                                      var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%南投%') AND (date LIKE '%實習%') group by title `)
+                                      var posts = postQuery(`select id, username, title, date,file,content,web,telent,address from posts WHERE(title LIKE '%南投%') AND (date LIKE '%實習%') group by title `)
                                       ctx.response.body = await render.mechanism(posts,usercheck);
                                       }
                                   
@@ -2044,7 +2044,7 @@ async function mechanism_p(ctx) {
                                         let op = ctx.request.url.searchParams.get('op')
                                         op = op || 'ASC'
                                           
-                                        var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%澎湖%') AND (date LIKE '%實習%') group by title `)
+                                        var posts = postQuery(`select id, username, title, date,file,content,web,telent,address from posts WHERE(title LIKE '%澎湖%') AND (date LIKE '%實習%') group by title `)
                                         ctx.response.body = await render.mechanism(posts,usercheck);
                                         }
                                     
@@ -2067,7 +2067,7 @@ async function mechanism_k(ctx) {
                                           let op = ctx.request.url.searchParams.get('op')
                                           op = op || 'ASC'
                                             
-                                          var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%金門縣%') AND (date LIKE '%實習%') group by title `)
+                                          var posts = postQuery(`select id, username, title, date,file,content,web,telent,address from posts WHERE(title LIKE '%金門縣%') AND (date LIKE '%實習%') group by title `)
                                           ctx.response.body = await render.mechanism(posts,usercheck);
                                           }
                                       
@@ -2090,7 +2090,7 @@ async function mechanism_l(ctx) {
                                             let op = ctx.request.url.searchParams.get('op')
                                             op = op || 'ASC'
                                               
-                                            var posts = postQuery(`select id, username, title, date,file,content from posts WHERE(title LIKE '%連江%') AND (date LIKE '%實習%') group by title `)
+                                            var posts = postQuery(`select id, username, title, date,file,content,web,telent,address from posts WHERE(title LIKE '%連江%') AND (date LIKE '%實習%') group by title `)
                                             ctx.response.body = await render.mechanism(posts,usercheck);
                                             }
                                         

@@ -16,7 +16,6 @@
 12/07(8hr)
 1.修復學習歷程網站無登入即可使用之漏洞
 2.提高學習歷程資訊安全(權限問題)
-
 3.組裝伺服器電腦
 4.處理記憶體問題
 12/14(8hr)
@@ -43,10 +42,13 @@
 1.搜尋引擎製作
 12/29(4hr)
 1.搜尋引擎製作
-12/30()
+12/30(5hr)
 1.新增貼文類別修改
 
-1/15(8hr)
+01/15(8hr)
+1.Data input
+
+01/
 
 03/01(1.5h)
 1.CSS navbar 
@@ -101,5 +103,7 @@ fix database
 2.database list UI design
 3.database algorithm fixed
 4.sql bug fix
-05/01()
+05/01(3hr)
 1.search engine optimization
+05/02(3hr)
+1.1.0-Version bug fixed

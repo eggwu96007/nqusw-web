@@ -55,43 +55,37 @@ body {
 
 /* Create two unequal columns that floats next to each other */
 /* Left column */
-.leftcolumn {   
-  background-color: #ddd;
-  float: left;
-}
-
-.card div  {   
-  border-radius: 2em;
-  background-color: rgb(118, 135, 122);
-  float: left;
-}
 
 
 /* Right column */
-.rightcolumn {
-  float: left;
-  background-color: #ddd;
+
+/*底*/
+.card ,.leftcolumn, .rightcolumn {
+  background-color:#A79EA4;
+  padding: 30px;
+  
 }
+/*圓頂*/
+.card div  {   
+  margin: 10px;
+  border-radius: 2em;
+  background-color:#B1BBBC ;
+}
+/*字*/
+.card a
+{
+  color: #cdd1d2;
+  text-align: center;
+  font-size: 2vw;
+  text-decoration: none;
+}
+
+
 
 
 /* Add a card effect for articles */
-.card {
-  background-color: #ddd;
-  padding: 10px;
-  
-}
-.card a
-{
-  color: #f1f1f1;
-  font-size: 30px;
- 
-}
 
-.card div
-{
-  margin: 10px;
- 
-}
+
 
 /* Clear floats after the columns */
 .row:after {
@@ -123,10 +117,11 @@ body {
       color: rgb(23, 239, 84);
       padding: 14px 16px;
       text-decoration: none;
+      font-size: 2vw;
     }
     
     li a:hover, .dropdown:hover .dropbtn {
-      background-color: red;
+      background-color: rgb(250, 134, 39);
     }
     
     li.dropdown {
@@ -146,6 +141,8 @@ body {
       
     }
     
+
+
     .sidenav a {
       text-align: center;
       padding:30px;
@@ -185,16 +182,44 @@ body {
 
 /* Footer */
 .footer {
-  padding: 20px;
   text-align: center;
   background: #ddd;
-  margin-top: 20px;
 }
+@font-face {
+      font-family:"粉圓";
+      src:url('images/words/jf-openhuninn-1.1.ttf');
+    }
 
-
+/*<div class="card" >
+      <h1>相關連結</h1>
+      <div style="display:inline-block;width: 45%;height: 50px;">
+        <a>&#9744最新消息</a>
+         </div>
+         <div style="display:inline-block;width: 45%;height: 50px;">
+          <a>&#9744關於本系</a>
+           </div>
+             <div style="display:inline-block;width: 45%;height: 50px;">
+              <a>&#9744系所成員</a>
+               </div>
+               <div style="display:inline-block;width: 45%;height: 50px;">
+                <a>&#9744課程資訊</a>
+                 </div>
+                 <div style="display:inline-block;width: 45%;height: 50px;">
+                  <a>&#9744實習專區</a>
+                   </div>
+                   <div style="display:inline-block;width: 45%;height: 50px;">
+                    <a>&#9744招生資訊</a>
+                     </div>*/
 
 /* Responsive layout - when the screen is less than 400px wide, make the navigation links stack on top of each other instead of next to each other */
 @media  (min-width: 0px) {
+  .card a
+{
+  color: #cdd1d2;
+  text-align: center;
+  font-size: 4vw;
+  text-decoration: none;
+}
   .leftcolumn  
  {
   width: 100%;
@@ -202,28 +227,45 @@ body {
  .rightcolumn
  {
   width: 100%;
+ }
+ .board
+ {
+   display: block;
  }
   .see{display:inline;float: right;}
   .nosee{display: none}
   .dropbtn1{display:none}
 
-
 }
 
 /* Responsive layout - when the screen is less than 800px wide, make the two columns stack on top of each other instead of next to each other */
 @media (min-width: 1000px) {
-  .leftcolumn  
+  .card a
+{
+  color: #cdd1d2;
+  text-align: center;
+  font-size: 2vw;
+  text-decoration: none;
+}
+
+  .board
  {
-  width: 60%;
+   display: flex;
+ }
+ .leftcolumn  
+ {
+  width: 50%;
  }
  .rightcolumn
  {
-  width: 40%;
+  width: 50%;
  }
+
   .see{display:none}
   .nosee{display:inline}
   .dropbtn1{display:inline-block}
 }
+
 
 
 </style>
@@ -248,30 +290,30 @@ body {
   <ul style="list-style-type: none;padding: 0;overflow: hidden;">
     <div id="mySidenav" class="sidenav" style="float: right ;z-index: 4;">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-        <a href="/about">活動花絮</a>
-        <a href="/list_graduate">實習專區</a>
+        <a href="https://www.nqu.edu.tw/social_work/index.php?code=list&ids=1868">活動花絮</a>
+        <a href="https://www.nqu.edu.tw/social_work/index.php?code=list&ids=2863">實習專區</a>
         <a href="/">新生專區</a>
         <a href="#news">關於本系</a>
     </div>
     
       <!--側欄點擊按鈕-->
       <span class="see" style="font-size:30px;cursor:pointer;" onclick="openNav()">&#9776; </span>
-      <li class="see" style="float: left;"><a href="/list_graduate">這邊要放一張有關係上的字體+圖標  </a></li>
+      <a href="file:///C:/Users/eggwu/Desktop/nqusw-web/activity/new1.html#news"><img class="see" style="float: left;width: 40%;" src="images/圖標.png"> </img>  </a>
     
       <!--上面那欄-->
     <div>
-    <li class="nosee" style="float: left;"><a href="/list_graduate">這邊要放一張有關係上的字體+圖標  </a></li>
-    <li class="nosee" style="margin-right:  5%;"><a href="/home">活動花絮</a></li> 
-    <li class="nosee"><a href="/list_graduate">實習專區</a></li>
+    <a href="file:///C:/Users/eggwu/Desktop/nqusw-web/activity/new1.html#news"><img class="nosee" style="width: 30%; " src="images/圖標.png"> </img> </a>
+    <li class="nosee" style="margin-right:  5%;"><a href="https://www.nqu.edu.tw/social_work/index.php?code=list&ids=1868">活動花絮</a></li> 
+    <li class="nosee"><a href="https://www.nqu.edu.tw/social_work/index.php?code=list&ids=2863">實習專區</a></li>
     <li class="nosee"><a href="/">新生專區</a></li>
     <li class="dropdown">
       <a href="javascript:void(0)" class="dropbtn1">關於本系</a>
       <div class="dropdown-content">
-        <a href="#">師資陣容</a>
-        <a href="#">課程資訊</a>
+        <a href="https://www.nqu.edu.tw/social_work/index.php?code=list&ids=3391">師資陣容</a>
+        <a href="https://www.nqu.edu.tw/social_work/index.php?code=list&ids=2293">課程資訊</a>
       </div>
     </li>
-    <li class="nosee"><a href="#news">最新消息</a></li>
+    <li class="nosee"><a href="https://www.nqu.edu.tw/social_work/index.php?code=list&ids=1867">最新消息</a></li>
     </div>
   </li>
     <!--<li class="dropdown">
@@ -285,10 +327,7 @@ body {
   
   </ul>
 
-  <div class="header" > 
-    <div  style="background-color: yellow;border-color: green;border-style: dotted;position: absolute;margin: 10%;z-index: 3;">
-<a style="font-size: 5vw;">這邊放圖標</a>
-    </div>   
+  <div class="header" >  
   <div class="container" style=" margin: auto;padding-left: 20px; padding-right: 20px;">
     <img  style="display:block; margin:auto;background-size: cover;object-fit: cover;max-height: 700px;border-radius:2em;" src="images/照片1.jpeg" />
     <img  style="display:block; margin:auto;background-size: cover;object-fit: cover;max-height: 700px;border-radius:2em; " src="images/照片2.jpeg" />
@@ -311,47 +350,50 @@ autoplay: true,
 autoplaySpeed: 2000,
 });
 </script>
-
-  <div class="leftcolumn">
+<div class="board" >
+  <div class="leftcolumn" >
+    <h1>相關連結</h1>
     <div class="card" >
-      <h1>相關連結</h1>
-      <div style="display:inline-block;width: 45%;height: 50px;">
-        <a>&#9744最新消息</a>
+    <div style="display:inline-block;width: 45%;height: 50px;  ">
+      
+      <a href="https://www.nqu.edu.tw/social_work/index.php?code=list&ids=1867">&#9744最新消息</a>
+       </div>
+       <div style="display:inline-block;width: 45%;height: 50px;">
+        <a href="https://www.nqu.edu.tw/social_work/index.php?code=list&ids=1869">&#9744關於本系</a>
          </div>
          <div style="display:inline-block;width: 45%;height: 50px;">
-          <a>&#9744關於本系</a>
+          <a href="https://www.nqu.edu.tw/social_work/index.php?code=list&ids=2292">&#9744系所成員</a>
            </div>
+           <div style="display:inline-block;width: 45%;height: 50px;">
+            <a href="https://www.nqu.edu.tw/social_work/index.php?code=list&ids=2293">&#9744課程資訊</a>
+             </div>
              <div style="display:inline-block;width: 45%;height: 50px;">
-              <a>&#9744系所成員</a>
+              <a href="https://www.nqu.edu.tw/social_work/index.php?code=list&ids=2863">&#9744實習專區</a>
                </div>
                <div style="display:inline-block;width: 45%;height: 50px;">
-                <a>&#9744課程資訊</a>
+                <a href="https://www.nqu.edu.tw/cht/index.php?code=list&ids=9">&#9744招生資訊</a>
                  </div>
-                 <div style="display:inline-block;width: 45%;height: 50px;">
-                  <a>&#9744實習專區</a>
-                   </div>
-                   <div style="display:inline-block;width: 45%;height: 50px;">
-                    <a>&#9744招生資訊</a>
-                     </div>
        </div>
-       
+      </div>
+       <div class="rightcolumn" >
+        <h1>聯絡我們</h1>
+        <div class="card" >
+          
+          <div style="display:block;">
+            <a>電話：(082)-313338</a>
+             </div>
+             <div style="display:block;">
+              <a>地址：金門縣金寧鄉大學路1號</a>
+               </div>
+             
+               
+                 
+           </div>
+    </div>  
    
   </div>
-  <div class="rightcolumn">
-    <div class="card" style="">
-      <h1>聯絡我們(放相關資訊)</h1>
+  
 
-      <div style="display:block;background-color: rgb(237, 132, 57);border-color:purple;">
-        <h1>電話：12345678</h1>
-         </div>
-         <div style="display:inline-block;background-color: rgb(237, 132, 57);border-color:purple;">
-          <h1>地址：金門</h1>
-           </div>
-         
-           
-             
-       </div>
-</div>
 
 <div class="footer">
   <h2>版權所有翻印必究</h2>
